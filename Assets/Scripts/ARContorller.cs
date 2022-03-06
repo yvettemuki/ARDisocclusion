@@ -12,29 +12,53 @@ public class ARContorller : MonoBehaviour
     [SerializeField]
     ARRaycastManager m_ARRaycastManager;
 
+    public AnchorController m_AnchorController;
+    public Camera m_ARCamera;
     public Dropdown m_DropDown;
     public Text m_TextCameraPos;
     public Text m_TextPortalPos;
-    public Text m_TextHumanPos;
-    public Camera m_ARCamera;
-    public AnchorController m_AnchorController;
+    //public Text m_TextHumanPos;
     //public Camera m_CameraB;
+    public GameObject m_HumanSpritePrefab;
     public GameObject m_CameraBPrefab;
     public Texture2D m_Frame0;
     public Texture2D m_Frame1;
-    public GameObject m_HumanSpritePrefab;
+    public GameObject m_ProjectorPrefabBG; // background projector
+    public GameObject m_ProjectorPrefabHM; // human projector
 
     private List<Vector3> m_4PortalCornerPositions;
     private List<Color> m_ForegroundColors = new List<Color>();
     private Vector2 m_HumanLowestUV;
     private Vector3 m_HumanLowestPointDirFromCamB;
     private GameObject m_HumanSprite;
+    private GameObject m_CameraB;
+    private GameObject m_ProjectorBG;
+    private GameObject m_ProjectorHM;
+    private bool m_IsCameraBRegisterd = false;
+    private bool m_IsPlayback = false;
 
     // Camera B data as the child of Portal
     Vector3 camera_pos = Vector3.zero;
     Vector3 forward = Vector3.zero;
     Vector3 up = Vector3.zero;
     Vector3 right = Vector3.zero;
+
+    // Video stuff
+    float playbackTime = 0f;
+    public List<Texture2D> m_Frames;
+
+    struct CameraBFrame
+    {
+        public Texture2D tex;
+        public Vector2 footUV;
+
+        public CameraBFrame(Texture2D tex, Vector2 footUV)
+        {
+            this.tex = tex;
+            this.footUV = footUV;
+        }
+    }
+    private List<CameraBFrame> m_CameraBFrames = new List<CameraBFrame>();
 
 
     public enum ControlObjectType
@@ -65,17 +89,29 @@ public class ARContorller : MonoBehaviour
         // Start set up the camera
         //m_ARCamera.enabled = true;
         //m_CameraB.enabled = false;
+
+        InitializeCameraBVideoFrames();
     }
 
     // Update is called once per frame/
     void Update()
     {
         updateCameraPosition();
+
+        if (m_IsPlayback)
+        {
+            PlaybackCameraB();
+        }
     }
 
     public void Reset()
     {
-        m_Session.Reset();
+        //m_Session.Reset();
+
+        m_AnchorController.Reset();
+
+        Destroy(m_HumanSprite);
+        Destroy(m_CameraB);
     }
 
     public void onControlObjectChanged()
@@ -107,7 +143,10 @@ public class ARContorller : MonoBehaviour
 
     public void updateCameraPosition()
     {
-        m_TextCameraPos.text = $"CameraA Position:\n{m_ARCamera.transform.position.ToString()}\nCameraB Positoin:\n{camera_pos.ToString()}";
+        m_TextCameraPos.text = $"CameraA Position:\n" +
+            $"{m_ARCamera.transform.position.ToString()}\n" +
+            $"CameraB Positoin:\n{camera_pos.ToString()}\n" +
+            $"Projector Position:\n{m_ProjectorBG.transform.position.ToString()}";
     }
 
     public void RegisterSecondCamera()
@@ -147,8 +186,6 @@ public class ARContorller : MonoBehaviour
 
         // generate ray
         Ray ray = new Ray(camera_pos, m_HumanLowestPointDirFromCamB);
-        Debug.Log($"+++++++++ {m_HumanLowestPointDirFromCamB} +++++++++");
-        m_TextHumanPos.text = $"Human Position Dir From Camera:\n{m_HumanLowestPointDirFromCamB.ToString()}";
 
         // ray cast
         List<ARRaycastHit> hits = new List<ARRaycastHit>();
@@ -157,8 +194,11 @@ public class ARContorller : MonoBehaviour
             ARRaycastHit hit = hits[0];
             Debug.Log($"+++++++++ human sprite position: {hit.pose.position.ToString()}+++++++");
 
-            Instantiate(m_HumanSpritePrefab, hit.pose.position, Quaternion.LookRotation(forward, up));
+            m_HumanSprite = Instantiate(m_HumanSpritePrefab, hit.pose.position, Quaternion.LookRotation(forward, up));
+            m_IsCameraBRegisterd = true;
         }
+        else
+            Debug.Log($"Failed to register camera B! Please check the code!");
 
         // data for test
         //Vector3 test_point_0 = Vector3.zero;
@@ -235,20 +275,34 @@ public class ARContorller : MonoBehaviour
         // Instantiate the camera B in the portal local coordinate
         if (m_AnchorController.m_PortalAnchor != null)
         {
-            GameObject cameraB = Instantiate(m_CameraBPrefab);
-            cameraB.transform.parent = m_AnchorController.m_PortalAnchor.transform;
-            cameraB.transform.localPosition = cam_pos_in_portal_coord;
-            cameraB.transform.localRotation = rotation_in_portal_coord;
-            Debug.Log($"***** {cam_pos_in_portal_coord} *********");
-            Debug.Log($"***** {rotation_in_portal_coord} *********");
-            Debug.Log($"***** {cameraB.transform.position.ToString()} *********");
-            Debug.Log($"***** {cameraB.transform.right.ToString()} *********");
+            // create camera
+            m_CameraB = Instantiate(m_CameraBPrefab);
+            m_CameraB.transform.parent = m_AnchorController.m_PortalAnchor.transform;
+            m_CameraB.transform.localPosition = cam_pos_in_portal_coord;
+            m_CameraB.transform.localRotation = rotation_in_portal_coord;
 
             // we get the positon of the camera without instantiate but use the m_PortalPrefab.TransformPoint(c) 
-            camera_pos = cameraB.transform.position;
-            forward = cameraB.transform.forward.normalized;
-            up = cameraB.transform.up.normalized;
-            right = cameraB.transform.right.normalized;
+            camera_pos = m_CameraB.transform.position;
+            forward = m_CameraB.transform.forward.normalized;
+            up = m_CameraB.transform.up.normalized;
+            right = m_CameraB.transform.right.normalized;
+
+            // set cameraB enable
+            m_CameraB.gameObject.SetActive(false);
+
+            // create projector for side corridor
+            m_ProjectorBG = Instantiate(m_ProjectorPrefabBG);
+            m_ProjectorBG.transform.parent = m_AnchorController.m_PortalAnchor.transform;
+            m_ProjectorBG.transform.localPosition = cam_pos_in_portal_coord;
+            m_ProjectorBG.transform.localRotation = rotation_in_portal_coord;
+            m_ProjectorBG.gameObject.SetActive(true);
+
+            // create projector for human sprite
+            m_ProjectorHM = Instantiate(m_ProjectorPrefabHM);
+            m_ProjectorHM.transform.parent = m_AnchorController.m_PortalAnchor.transform;
+            m_ProjectorHM.transform.localPosition = cam_pos_in_portal_coord;
+            m_ProjectorHM.transform.localRotation = rotation_in_portal_coord;
+            m_ProjectorHM.gameObject.SetActive(true);
         }
         else
         {
@@ -409,6 +463,81 @@ public class ARContorller : MonoBehaviour
             return true;
         else
             return false;
+    }
+
+    public void PlaybackCameraB()
+    {
+        if (m_CameraBFrames.Count <= 0)
+        { 
+            Debug.Log($"Video frames should not be empty!");
+            return;
+        }
+
+        if (!m_IsCameraBRegisterd)
+        {
+            Debug.Log($"Please first register the camera B!");
+            return;
+        }
+
+        int index = (int)Mathf.Floor(playbackTime) % ControllerStates.FRAME_NUM;
+        CameraBFrame frame = m_CameraBFrames[index];
+
+        if (!frame.Equals(default(CameraBFrame)))
+        {
+            Vector2 uv = frame.footUV;
+            Texture2D tex = frame.tex;
+            Vector3 dirFromCamBToUV = Vector3.zero;
+
+            // transform uv to world space
+            TransformFromUVToWorldPoint(in uv, out dirFromCamBToUV);
+
+            // generate ray
+            Ray ray = new Ray(camera_pos, dirFromCamBToUV);
+
+            // ray cast
+            List<ARRaycastHit> hits = new List<ARRaycastHit>();
+            if (m_ARRaycastManager.Raycast(ray, hits, TrackableType.PlaneWithinPolygon))
+            {
+                ARRaycastHit hit = hits[0];
+                Debug.Log($"+++++++++ human sprite position: {hit.pose.position.ToString()}+++++++");
+
+                if (!m_HumanSprite)
+                {
+                    m_HumanSprite = Instantiate(m_HumanSpritePrefab, hit.pose.position, Quaternion.LookRotation(forward, up));
+                }
+                else
+                {
+                    m_HumanSprite.transform.position = hit.pose.position;
+                    // to do: also change the orientation of human
+                }
+            }
+            else
+                Debug.Log($"Failed to register camera B! Please check the code!");
+        }
+
+        playbackTime += Time.deltaTime;
+    }
+
+    public void SetPlayBack()
+    {
+        if (m_IsPlayback)
+            playbackTime = 0;
+
+        m_IsPlayback = !m_IsPlayback;
+    }
+
+    public void InitializeCameraBVideoFrames()
+    {
+       for (int i = 0; i < ControllerStates.FOOTUVs.Length; i++)
+       {
+            Vector2 uv = ControllerStates.FOOTUVs[i];
+
+            if (m_Frames[i] != null && uv != Vector2.zero)
+            {
+                CameraBFrame frame = new CameraBFrame(m_Frames[i], uv);
+                m_CameraBFrames.Add(frame);
+            }
+        }
     }
 
 }

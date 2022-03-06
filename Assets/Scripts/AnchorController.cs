@@ -15,10 +15,9 @@ public class AnchorController : MonoBehaviour
     PlaneController m_PlaneController;
 
     List<ARAnchor> m_Anchors = new List<ARAnchor>();
-    static List<ARRaycastHit> s_Hits = new List<ARRaycastHit> ();  // can be the reason for the unstable bug
     const TrackableType trackableTypes = TrackableType.PlaneWithinPolygon; //TrackableType.FeaturePoint | 
-    static List<ARRaycastHit> portalRayCastHits = new List<ARRaycastHit>();
-    List<ARAnchor> m_OtherAnchors = new List<ARAnchor>();
+    static List<ARRaycastHit> portalRayCastHits = new List<ARRaycastHit>(); // pivots for portal
+    static List<ARRaycastHit> corridorRayCastHits = new List<ARRaycastHit>(); // pivots for corridor
     
     [SerializeField]
     GameObject m_PrefabCorrider;
@@ -60,6 +59,7 @@ public class AnchorController : MonoBehaviour
 
     public ARAnchor m_QuadAnchor;
     public ARAnchor m_PortalAnchor;
+    public ARAnchor m_CorridorAnchor;
 
     //public Text m_TextAnchorPostiion;
 
@@ -88,83 +88,11 @@ public class AnchorController : MonoBehaviour
         // Determine create type
         if (!m_IsCorridorExist && ARContorller.currentObjectType == ARContorller.ControlObjectType.OBJ_CORRIDOR)
         {
-            m_CurrentPrefab = prefabCorrider;
-
-            // get the touch
-            var touch = Input.GetTouch(0);
-            if (touch.phase != TouchPhase.Began)
-                return;
-
-            // Perform the raycast
-            if (m_RaycastManager.Raycast(touch.position, s_Hits, trackableTypes))
-            {
-                // Raycast hit is stored by distace so the first one will be the closet one
-                ARRaycastHit hit = s_Hits[0];
-
-                TextLogger.Log($"Corrider Position: {hit.pose.position.ToString()}");
-
-                // Create a new anchor
-                var anchor = CreateAnchor(hit.pose, hit.trackable, m_CurrentPrefab);
-                if (anchor)
-                {
-                    // Add the anchor to our anchor list to manage
-                    m_Anchors.Add(anchor);
-                    m_IsCorridorExist = true;
-                }
-                else
-                {
-                    TextLogger.Log("Failed to create corridor anchor!");
-                }
-            }
+            CreateMainGeometry(prefabCorrider, corridorRayCastHits);
         }
         else if (!m_IsPortalExist && ARContorller.currentObjectType == ARContorller.ControlObjectType.OBJ_PORTAL)
         {
-            m_CurrentPrefab = prefabPortal;
-
-            if (portalRayCastHits.Count < 2)
-            {
-                // get two pivots for the portal
-                var touch = Input.GetTouch(0);
-                if (touch.phase != TouchPhase.Began)
-                    return;
-
-                if (m_RaycastManager.Raycast(touch.position, s_Hits, trackableTypes))
-                {
-                    ARRaycastHit hit = s_Hits[0];
-
-                    //Debug.Log($"--- hit position: {hit.pose.position.ToString()}");
-                    //Debug.Log($"+++ hit id: {hit.trackableId}");
-                    TextLogger.Log($"Portal Hit point {portalRayCastHits.Count}: {hit.pose.position.ToString()}");
-                    portalRayCastHits.Add(hit);
-                }
-                else
-                {
-                    TextLogger.Log($"Portal hit point create failed");
-                }
-            }
-            else if (portalRayCastHits.Count == 2)
-            {
-                // create portal anchor
-                Pose pose = CalculatePlacementPose(portalRayCastHits);
-
-                portalRayCastHits.Add(new ARRaycastHit());
-
-                // Create a new anchor
-                var anchor = CreateAnchor(pose, portalRayCastHits[0].trackable, m_CurrentPrefab);
-                if (anchor)
-                {
-                    // Add the anchor to our anchor list to manage
-                    m_Anchors.Add(anchor);
-                    m_PortalAnchor = anchor;
-                    m_IsPortalExist = true;
-                }
-                else
-                {
-                    TextLogger.Log("Failed to create portal anchor!");
-                }
-            }
-            else
-                return;
+            CreateMainGeometry(prefabPortal, portalRayCastHits);
         }
         else if (ARContorller.currentObjectType == ARContorller.ControlObjectType.OBJ_POINT)
         {
@@ -176,6 +104,7 @@ public class AnchorController : MonoBehaviour
                 return;
 
             // Perform the raycast
+            List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
             if (m_RaycastManager.Raycast(touch.position, s_Hits, trackableTypes))
             {
                 // Raycast hit is stored by distace so the first one will be the closet one
@@ -189,7 +118,7 @@ public class AnchorController : MonoBehaviour
                 {
                     // Add the anchor to our anchor list to manage
                     SetAnchorText(anchor, $"{hit.pose.position.ToString()}");
-                    m_OtherAnchors.Add(anchor);
+                    m_Anchors.Add(anchor);
                 }
                 else
                 {
@@ -208,6 +137,7 @@ public class AnchorController : MonoBehaviour
                 return;
 
             // Perform the raycast
+            List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
             if (m_RaycastManager.Raycast(touch.position, s_Hits, trackableTypes))
             {
                 // Raycast hit is stored by distace so the first one will be the closet one
@@ -221,7 +151,7 @@ public class AnchorController : MonoBehaviour
                 {
                     // Add the anchor to our anchor list to manage
                     SetAnchorText(anchor, $"{hit.pose.position.ToString()}");
-                    m_OtherAnchors.Add(anchor);
+                    m_Anchors.Add(anchor);
                     m_QuadAnchor = anchor;
                     m_IsQuadExist = true;
                 }
@@ -300,7 +230,7 @@ public class AnchorController : MonoBehaviour
 
     public void Reset()
     {
-        if (m_Anchors.Count == 0 && m_OtherAnchors.Count == 0)
+        if (m_Anchors.Count == 0)
         {
             TextLogger.Log("Anchors list is empty!");
             return;
@@ -312,23 +242,19 @@ public class AnchorController : MonoBehaviour
             Destroy(anchor.gameObject);
         }
 
-        // clear the anchors of points
-        foreach (var anchor in m_OtherAnchors)
-        {
-            Destroy(anchor.gameObject);
-        }
-
         Destroy(m_QuadAnchor);
 
         m_IsCorridorExist = false;
         m_IsPortalExist = false;
         m_IsQuadExist = false;
 
-        // Whether we should Destroy the m_PortalAnchor too
+        m_PortalAnchor = null;
+        m_CorridorAnchor = null;
+        m_QuadAnchor = null;
 
         m_Anchors.Clear();
-        m_OtherAnchors.Clear();
         portalRayCastHits.Clear();
+        corridorRayCastHits.Clear();
         TextLogger.Log("Anchors has been cleared!");
     }
 
@@ -367,5 +293,65 @@ public class AnchorController : MonoBehaviour
         {
             canvasTextManager.text = text;
         }
+    }
+
+    public void CreateMainGeometry(GameObject prefab, List<ARRaycastHit> pivots)
+    {
+        m_CurrentPrefab = prefab;
+
+        if (pivots.Count < 2)
+        {
+            // get two pivots for the portal
+            var touch = Input.GetTouch(0);
+            if (touch.phase != TouchPhase.Began)
+                return;
+
+            List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
+            if (m_RaycastManager.Raycast(touch.position, s_Hits, trackableTypes))
+            {
+                ARRaycastHit hit = s_Hits[0];
+
+                TextLogger.Log($"[{prefab.name}] Hit point {pivots.Count}: {hit.pose.position.ToString()}");
+                pivots.Add(hit);
+            }
+            else
+            {
+                TextLogger.Log($"[{prefab.name}] hit point create failed");
+            }
+        }
+        else if (pivots.Count == 2)
+        {
+            // create portal anchor
+            Pose pose = CalculatePlacementPose(pivots);
+
+            // add for the reset
+            pivots.Add(new ARRaycastHit());
+
+            // Create a new anchor
+            var anchor = CreateAnchor(pose, pivots[0].trackable, m_CurrentPrefab);
+            if (anchor)
+            {
+                // Add the anchor to our anchor list to manage
+                m_Anchors.Add(anchor);
+
+                if (ARContorller.currentObjectType == ARContorller.ControlObjectType.OBJ_PORTAL)
+                {
+                    m_PortalAnchor = anchor;
+                    m_IsPortalExist = true;
+                }
+                else if (ARContorller.currentObjectType == ARContorller.ControlObjectType.OBJ_CORRIDOR)
+                {
+                    m_CorridorAnchor = anchor;
+                    m_IsCorridorExist = true;
+                }
+                
+            }
+            else
+            {
+                TextLogger.Log($"Failed to create [{prefab.name}] anchor!");
+            }
+        }
+        else
+            return;
     }
 }

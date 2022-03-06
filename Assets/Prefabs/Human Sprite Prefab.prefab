@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8304429399113435815}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Human Sprite Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 681254929096087245}
   - component: {fileID: 1287224636532149842}
   - component: {fileID: 942367830946020893}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Human Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,7 +91,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 137cf0927207bf0438f29aea90c6037f, type: 2}
+  - {fileID: 2100000, guid: dbf62f432a924574da5e5c050b080980, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

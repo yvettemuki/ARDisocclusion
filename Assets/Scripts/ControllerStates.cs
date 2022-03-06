@@ -8,6 +8,8 @@ public class ControllerStates : MonoBehaviour
     public static float PORTAL_WIDTH = 1.6f;          //1.519696f;
 
     public static float CAM_B_HFOV = 67.6615f;  // horizontal field of view!!!
+    public static float CAM_B_VFOV = 94.007f;
+    public static float CAM_RATIO = 0.624866f;
     public static Vector3 CAM_B_EYE_POS = new Vector3(-0.0303495f, 0.183799f, -0.113018f); //-z
     public static Vector3 CAM_B_LOOK_AT_POINT = new Vector3(-0.0439344f, 0.190594f, 0.886866f); //-z
     public static Vector3 CAM_B_UP = new Vector3(0.00495004f, 0.999965f, -0.0067288f); //-z
@@ -21,6 +23,15 @@ public class ControllerStates : MonoBehaviour
     public static float HUMAN_HEIGHT = 1.62f;
     public static int HUMAN_HAND_SET_LOWEST_U = 282; // 280  290(1*1) 297 285
     public static int HUMAN_HAND_SET_LOWEST_V = 316; // 318  211(1*1) 166 192
+
+    public static int FRAME_NUM = 5;
+    public static Vector2[] FOOTUVs= {
+       new Vector2(284, 246),
+       new Vector2(280, 318),
+       new Vector2(280, 373),
+       new Vector2(273, 335),
+       new Vector2(275, 407)
+    };
 }
 
 /** Data of Camera B by Extrinsic Calibration (Right Coord System)**/
