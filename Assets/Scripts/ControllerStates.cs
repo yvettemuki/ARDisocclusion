@@ -30,7 +30,7 @@ public class ControllerStates : MonoBehaviour
        new Vector2(280, 318),
        new Vector2(280, 373),
        new Vector2(273, 335),
-       new Vector2(275, 407)
+       new Vector2(280, 238)
     };
 }
 

@@ -343,6 +343,9 @@ public class AnchorController : MonoBehaviour
                 {
                     m_CorridorAnchor = anchor;
                     m_IsCorridorExist = true;
+
+                    // set corridor to unvisable
+                    m_CorridorAnchor.gameObject.SetActive(false);
                 }
                 
             }

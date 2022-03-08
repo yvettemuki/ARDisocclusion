@@ -14,6 +14,8 @@ public class ARContorller : MonoBehaviour
 
     public AnchorController m_AnchorController;
     public Camera m_ARCamera;
+    public ARCameraController m_ARCameraController;
+
     public Dropdown m_DropDown;
     public Text m_TextCameraPos;
     public Text m_TextPortalPos;
@@ -27,7 +29,6 @@ public class ARContorller : MonoBehaviour
     public GameObject m_ProjectorPrefabHM; // human projector
 
     private List<Vector3> m_4PortalCornerPositions;
-    private List<Color> m_ForegroundColors = new List<Color>();
     private Vector2 m_HumanLowestUV;
     private Vector3 m_HumanLowestPointDirFromCamB;
     private GameObject m_HumanSprite;
@@ -36,12 +37,20 @@ public class ARContorller : MonoBehaviour
     private GameObject m_ProjectorHM;
     private bool m_IsCameraBRegisterd = false;
     private bool m_IsPlayback = false;
+    private Texture2D m_HumanSpriteTex;
 
     // Camera B data as the child of Portal
-    Vector3 camera_pos = Vector3.zero;
+    Vector3 camera_b_pos = Vector3.zero;
     Vector3 forward = Vector3.zero;
     Vector3 up = Vector3.zero;
     Vector3 right = Vector3.zero;
+
+    // Portal coordinate system data
+    Vector3 portal_origin = Vector3.zero;
+    Vector3 portal_x_axis = Vector3.zero;
+    Vector3 portal_y_axis = Vector3.zero;
+    Vector3 portal_z_axis = Vector3.zero;
+    Vector3 camera_a_pos = Vector3.zero;
 
     // Video stuff
     float playbackTime = 0f;
@@ -102,6 +111,8 @@ public class ARContorller : MonoBehaviour
         {
             PlaybackCameraB();
         }
+
+        
     }
 
     public void Reset()
@@ -144,9 +155,24 @@ public class ARContorller : MonoBehaviour
     public void updateCameraPosition()
     {
         m_TextCameraPos.text = $"CameraA Position:\n" +
+            $"{m_ARCamera.transform.position.ToString()}\n";
+
+        // calculate cameraA position in portal coord system
+        if (m_IsCameraBRegisterd)
+        {
+            Vector3 cam_pos0 = m_ARCamera.transform.position - portal_origin;
+            camera_a_pos = new Vector3(
+                Vector3.Dot(portal_x_axis, cam_pos0),
+                Vector3.Dot(portal_y_axis, cam_pos0),
+                Vector3.Dot(portal_z_axis, cam_pos0)
+            );
+
+            m_TextCameraPos.text = $"CamA World Position:\n" +
             $"{m_ARCamera.transform.position.ToString()}\n" +
-            $"CameraB Positoin:\n{camera_pos.ToString()}\n" +
-            $"Projector Position:\n{m_ProjectorBG.transform.position.ToString()}";
+            $"CamA Local Positoin:\n{camera_a_pos.ToString()}\n";
+        }
+
+
     }
 
     public void RegisterSecondCamera()
@@ -167,25 +193,49 @@ public class ARContorller : MonoBehaviour
             $"{m_4PortalCornerPositions[2].ToString()}\n" +
             $"{m_4PortalCornerPositions[3].ToString()}";
 
-        TextLogger.Log($"position 1: {m_4PortalCornerPositions[0].ToString()}");
-        TextLogger.Log($"position 2: {m_4PortalCornerPositions[1].ToString()}");
-        TextLogger.Log($"position 3: {m_4PortalCornerPositions[2].ToString()}");
-        TextLogger.Log($"position 4: {m_4PortalCornerPositions[3].ToString()}");
+        // calculate portal coordinate system data
+        portal_origin = m_AnchorController.m_PortalAnchor.gameObject.transform.position;
+        portal_x_axis = (m_4PortalCornerPositions[1] - m_4PortalCornerPositions[0]).normalized;
+        portal_y_axis = (m_4PortalCornerPositions[2] - m_4PortalCornerPositions[0]).normalized;
+        portal_z_axis = Vector3.Cross(portal_x_axis, portal_y_axis).normalized;
 
-        /** Process the data we use to do the extrinsic calibration and set the camera is 
-         * positon relative to the portal, then get the new world position of the cameraB 
-         * base on the ar core renew coordinate system
+        /** Process the data we use to do the extrinsic calibration and set the camera 
+         * (human sprite projector ans background projector) in the positon relative to 
+         * the portal, then get the new world position of the cameraB base on the ar core 
+         * renew coordinate system.
          * */
-        ProcessCameraBPosition();
+        ProcessCameraBProjectorsPos();
 
-        // background subtraction
-        BackgourndSubtraction(m_Frame0, m_Frame1, out m_HumanLowestUV);
+
+        //XRCpuImage image;
+        //m_ARCameraController.GetCurrentCameraImage(out image);
+
+        //Debug.Log($"-------- {image.width}, {image.height} ---------");
+
+    }
+
+    public void XRayDisocclusion()
+    {
+        if (!m_IsCameraBRegisterd)
+        {
+            Debug.Log($"Camera B should be registered before disocclusion!");
+            return;
+        }
+        // background subtraction to get the human sprite texture 
+        m_HumanSpriteTex = BackgourndSubtraction(m_Frame0, m_Frame1);
+
+        // find the lowest point ****** TODO ******
+        //FindHumanFootUV(m_HumanSpriteTex, out m_HumanLowestUV);
+        m_HumanLowestUV = new Vector2(ControllerStates.HUMAN_HAND_SET_LOWEST_U, ControllerStates.HUMAN_HAND_SET_LOWEST_V);
+
+        // set the huamn sprite projector texture
+        ApplyHumanCurrentTexture();
 
         // transform uv to world space
         TransformFromUVToWorldPoint(in m_HumanLowestUV, out m_HumanLowestPointDirFromCamB);
 
         // generate ray
-        Ray ray = new Ray(camera_pos, m_HumanLowestPointDirFromCamB);
+        Ray ray = new Ray(camera_b_pos, m_HumanLowestPointDirFromCamB);
 
         // ray cast
         List<ARRaycastHit> hits = new List<ARRaycastHit>();
@@ -195,45 +245,21 @@ public class ARContorller : MonoBehaviour
             Debug.Log($"+++++++++ human sprite position: {hit.pose.position.ToString()}+++++++");
 
             m_HumanSprite = Instantiate(m_HumanSpritePrefab, hit.pose.position, Quaternion.LookRotation(forward, up));
-            m_IsCameraBRegisterd = true;
+
+            // set corridor visable
+            m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
         }
         else
-            Debug.Log($"Failed to register camera B! Please check the code!");
-
-        // data for test
-        //Vector3 test_point_0 = Vector3.zero;
-        //Vector2 test_uv_0 = new Vector2(110, 151);
-        //TransformFromUVToWorldPoint(in test_uv_0, out test_point_0);
-        //Vector3 test_point_1 = Vector3.zero;
-        //Vector2 test_uv_1 = new Vector2(472, 160);
-        //TransformFromUVToWorldPoint(in test_uv_1, out test_point_1);
-
-        //Ray test_ray_0 = new Ray(camera_pos, test_point_0);
-        //Ray test_ray_1 = new Ray(camera_pos, test_point_1);
-
-        //Vector3 plane_norm = (m_4PortalCornerPositions[2] - m_4PortalCornerPositions[0]).normalized;
-        //Vector3 p0 = m_4PortalCornerPositions[0];
-        //float test_t_0 = Vector3.Dot(p0 - test_ray_0.origin, plane_norm) / Vector3.Dot(test_ray_0.direction, plane_norm);
-        //if (test_t_0 > 0)
-        //{
-        //    Vector3 test_hit_0 = test_ray_0.GetPoint(test_t_0);
-        //    Instantiate(m_HumanSpritePrefab, test_hit_0, Quaternion.identity);
-        //}
-        //float test_t_1 = Vector3.Dot(p0 - test_ray_1.origin, plane_norm) / Vector3.Dot(test_ray_1.direction, plane_norm);
-        //if (test_t_1 > 0)
-        //{
-        //    Vector3 test_hit_1 = test_ray_1.GetPoint(test_t_1);
-        //    Instantiate(m_HumanSpritePrefab, test_hit_1, Quaternion.identity);
-        //}
-
+            Debug.Log($"Failed to visualize the human sprite! Please check the code!");
     }
 
-    public void ProcessCameraBPosition()
+    public void ProcessCameraBProjectorsPos()
     {
         Vector3 cam_pos = ControllerStates.CAM_B_EYE_POS;
         Vector3 look_at_point = ControllerStates.CAM_B_LOOK_AT_POINT;
         Vector3 up_at_point = cam_pos + ControllerStates.CAM_B_UP;
 
+        // calculate portal coordinate system (attention: this is the precomputed portal data)
         Vector3 portal_bottom_left = ControllerStates.PORTAL_BOTTOM_LEFT;
         Vector3 portal_bottom_right = ControllerStates.PORTAL_BOTTOM_RIGHT;
         Vector3 portal_top_left = ControllerStates.PORTAL_TOP_LEFT;
@@ -282,12 +308,13 @@ public class ARContorller : MonoBehaviour
             m_CameraB.transform.localRotation = rotation_in_portal_coord;
 
             // we get the positon of the camera without instantiate but use the m_PortalPrefab.TransformPoint(c) 
-            camera_pos = m_CameraB.transform.position;
+            camera_b_pos = m_CameraB.transform.position;
             forward = m_CameraB.transform.forward.normalized;
             up = m_CameraB.transform.up.normalized;
             right = m_CameraB.transform.right.normalized;
 
-            // set cameraB enable
+            // set cameraB status
+            m_IsCameraBRegisterd = true;
             m_CameraB.gameObject.SetActive(false);
 
             // create projector for side corridor
@@ -330,11 +357,11 @@ public class ARContorller : MonoBehaviour
         float clip_half_height = clip_half_width * aspect;
 
         // get the start(bottom left) point of the clip plane
-        Vector3 clip_center_point = camera_pos + forward * ControllerStates.Z_NEAR;
+        Vector3 clip_center_point = camera_b_pos + forward * ControllerStates.Z_NEAR;
         Debug.Log($"&&& clip center point is : {clip_center_point.ToString()}"); // shoulbe be z = z_near 0.1
         Vector3 clip_start_point = clip_center_point - right * clip_half_width - up * clip_half_height;  // start from bottom left
 
-        Vector3 cam_pos_to_clip_start_dir = clip_start_point - camera_pos;  // attenction: here we don't need to normalize the vector
+        Vector3 cam_pos_to_clip_start_dir = clip_start_point - camera_b_pos;  // attenction: here we don't need to normalize the vector
 
         // calcualte the uv 3D point
         float uu = uv.x * (clip_half_width * 2 / tex_width);
@@ -346,13 +373,12 @@ public class ARContorller : MonoBehaviour
 
     }
 
-    public Texture2D BackgourndSubtraction(Texture2D frame0, Texture2D frame1, out Vector2 lowestUV)
+    public Texture2D BackgourndSubtraction(Texture2D frame0, Texture2D frame1)
     {
         int _tex_width = frame0.width;
         int _tex_height = frame0.height;
 
         Texture2D _subtract_frame = new Texture2D(_tex_width, _tex_height);
-        lowestUV = new Vector2(ControllerStates.HUMAN_HAND_SET_LOWEST_U, ControllerStates.HUMAN_HAND_SET_LOWEST_V);
 
         if (frame0 == null || frame1 == null)
         {
@@ -373,10 +399,8 @@ public class ARContorller : MonoBehaviour
                     float diff_1 = Mathf.Pow(color0.g - color1.g, 2);
                     float diff_2 = Mathf.Pow(color0.b - color1.b, 2);
 
-                    if (diff_0 > 0.008 || diff_1 > 0.008 || diff_2 > 0.008)
+                    if (diff_0 > 0.01 || diff_1 > 0.01 || diff_2 > 0.01)
                     {
-                        // add the object pixel into the list
-                        m_ForegroundColors.Add(color1);
                         _subtract_frame.SetPixel(u, v, color1);
                     }
                     else
@@ -388,16 +412,8 @@ public class ARContorller : MonoBehaviour
                 }
             }
 
+            _subtract_frame.Apply();
 
-            //FindHumanFootUV(_subtract_frame, out m_HumanLowestUV);
-
-            //frame1.SetPixel((int)m_HumanLowestUV.x, (int)m_HumanLowestUV.y, new Color(1f, 0f, 0f, 1f));
-            //frame1.SetPixel((int)m_HumanLowestUV.x + 1, (int)m_HumanLowestUV.y, new Color(1f, 0f, 0f, 1f));
-            //frame1.SetPixel((int)m_HumanLowestUV.x - 1, (int)m_HumanLowestUV.y, new Color(1f, 0f, 0f, 1f));
-            //frame1.SetPixel((int)m_HumanLowestUV.x, (int)m_HumanLowestUV.y + 1, new Color(1f, 0f, 0f, 1f));
-            //frame1.SetPixel((int)m_HumanLowestUV.x, (int)m_HumanLowestUV.y - 1, new Color(1f, 0f, 0f, 1f));
-
-            //_subtract_frame.Apply();
             //if (m_AnchorController.m_QuadAnchor != null)
             //{
             //    m_AnchorController.m_QuadAnchor.transform.GetChild(0).GetComponent<Renderer>().material.mainTexture = _subtract_frame;
@@ -409,7 +425,7 @@ public class ARContorller : MonoBehaviour
             return null;
         }
 
-        return _subtract_frame;
+        return frame1;
     }
 
     public void FindHumanFootUV(Texture2D frame, out Vector2 uv)
@@ -417,6 +433,8 @@ public class ARContorller : MonoBehaviour
         uv = Vector2.zero;
         int _tex_height = frame.height;
         int _tex_width = frame.width;
+
+        // TODO: optimize the background subtraction      
 
         for (int v = 0; v < _tex_height; v++)
         {
@@ -488,11 +506,17 @@ public class ARContorller : MonoBehaviour
             Texture2D tex = frame.tex;
             Vector3 dirFromCamBToUV = Vector3.zero;
 
+            // apply projector texture to the human sprite
+            m_HumanSpriteTex = tex;
+
+            // apply human projector texture
+            ApplyHumanCurrentTexture();
+
             // transform uv to world space
             TransformFromUVToWorldPoint(in uv, out dirFromCamBToUV);
 
             // generate ray
-            Ray ray = new Ray(camera_pos, dirFromCamBToUV);
+            Ray ray = new Ray(camera_b_pos, dirFromCamBToUV);
 
             // ray cast
             List<ARRaycastHit> hits = new List<ARRaycastHit>();
@@ -510,6 +534,7 @@ public class ARContorller : MonoBehaviour
                     m_HumanSprite.transform.position = hit.pose.position;
                     // to do: also change the orientation of human
                 }
+
             }
             else
                 Debug.Log($"Failed to register camera B! Please check the code!");
@@ -538,6 +563,18 @@ public class ARContorller : MonoBehaviour
                 m_CameraBFrames.Add(frame);
             }
         }
+    }
+
+    private void ApplyHumanCurrentTexture()
+    {
+        if (m_HumanSpriteTex == null)
+        {
+            Debug.Log($"Human sprite texture can not be null!");
+            return;
+        }
+
+        Debug.Log($"________ {m_ProjectorHM.GetComponent<Projector>()}");
+        m_ProjectorHM.GetComponent<Projector>().material.SetTexture("_ShadowTex", m_HumanSpriteTex);
     }
 
 }
