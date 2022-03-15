@@ -50,7 +50,9 @@ public class ARContorller : MonoBehaviour
     Vector3 portal_x_axis = Vector3.zero;
     Vector3 portal_y_axis = Vector3.zero;
     Vector3 portal_z_axis = Vector3.zero;
-    Vector3 camera_a_pos = Vector3.zero;
+    Vector3 camera_a_pos_in_portal = Vector3.zero;
+    float portal_x_lower_bound = 0f;
+    float portal_x_upper_bound = 0f;
 
     // Video stuff
     float playbackTime = 0f;
@@ -105,7 +107,7 @@ public class ARContorller : MonoBehaviour
     // Update is called once per frame/
     void Update()
     {
-        updateCameraPosition();
+        UpdateCameraPosition();
 
         if (m_IsPlayback)
         {
@@ -123,6 +125,11 @@ public class ARContorller : MonoBehaviour
 
         Destroy(m_HumanSprite);
         Destroy(m_CameraB);
+        Destroy(m_ProjectorBG);
+        Destroy(m_ProjectorHM);
+
+        m_IsPlayback = false;
+        m_IsCameraBRegisterd = false;
     }
 
     public void onControlObjectChanged()
@@ -152,7 +159,7 @@ public class ARContorller : MonoBehaviour
         }
     }
 
-    public void updateCameraPosition()
+    public void UpdateCameraPosition()
     {
         m_TextCameraPos.text = $"CameraA Position:\n" +
             $"{m_ARCamera.transform.position.ToString()}\n";
@@ -160,16 +167,43 @@ public class ARContorller : MonoBehaviour
         // calculate cameraA position in portal coord system
         if (m_IsCameraBRegisterd)
         {
+            m_TextCameraPos.text = $"CamA World Position:\n" +
+            $"{m_ARCamera.transform.position.ToString()}\n";
+
+            // calcualte the cameraA position with respective to the portal
             Vector3 cam_pos0 = m_ARCamera.transform.position - portal_origin;
-            camera_a_pos = new Vector3(
+            camera_a_pos_in_portal = new Vector3(
                 Vector3.Dot(portal_x_axis, cam_pos0),
                 Vector3.Dot(portal_y_axis, cam_pos0),
                 Vector3.Dot(portal_z_axis, cam_pos0)
             );
 
-            m_TextCameraPos.text = $"CamA World Position:\n" +
-            $"{m_ARCamera.transform.position.ToString()}\n" +
-            $"CamA Local Positoin:\n{camera_a_pos.ToString()}\n";
+            if (camera_a_pos_in_portal.x < portal_x_lower_bound)
+            {
+                m_TextCameraPos.text += $"left side {portal_x_lower_bound}:\n{camera_a_pos_in_portal.ToString()}\n";
+                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(false);
+                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(true);
+                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(true);
+                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
+                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
+                
+            }
+            else if (camera_a_pos_in_portal.x > portal_x_upper_bound)
+            {
+                m_TextCameraPos.text += $"right side {portal_x_upper_bound}:\n{camera_a_pos_in_portal.ToString()}\n ";
+                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(false);
+                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(true);
+                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(true);
+                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
+                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
+                
+            }
+            else
+            {
+                m_TextCameraPos.text += $"center:\n{camera_a_pos_in_portal.ToString()}\n ";
+                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+            }
+
         }
 
 
@@ -194,10 +228,14 @@ public class ARContorller : MonoBehaviour
             $"{m_4PortalCornerPositions[3].ToString()}";
 
         // calculate portal coordinate system data
-        portal_origin = m_AnchorController.m_PortalAnchor.gameObject.transform.position;
-        portal_x_axis = (m_4PortalCornerPositions[1] - m_4PortalCornerPositions[0]).normalized;
-        portal_y_axis = (m_4PortalCornerPositions[2] - m_4PortalCornerPositions[0]).normalized;
-        portal_z_axis = Vector3.Cross(portal_x_axis, portal_y_axis).normalized;
+        Transform portal_transform = m_AnchorController.m_PortalAnchor.gameObject.transform;
+        portal_origin = portal_transform.position;
+        portal_x_axis = portal_transform.right;
+        portal_y_axis = portal_transform.up;
+        portal_z_axis = portal_transform.forward;
+        float portal_width = m_AnchorController.m_PortalAnchor.gameObject.transform.GetChild(1).transform.localScale.x;
+        portal_x_lower_bound = -0.5f * portal_width;
+        portal_x_upper_bound = 0.5f * portal_width;
 
         /** Process the data we use to do the extrinsic calibration and set the camera 
          * (human sprite projector ans background projector) in the positon relative to 

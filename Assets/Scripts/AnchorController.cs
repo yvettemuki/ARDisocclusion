@@ -180,7 +180,7 @@ public class AnchorController : MonoBehaviour
         {
             position = 0.5f * (pivotHits[0].pose.position + pivotHits[1].pose.position);
             //position = pivotHits[0].pose.position;
-            TextLogger.Log($"Portal position is: {position.ToString()}");
+            Debug.Log($"Portal position is: {position.ToString()}");
 
             right = pivotHits[1].pose.position - pivotHits[0].pose.position;
             up = pivotHits[0].pose.up;
@@ -260,18 +260,23 @@ public class AnchorController : MonoBehaviour
 
     public List<Vector3> getPortal4CornerPositions()
     {
-        if (portalRayCastHits.Count < 3)
+        if (!m_IsPortalExist)
         {
-            TextLogger.Log($"Portal left and right pivots has lost");
+            TextLogger.Log($"Portal should be created first!");
             return null;
         }
 
         List<Vector3> _fourCorners = new List<Vector3>();
         // add the point of the portal: 1.bottom left, 2.bottom right, 3.top left, 4.top right
-        var _position_1 = portalRayCastHits[0].pose.position;
-        var _position_2 = _position_1 + new Vector3(ControllerStates.PORTAL_WIDTH, 0f, 0f);
-        var _position_3 = _position_1 + new Vector3(0f, ControllerStates.PORTAL_HEIGHT, 0f);  //!!only true if on the same horizontal plane
-        var _position_4 = _position_2 + new Vector3(0f, ControllerStates.PORTAL_HEIGHT, 0f);
+        // attention: should not use pivots[] because it may not alain with the real one
+        Vector3 right = m_PortalAnchor.gameObject.transform.right;
+        Vector3 up = m_PortalAnchor.gameObject.transform.up;
+        Vector3 pos = m_PortalAnchor.gameObject.transform.position;
+
+        var _position_1 = pos - right * ControllerStates.PORTAL_WIDTH * 0.5f;
+        var _position_2 = pos + right * ControllerStates.PORTAL_WIDTH * 0.5f;
+        var _position_3 = pos + up * ControllerStates.PORTAL_HEIGHT - right * ControllerStates.PORTAL_WIDTH * 0.5f;
+        var _position_4 = pos + up * ControllerStates.PORTAL_HEIGHT + right * ControllerStates.PORTAL_WIDTH * 0.5f;
 
         _fourCorners.Add(_position_1);
         _fourCorners.Add(_position_2);
