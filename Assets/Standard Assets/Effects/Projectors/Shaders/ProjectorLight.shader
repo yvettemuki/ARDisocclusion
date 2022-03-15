@@ -11,21 +11,21 @@ Shader "Projector/Light" {
 	Subshader {
 		Tags {"Queue"="Transparent"}
 		Pass {
-			ZWrite Off
-			ColorMask RGB
-			Blend DstColor One
-			Offset -1, -1
+			//ZWrite Off
+			//ColorMask RGB
+			//Blend DstColor One
+			//Offset -1, -1
 	
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-			#pragma multi_compile_fog
+			//#pragma multi_compile_fog
 			#include "UnityCG.cginc"
 			
 			struct v2f {
 				float4 uvShadow : TEXCOORD0;
 				float4 uvFalloff : TEXCOORD1;
-				UNITY_FOG_COORDS(2)
+				//UNITY_FOG_COORDS(2)
 				float4 pos : SV_POSITION;
 			};
 			
@@ -38,7 +38,7 @@ Shader "Projector/Light" {
 				o.pos = UnityObjectToClipPos(vertex);
 				o.uvShadow = mul (unity_Projector, vertex);
 				o.uvFalloff = mul (unity_ProjectorClip, vertex);
-				UNITY_TRANSFER_FOG(o,o.pos);
+				//UNITY_TRANSFER_FOG(o,o.pos);
 				return o;
 			}
 			
@@ -50,7 +50,7 @@ Shader "Projector/Light" {
 			{
 				fixed4 texS = tex2Dproj (_ShadowTex, UNITY_PROJ_COORD(i.uvShadow));
 				texS.rgb *= _Color.rgb;
-				texS.a = 1.0-texS.a;
+				texS.a = 1.0;
 				return texS;
 	
 				/*fixed4 texF = tex2Dproj (_FalloffTex, UNITY_PROJ_COORD(i.uvFalloff));
