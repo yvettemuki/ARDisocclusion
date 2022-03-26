@@ -52,7 +52,6 @@ public class AnchorController : MonoBehaviour
     }
 
     private GameObject m_CurrentPrefab;
-    private ARPlane m_TargetPlane = null;
     private bool m_IsCorridorExist = false;
     private bool m_IsPortalExist = false;
     private bool m_IsQuadExist = false;
@@ -180,7 +179,6 @@ public class AnchorController : MonoBehaviour
         {
             position = 0.5f * (pivotHits[0].pose.position + pivotHits[1].pose.position);
             //position = pivotHits[0].pose.position;
-            Debug.Log($"Portal position is: {position.ToString()}");
 
             right = pivotHits[1].pose.position - pivotHits[0].pose.position;
             up = pivotHits[0].pose.up;
@@ -204,10 +202,13 @@ public class AnchorController : MonoBehaviour
         // if hit a plane
         if (trackable is ARPlane plane)
         {
-            m_PlaneController.SetTargetPlane(plane);
-            m_PlaneController.SetPlaneDetection(false);
-            m_PlaneController.SetOtherPlaneActive(false);
-
+            if (m_PlaneController.GetTargetPlane() == null)
+            {
+                m_PlaneController.SetTargetPlane(plane);
+                m_PlaneController.SetPlaneDetection(false);
+                m_PlaneController.SetOtherPlaneActive(false);
+            }
+            
             var planeManager = GetComponent<ARPlaneManager>();
 
             if (planeManager)
@@ -268,7 +269,7 @@ public class AnchorController : MonoBehaviour
 
         List<Vector3> _fourCorners = new List<Vector3>();
         // add the point of the portal: 1.bottom left, 2.bottom right, 3.top left, 4.top right
-        // attention: should not use pivots[] because it may not alain with the real one
+        // attention: should not use pivots[] because it may not equal to the real one
         Vector3 right = m_PortalAnchor.gameObject.transform.right;
         Vector3 up = m_PortalAnchor.gameObject.transform.up;
         Vector3 pos = m_PortalAnchor.gameObject.transform.position;
@@ -284,11 +285,6 @@ public class AnchorController : MonoBehaviour
         _fourCorners.Add(_position_4);
 
         return _fourCorners;
-    }
-
-    public void GetTargetPlane(out ARPlane targetPlane)
-    {
-        targetPlane = m_TargetPlane;
     }
 
     public void SetAnchorText(ARAnchor anchor, string text)
@@ -343,6 +339,12 @@ public class AnchorController : MonoBehaviour
                 {
                     m_PortalAnchor = anchor;
                     m_IsPortalExist = true;
+
+                    Debug.Log($"the calculate pose : {pose.position.ToString()}");
+                    Debug.Log($"the portal posi: {m_PortalAnchor.gameObject.transform.position.ToString()} ");
+
+                    // attach the corridor geometry to the portal
+                    AttachGeoToPortal(prefabCorrider, pose);
                 }
                 else if (ARContorller.currentObjectType == ARContorller.ControlObjectType.OBJ_CORRIDOR)
                 {
@@ -361,5 +363,35 @@ public class AnchorController : MonoBehaviour
         }
         else
             return;
+    }
+
+
+    // Create and attach the geometry prefab (corridor) to the portal anchor
+    private void AttachGeoToPortal(GameObject geoPrefab, Pose pose)
+    {
+        if (!m_IsPortalExist)
+            return;
+
+        if (geoPrefab == null || pose == null)
+            return;
+
+        Debug.Log("--- in the attach function of the geometry! ----");
+
+        ARTrackable plane = m_PlaneController.GetTargetPlane();
+        if (plane != null)
+        {
+            var anchor = CreateAnchor(pose, plane, geoPrefab);
+
+            if (anchor)
+            {
+                // TODO: current we only have one geometry model (corridor)
+                m_CorridorAnchor = anchor;
+                m_Anchors.Add(anchor);
+                m_IsCorridorExist = true;
+
+                m_CorridorAnchor.gameObject.SetActive(false);
+            }
+        }
+
     }
 }

@@ -567,21 +567,22 @@ MonoBehaviour:
   m_AnchorController: {fileID: 2079571521}
   m_ARCamera: {fileID: 1552705265}
   m_ARCameraController: {fileID: 1298104232}
+  m_ProjectorController: {fileID: 605371440}
   m_DropDown: {fileID: 1105734431}
   m_TextCameraPos: {fileID: 1270414722}
   m_TextPortalPos: {fileID: 1251947677}
   m_HumanSpritePrefab: {fileID: 551767727156965736, guid: 900b0e43c5006a344b849d88f4d465f8, type: 3}
   m_CameraBPrefab: {fileID: 4691372859710652527, guid: eb3dd7cb733ac1f43959607eae4d7eb7, type: 3}
-  m_Frame0: {fileID: 2800000, guid: 5047cab9465f454478413ec6b4571d8f, type: 3}
-  m_Frame1: {fileID: 2800000, guid: a2a8e08ed65d25441869cc49f9ccb088, type: 3}
+  m_Frame0: {fileID: 2800000, guid: 105d4b21b30d1b146a289e43ff23ef82, type: 3}
+  m_Frame1: {fileID: 2800000, guid: 497121c4d5144404cbdfd88c00dfd86e, type: 3}
   m_ProjectorPrefabBG: {fileID: 1769279600775891930, guid: 980c5a9f33bd66043a84a5b5629007e3, type: 3}
   m_ProjectorPrefabHM: {fileID: 3058117821288416713, guid: 9d353c40fcd78f944848dd9cd3c9175f, type: 3}
   m_Frames:
-  - {fileID: 2800000, guid: 0399f5656213fae4a99dac89c9058129, type: 3}
-  - {fileID: 2800000, guid: 55eb5f87b02d2e34287c415d9c731c22, type: 3}
-  - {fileID: 2800000, guid: c63c910fd8a70d54094b592171828c7b, type: 3}
-  - {fileID: 2800000, guid: 51cb8f163fdf1f144ad3ab0bb61705ab, type: 3}
-  - {fileID: 2800000, guid: 3bb16ffc0ededfd4087591b76eb2bc91, type: 3}
+  - {fileID: 2800000, guid: 497121c4d5144404cbdfd88c00dfd86e, type: 3}
+  - {fileID: 2800000, guid: 5d9455938d7971c48a047761f3ce8a07, type: 3}
+  - {fileID: 2800000, guid: 67017a1e48c0ee744a172652d7264f0b, type: 3}
+  - {fileID: 2800000, guid: 4a580dad07f9bf242842e6cb9f85fd84, type: 3}
+  - {fileID: 2800000, guid: 50d5e51d3ff01734c91231ac7dada89f, type: 3}
 --- !u!4 &437207861
 Transform:
   m_ObjectHideFlags: 0
@@ -675,6 +676,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 540605032}
   m_CullTransparentMesh: 1
+--- !u!1 &605371439
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 605371441}
+  - component: {fileID: 605371440}
+  m_Layer: 0
+  m_Name: Projector Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &605371440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 605371439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af07cc4ec3c01934182c0f3dccbed6a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BGSubOutputRTex: {fileID: 8400000, guid: 3dfa732829404d14285e0c5976661c55, type: 2}
+  material: {fileID: 2100000, guid: 8111d7e04a3893341bad2a03beb05f3a, type: 2}
+  BGSubInputRTex: {fileID: 8400000, guid: d1ae412b8aacbca4e911b59aaa127cee, type: 2}
+  videoPlayer: {fileID: 761097362}
+--- !u!4 &605371441
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 605371439}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 320, y: 240, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &647009421
 GameObject:
   m_ObjectHideFlags: 0
@@ -1081,6 +1129,72 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &761097361
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 761097363}
+  - component: {fileID: 761097362}
+  m_Layer: 0
+  m_Name: VideoPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!328 &761097362
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761097361}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 32900000, guid: 067250b228700554e932e1031dc56876, type: 3}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 0}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: _MainTex
+  m_RenderMode: 2
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 2
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 0
+  m_SkipOnDrop: 1
+  m_Looping: 1
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
+--- !u!4 &761097363
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761097361}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 323.1299, y: 439.23077, z: 16.687988}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &916155158
 GameObject:
   m_ObjectHideFlags: 0
@@ -3041,7 +3155,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 437207860}
         m_TargetAssemblyTypeName: ARContorller, Assembly-CSharp
-        m_MethodName: SetPlayBack
+        m_MethodName: SetPlayBackVideoClip
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

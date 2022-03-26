@@ -21,17 +21,32 @@ public class ControllerStates : MonoBehaviour
     public static Vector3 PORTAL_TOP_RIGHT = new Vector3(0.7f, 1.5f, 1.8f);
 
     public static float HUMAN_HEIGHT = 1.62f;
-    public static int HUMAN_HAND_SET_LOWEST_U = 282; // 280  290(1*1) 297 285
-    public static int HUMAN_HAND_SET_LOWEST_V = 316; // 318  211(1*1) 166 192
+    public static int HUMAN_HAND_SET_LOWEST_U = 290; // 282 280  290(1*1) 297 285
+    public static int HUMAN_HAND_SET_LOWEST_V = 317; // 316 318  211(1*1) 166 192
+
+    public enum PlaybackMode
+    {
+        PLAY_BACK_SEGMENT,
+        PLAY_BACK_VIDEO_CLIP
+    };
 
     public static int FRAME_NUM = 5;
     public static Vector2[] FOOTUVs= {
-       new Vector2(284, 246),
-       new Vector2(280, 318),
-       new Vector2(280, 373),
-       new Vector2(273, 335),
-       new Vector2(280, 238)
+       new Vector2(290, 317),
+       new Vector2(294, 369),
+       new Vector2(290, 395),
+       new Vector2(285, 346),
+       new Vector2(281, 247)
     };
+
+    // data old
+    //public static Vector2[] FOOTUVs = {
+    //   new Vector2(284, 246),
+    //   new Vector2(280, 318),
+    //   new Vector2(280, 373),
+    //   new Vector2(273, 335),
+    //   new Vector2(280, 238)
+    //};
 }
 
 /** Data of Camera B by Extrinsic Calibration (Right Coord System)**/

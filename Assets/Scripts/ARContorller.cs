@@ -15,6 +15,7 @@ public class ARContorller : MonoBehaviour
     public AnchorController m_AnchorController;
     public Camera m_ARCamera;
     public ARCameraController m_ARCameraController;
+    public ProjectorController m_ProjectorController;
 
     public Dropdown m_DropDown;
     public Text m_TextCameraPos;
@@ -36,7 +37,8 @@ public class ARContorller : MonoBehaviour
     private GameObject m_ProjectorBG;
     private GameObject m_ProjectorHM;
     private bool m_IsCameraBRegisterd = false;
-    private bool m_IsPlayback = false;
+    private bool m_IsPlaybackSegment = false;
+    private bool m_IsPlaybackVideoClip = false;
     private Texture2D m_HumanSpriteTex;
 
     // Camera B data as the child of Portal
@@ -109,9 +111,14 @@ public class ARContorller : MonoBehaviour
     {
         UpdateCameraPosition();
 
-        if (m_IsPlayback)
+        if (m_IsPlaybackSegment)
         {
-            PlaybackCameraB();
+            PlaybackCameraBSegment();
+        }
+
+        if (m_IsPlaybackVideoClip)
+        {
+            PlaybackCameraBVideoClip();
         }
 
         
@@ -128,7 +135,7 @@ public class ARContorller : MonoBehaviour
         Destroy(m_ProjectorBG);
         Destroy(m_ProjectorHM);
 
-        m_IsPlayback = false;
+        m_IsPlaybackSegment = false;
         m_IsCameraBRegisterd = false;
     }
 
@@ -168,7 +175,8 @@ public class ARContorller : MonoBehaviour
         if (m_IsCameraBRegisterd)
         {
             m_TextCameraPos.text = $"CamA World Position:\n" +
-            $"{m_ARCamera.transform.position.ToString()}\n";
+            $"{m_ARCamera.transform.position.ToString()}\n + " +
+            $"CamB Pos:\n {camera_b_pos.ToString()}\n";
 
             // calcualte the cameraA position with respective to the portal
             Vector3 cam_pos0 = m_ARCamera.transform.position - portal_origin;
@@ -244,6 +252,9 @@ public class ARContorller : MonoBehaviour
          * */
         ProcessCameraBProjectorsPos();
 
+        // set the camera B status
+        m_IsCameraBRegisterd = true;
+
 
         //XRCpuImage image;
         //m_ARCameraController.GetCurrentCameraImage(out image);
@@ -259,15 +270,16 @@ public class ARContorller : MonoBehaviour
             Debug.Log($"Camera B should be registered before disocclusion!");
             return;
         }
-        // background subtraction to get the human sprite texture 
-        m_HumanSpriteTex = BackgourndSubtraction(m_Frame0, m_Frame1);
+        
+        // set the human texture for background subtraction
+        m_HumanSpriteTex = m_Frame1;
 
         // find the lowest point ****** TODO ******
         //FindHumanFootUV(m_HumanSpriteTex, out m_HumanLowestUV);
         m_HumanLowestUV = new Vector2(ControllerStates.HUMAN_HAND_SET_LOWEST_U, ControllerStates.HUMAN_HAND_SET_LOWEST_V);
 
         // set the huamn sprite projector texture
-        ApplyHumanCurrentTexture();
+        ApplyHumanCurrentTexture(ControllerStates.PlaybackMode.PLAY_BACK_SEGMENT);
 
         // transform uv to world space
         TransformFromUVToWorldPoint(in m_HumanLowestUV, out m_HumanLowestPointDirFromCamB);
@@ -352,7 +364,6 @@ public class ARContorller : MonoBehaviour
             right = m_CameraB.transform.right.normalized;
 
             // set cameraB status
-            m_IsCameraBRegisterd = true;
             m_CameraB.gameObject.SetActive(false);
 
             // create projector for side corridor
@@ -411,61 +422,6 @@ public class ARContorller : MonoBehaviour
 
     }
 
-    public Texture2D BackgourndSubtraction(Texture2D frame0, Texture2D frame1)
-    {
-        int _tex_width = frame0.width;
-        int _tex_height = frame0.height;
-
-        Texture2D _subtract_frame = new Texture2D(_tex_width, _tex_height);
-
-        if (frame0 == null || frame1 == null)
-        {
-            Debug.Log("make sure the frame0 and frame1 both imported");
-            return null;
-        }
-
-        if (frame0.isReadable && frame1.isReadable)
-        {
-            for (int v = 0; v < _tex_height; v++)
-            {
-                for (int u = 0; u < _tex_width; u++)
-                {
-                    Color color0 = frame0.GetPixel(u, v);
-                    Color color1 = frame1.GetPixel(u, v);
-
-                    float diff_0 = Mathf.Pow(color0.r - color1.r, 2);
-                    float diff_1 = Mathf.Pow(color0.g - color1.g, 2);
-                    float diff_2 = Mathf.Pow(color0.b - color1.b, 2);
-
-                    if (diff_0 > 0.01 || diff_1 > 0.01 || diff_2 > 0.01)
-                    {
-                        _subtract_frame.SetPixel(u, v, color1);
-                    }
-                    else
-                    {
-                        _subtract_frame.SetPixel(u, v, new Color(1f, 1f, 1f, 0f));
-                    }
-                    
-                    
-                }
-            }
-
-            _subtract_frame.Apply();
-
-            //if (m_AnchorController.m_QuadAnchor != null)
-            //{
-            //    m_AnchorController.m_QuadAnchor.transform.GetChild(0).GetComponent<Renderer>().material.mainTexture = _subtract_frame;
-            //}
-        }
-        else
-        {
-            Debug.Log($"----- false to read texture, please check texture setting ------");
-            return null;
-        }
-
-        return frame1;
-    }
-
     public void FindHumanFootUV(Texture2D frame, out Vector2 uv)
     {
         uv = Vector2.zero;
@@ -521,7 +477,7 @@ public class ARContorller : MonoBehaviour
             return false;
     }
 
-    public void PlaybackCameraB()
+    public void PlaybackCameraBSegment()
     {
         if (m_CameraBFrames.Count <= 0)
         { 
@@ -548,7 +504,7 @@ public class ARContorller : MonoBehaviour
             m_HumanSpriteTex = tex;
 
             // apply human projector texture
-            ApplyHumanCurrentTexture();
+            ApplyHumanCurrentTexture(ControllerStates.PlaybackMode.PLAY_BACK_SEGMENT);
 
             // transform uv to world space
             TransformFromUVToWorldPoint(in uv, out dirFromCamBToUV);
@@ -581,12 +537,27 @@ public class ARContorller : MonoBehaviour
         playbackTime += Time.deltaTime;
     }
 
-    public void SetPlayBack()
+    public void PlaybackCameraBVideoClip()
     {
-        if (m_IsPlayback)
+        ApplyHumanCurrentTexture(ControllerStates.PlaybackMode.PLAY_BACK_VIDEO_CLIP);
+    }
+
+    public void SetPlayBackSegment()
+    {
+        if (m_IsPlaybackSegment)
             playbackTime = 0;
 
-        m_IsPlayback = !m_IsPlayback;
+        m_IsPlaybackSegment = !m_IsPlaybackSegment;
+    }
+
+    public void SetPlayBackVideoClip()
+    {
+        m_IsPlaybackVideoClip = !m_IsPlaybackVideoClip;
+
+        if (m_IsPlaybackVideoClip)
+            m_ProjectorController.videoPlayer.Play();
+        else
+            m_ProjectorController.videoPlayer.Stop();
     }
 
     public void InitializeCameraBVideoFrames()
@@ -603,7 +574,7 @@ public class ARContorller : MonoBehaviour
         }
     }
 
-    private void ApplyHumanCurrentTexture()
+    private void ApplyHumanCurrentTexture(ControllerStates.PlaybackMode mode)
     {
         if (m_HumanSpriteTex == null)
         {
@@ -611,8 +582,11 @@ public class ARContorller : MonoBehaviour
             return;
         }
 
-        Debug.Log($"________ {m_ProjectorHM.GetComponent<Projector>()}");
-        m_ProjectorHM.GetComponent<Projector>().material.SetTexture("_ShadowTex", m_HumanSpriteTex);
+        if (mode == ControllerStates.PlaybackMode.PLAY_BACK_SEGMENT)
+            m_ProjectorController.SetRenderTexture(m_HumanSpriteTex);
+        else if (mode == ControllerStates.PlaybackMode.PLAY_BACK_VIDEO_CLIP)
+            m_ProjectorController.SetRenderTexture();
+
     }
 
 }

@@ -78,6 +78,11 @@ public class PlaneController : MonoBehaviour
         m_TargetPlane = targetPlane;
     }
 
+    public ARPlane GetTargetPlane()
+    {
+        return m_TargetPlane;
+    }
+
     // set all the planes except target plane active true or false
     public void SetOtherPlaneActive(bool isEnable)
     {
@@ -87,4 +92,6 @@ public class PlaneController : MonoBehaviour
                 plane.gameObject.SetActive(isEnable);
         }    
     }
+
+   
 }
