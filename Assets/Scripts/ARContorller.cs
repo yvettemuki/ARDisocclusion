@@ -477,6 +477,30 @@ public class ARContorller : MonoBehaviour
             return false;
     }
 
+    public void RaycastHumanSpritePosition(Ray ray)
+    {
+        // ray cast for human position
+        List<ARRaycastHit> hits = new List<ARRaycastHit>();
+        if (m_ARRaycastManager.Raycast(ray, hits, TrackableType.PlaneWithinPolygon))
+        {
+            ARRaycastHit hit = hits[0];
+            Debug.Log($"+++++++++ human sprite position: {hit.pose.position.ToString()}+++++++");
+
+            if (!m_HumanSprite)
+            {
+                m_HumanSprite = Instantiate(m_HumanSpritePrefab, hit.pose.position, Quaternion.LookRotation(forward, up));
+            }
+            else
+            {
+                m_HumanSprite.transform.position = hit.pose.position;
+                // to do: also change the orientation of human
+            }
+
+        }
+        else
+            Debug.Log($"Failed to register camera B! Please check the code!");
+    }
+
     public void PlaybackCameraBSegment()
     {
         if (m_CameraBFrames.Count <= 0)
@@ -491,7 +515,7 @@ public class ARContorller : MonoBehaviour
             return;
         }
 
-        int index = (int)Mathf.Floor(playbackTime) % ControllerStates.FRAME_NUM;
+        int index = (int)Mathf.Floor(playbackTime) % ControllerStates.SEGMENT_FRAME_NUM;
         CameraBFrame frame = m_CameraBFrames[index];
 
         if (!frame.Equals(default(CameraBFrame)))
@@ -512,26 +536,8 @@ public class ARContorller : MonoBehaviour
             // generate ray
             Ray ray = new Ray(camera_b_pos, dirFromCamBToUV);
 
-            // ray cast
-            List<ARRaycastHit> hits = new List<ARRaycastHit>();
-            if (m_ARRaycastManager.Raycast(ray, hits, TrackableType.PlaneWithinPolygon))
-            {
-                ARRaycastHit hit = hits[0];
-                Debug.Log($"+++++++++ human sprite position: {hit.pose.position.ToString()}+++++++");
-
-                if (!m_HumanSprite)
-                {
-                    m_HumanSprite = Instantiate(m_HumanSpritePrefab, hit.pose.position, Quaternion.LookRotation(forward, up));
-                }
-                else
-                {
-                    m_HumanSprite.transform.position = hit.pose.position;
-                    // to do: also change the orientation of human
-                }
-
-            }
-            else
-                Debug.Log($"Failed to register camera B! Please check the code!");
+            // update the human position
+            RaycastHumanSpritePosition(ray);
         }
 
         playbackTime += Time.deltaTime;
@@ -539,6 +545,41 @@ public class ARContorller : MonoBehaviour
 
     public void PlaybackCameraBVideoClip()
     {
+        if (!m_IsCameraBRegisterd)
+        {
+            Debug.Log($"Please first register the camera B!");
+            return;
+        }
+
+        Vector3 dirFromCamBToUV = Vector3.zero;
+        Vector2 uv = Vector2.zero;
+
+        // get the time data for position clculation
+        int time_0 = (int)m_ProjectorController.videoPlayer.time;
+
+        if (time_0 < ControllerStates.VIDEO_CLIP_FRAME_NUM - 1)
+        {
+            int time_1 = (int)m_ProjectorController.videoPlayer.time + 1;
+            float current_time = (int)(m_ProjectorController.videoPlayer.time * 1000f) / 1000f;
+
+            Vector2 uv_min = ControllerStates.VIDEO_FOOT_UVs[time_0];
+            Vector2 uv_max = ControllerStates.VIDEO_FOOT_UVs[time_1];
+
+            // linear interpolation the position
+            float ratio = (current_time - time_0) / (time_1 - time_0);
+            uv = uv_min + ratio * (uv_max - uv_min);
+        }
+        else
+        {
+            uv = ControllerStates.VIDEO_FOOT_UVs[time_0];
+        }
+
+        TransformFromUVToWorldPoint(in uv, out dirFromCamBToUV);
+
+        Ray ray = new Ray(camera_b_pos, dirFromCamBToUV);
+
+        RaycastHumanSpritePosition(ray);
+
         ApplyHumanCurrentTexture(ControllerStates.PlaybackMode.PLAY_BACK_VIDEO_CLIP);
     }
 
@@ -562,9 +603,9 @@ public class ARContorller : MonoBehaviour
 
     public void InitializeCameraBVideoFrames()
     {
-       for (int i = 0; i < ControllerStates.FOOTUVs.Length; i++)
+       for (int i = 0; i < ControllerStates.FOOT_UVs.Length; i++)
        {
-            Vector2 uv = ControllerStates.FOOTUVs[i];
+            Vector2 uv = ControllerStates.FOOT_UVs[i];
 
             if (m_Frames[i] != null && uv != Vector2.zero)
             {

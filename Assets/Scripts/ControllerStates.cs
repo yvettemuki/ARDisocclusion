@@ -30,8 +30,8 @@ public class ControllerStates : MonoBehaviour
         PLAY_BACK_VIDEO_CLIP
     };
 
-    public static int FRAME_NUM = 5;
-    public static Vector2[] FOOTUVs= {
+    public static int SEGMENT_FRAME_NUM = 5;
+    public static Vector2[] FOOT_UVs= {
        new Vector2(290, 317),
        new Vector2(294, 369),
        new Vector2(290, 395),
@@ -39,7 +39,7 @@ public class ControllerStates : MonoBehaviour
        new Vector2(281, 247)
     };
 
-    // data old
+    // data old for segment
     //public static Vector2[] FOOTUVs = {
     //   new Vector2(284, 246),
     //   new Vector2(280, 318),
@@ -47,6 +47,24 @@ public class ControllerStates : MonoBehaviour
     //   new Vector2(273, 335),
     //   new Vector2(280, 238)
     //};
+
+    public static int VIDEO_CLIP_FRAME_NUM = 14;
+    public static Vector2[] VIDEO_FOOT_UVs = {
+       new Vector2(283, 266),
+       new Vector2(287, 317),
+       new Vector2(292, 349),
+       new Vector2(292, 371),
+       new Vector2(290, 384),
+       new Vector2(290, 390),
+       new Vector2(289, 398),
+       new Vector2(291, 399),
+       new Vector2(290, 395),
+       new Vector2(289, 385),
+       new Vector2(288, 373),
+       new Vector2(288, 353),
+       new Vector2(291, 328),
+       new Vector2(285, 305)
+    };
 }
 
 /** Data of Camera B by Extrinsic Calibration (Right Coord System)**/
