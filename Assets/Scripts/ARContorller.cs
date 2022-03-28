@@ -80,7 +80,6 @@ public class ARContorller : MonoBehaviour
         OBJ_CORRIDOR,
         OBJ_PORTAL,
         OBJ_POINT,
-        OBJ_QUAD
     };
 
     public static ControlObjectType currentObjectType = ControlObjectType.OBJ_NONE;
@@ -157,9 +156,6 @@ public class ARContorller : MonoBehaviour
                 break;
             case "Point":
                 currentObjectType = ControlObjectType.OBJ_POINT;
-                break;
-            case "Quad":
-                currentObjectType = ControlObjectType.OBJ_QUAD;
                 break;
             default: 
                 break;
@@ -255,12 +251,6 @@ public class ARContorller : MonoBehaviour
         // set the camera B status
         m_IsCameraBRegisterd = true;
 
-
-        //XRCpuImage image;
-        //m_ARCameraController.GetCurrentCameraImage(out image);
-
-        //Debug.Log($"-------- {image.width}, {image.height} ---------");
-
     }
 
     public void XRayDisocclusion()
@@ -275,7 +265,6 @@ public class ARContorller : MonoBehaviour
         m_HumanSpriteTex = m_Frame1;
 
         // find the lowest point ****** TODO ******
-        //FindHumanFootUV(m_HumanSpriteTex, out m_HumanLowestUV);
         m_HumanLowestUV = new Vector2(ControllerStates.HUMAN_HAND_SET_LOWEST_U, ControllerStates.HUMAN_HAND_SET_LOWEST_V);
 
         // set the huamn sprite projector texture
@@ -422,61 +411,6 @@ public class ARContorller : MonoBehaviour
 
     }
 
-    public void FindHumanFootUV(Texture2D frame, out Vector2 uv)
-    {
-        uv = Vector2.zero;
-        int _tex_height = frame.height;
-        int _tex_width = frame.width;
-
-        // TODO: optimize the background subtraction      
-
-        for (int v = 0; v < _tex_height; v++)
-        {
-            for (int u = 0; u < _tex_width; u++)
-            {
-                if (frame.GetPixel(u, v) != new Color(1f, 1f, 1f, 0f) && v > uv.y)
-                {
-                    bool isArea = ConfirmArea(new Vector2(u, v), frame, 3);
-
-                    if (isArea)
-                    {
-                        uv.x = u;
-                        uv.y = v;
-                        Debug.Log($"--highest point------- ({u},{v}) ----------");
-                    }
-                }
-            }
-        }
-    }
-
-    public bool ConfirmArea(Vector2 uv, Texture2D frame, int range)
-    {
-        int _white_area_num = 0;
-        int _sum_num = (1 + 2 * range) * (1 + range);
-
-        for (int v = (int)uv.y - range; v <= (int)uv.y; v++)
-        {
-            for (int u = (int)uv.x - range; u <= (int)uv.x + range; u++)
-            {
-                if (uv.x == u && uv.y == v)
-                    continue;
-
-                if (frame.GetPixel(u, v) == new Color(1f, 1f, 1f, 0f))
-                {
-                    _white_area_num++;
-                }
-            }
-        }
-
-        //Debug.Log($"--highest point--({uv.x},{uv.y})----- {frame.GetPixel((int)uv.x, (int)uv.y).ToString()} ----------");
-        //Debug.Log($"--highest point--{_white_area_num}---");
-
-        if ((float)_white_area_num / (float)_sum_num < 0.15)
-            return true;
-        else
-            return false;
-    }
-
     public void RaycastHumanSpritePosition(Ray ray)
     {
         // ray cast for human position
@@ -560,7 +494,8 @@ public class ARContorller : MonoBehaviour
         if (time_0 < ControllerStates.VIDEO_CLIP_FRAME_NUM - 1)
         {
             int time_1 = (int)m_ProjectorController.videoPlayer.time + 1;
-            float current_time = (int)(m_ProjectorController.videoPlayer.time * 1000f) / 1000f;
+            //float current_time = (int)(m_ProjectorController.videoPlayer.time * 1000f) / 1000f;
+            float current_time = (float)m_ProjectorController.videoPlayer.time;
 
             Vector2 uv_min = ControllerStates.VIDEO_FOOT_UVs[time_0];
             Vector2 uv_max = ControllerStates.VIDEO_FOOT_UVs[time_1];
@@ -574,13 +509,14 @@ public class ARContorller : MonoBehaviour
             uv = ControllerStates.VIDEO_FOOT_UVs[time_0];
         }
 
+        ApplyHumanCurrentTexture(ControllerStates.PlaybackMode.PLAY_BACK_VIDEO_CLIP);
+
         TransformFromUVToWorldPoint(in uv, out dirFromCamBToUV);
 
         Ray ray = new Ray(camera_b_pos, dirFromCamBToUV);
 
         RaycastHumanSpritePosition(ray);
-
-        ApplyHumanCurrentTexture(ControllerStates.PlaybackMode.PLAY_BACK_VIDEO_CLIP);
+        
     }
 
     public void SetPlayBackSegment()

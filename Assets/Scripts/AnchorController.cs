@@ -126,41 +126,6 @@ public class AnchorController : MonoBehaviour
 
             }
         }
-        else if (!m_IsQuadExist && ARContorller.currentObjectType == ARContorller.ControlObjectType.OBJ_QUAD)
-        {
-            m_CurrentPrefab = prefabQuad;
-
-            // get the touch
-            var touch = Input.GetTouch(0);
-            if (touch.phase != TouchPhase.Began)
-                return;
-
-            // Perform the raycast
-            List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
-            if (m_RaycastManager.Raycast(touch.position, s_Hits, trackableTypes))
-            {
-                // Raycast hit is stored by distace so the first one will be the closet one
-                ARRaycastHit hit = s_Hits[0];
-
-                TextLogger.Log($"Quad Position: {hit.pose.position.ToString()}");
-
-                // Create a new anchor
-                var anchor = CreateAnchor(hit.pose, hit.trackable, m_CurrentPrefab);
-                if (anchor)
-                {
-                    // Add the anchor to our anchor list to manage
-                    SetAnchorText(anchor, $"{hit.pose.position.ToString()}");
-                    m_Anchors.Add(anchor);
-                    m_QuadAnchor = anchor;
-                    m_IsQuadExist = true;
-                }
-                else
-                {
-                    TextLogger.Log("Failed to create quad anchor!");
-                }
-
-            }
-        }
         else if (ARContorller.currentObjectType == ARContorller.ControlObjectType.OBJ_NONE)
             return;
 

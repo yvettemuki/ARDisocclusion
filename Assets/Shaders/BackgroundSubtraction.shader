@@ -50,7 +50,7 @@ Shader "Projector/BackgroundSubtraction"
             {
                 // blur the images
                 // blurry image f0(sub) and f1(main)
-                int hw = 6;
+                int hw = 5;
                 float n = 0.0;
                 fixed4 blur_main = (0.0);
                 fixed4 blur_sub = (0.0);
@@ -80,7 +80,7 @@ Shader "Projector/BackgroundSubtraction"
                 float b_diff_square = pow(col_human.b - col_background.b, 2);
                 float square_diff = r_diff_square + g_diff_square + b_diff_square;
 
-                if (square_diff > 0.008f && square_diff < 3.0f)
+                if (square_diff > 0.01f && square_diff < 3.0f)
                 {
                     // filter the noise
                     return _MainTex.Sample(sampler_MainTex, i.uv);
