@@ -6,8 +6,8 @@ using UnityEngine.Video;
 public class ProjectorController : MonoBehaviour
 {
     public RenderTexture BGSubOutputRTex;  // after background subtraction human sprite output
-    public Material material;
     public RenderTexture BGSubInputRTex;  // for video having human
+    public Material bgSubMaterial;
     public VideoPlayer videoPlayer;
 
     // Start is called before the first frame update
@@ -25,12 +25,21 @@ public class ProjectorController : MonoBehaviour
 
     public void SetRenderTexture(Texture2D humanSpriteFrame)
     {
+        if (humanSpriteFrame == null)
+        {
+            Debug.Log($"Human sprite texture can not be null!");
+            return;
+        }
+
         // the first paramenter is the _MainTex for shader input
-        Graphics.Blit(humanSpriteFrame, BGSubOutputRTex, material);
+        Graphics.Blit(humanSpriteFrame, BGSubOutputRTex, bgSubMaterial);
     }
 
-    public void SetRenderTexture()
+    public void SetRenderTexture(ARContorller.UserStudyType type)
     {
-        Graphics.Blit(BGSubInputRTex, BGSubOutputRTex, material);
+        if (type == ARContorller.UserStudyType.TYPE_XRAY)
+            Graphics.Blit(BGSubInputRTex, BGSubOutputRTex, bgSubMaterial);
+        else if (type == ARContorller.UserStudyType.TYPE_TEXTURED)
+            Graphics.Blit(BGSubInputRTex, BGSubOutputRTex);
     }    
 }

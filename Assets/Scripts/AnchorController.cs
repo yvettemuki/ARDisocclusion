@@ -43,20 +43,10 @@ public class AnchorController : MonoBehaviour
         set { m_PrefabPoint = value; }
     }
 
-    [SerializeField]
-    GameObject m_PrefabQuad;
-    public GameObject prefabQuad
-    {
-        get { return m_PrefabQuad; }
-        set { m_PrefabQuad = value; }
-    }
-
     private GameObject m_CurrentPrefab;
     private bool m_IsCorridorExist = false;
     private bool m_IsPortalExist = false;
-    private bool m_IsQuadExist = false;
 
-    public ARAnchor m_QuadAnchor;
     public ARAnchor m_PortalAnchor;
     public ARAnchor m_CorridorAnchor;
 
@@ -208,20 +198,20 @@ public class AnchorController : MonoBehaviour
             Destroy(anchor.gameObject);
         }
 
-        Destroy(m_QuadAnchor);
-
         m_IsCorridorExist = false;
         m_IsPortalExist = false;
-        m_IsQuadExist = false;
 
         m_PortalAnchor = null;
         m_CorridorAnchor = null;
-        m_QuadAnchor = null;
 
         m_Anchors.Clear();
         portalRayCastHits.Clear();
         corridorRayCastHits.Clear();
         TextLogger.Log("Anchors has been cleared!");
+
+        m_PlaneController.SetPlaneDetection(true);
+        m_PlaneController.SetOtherPlaneActive(true);
+        m_PlaneController.SetTargetPlane(null);
     }
 
     public List<Vector3> getPortal4CornerPositions()

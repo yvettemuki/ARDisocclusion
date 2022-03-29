@@ -17,13 +17,13 @@ public class ARContorller : MonoBehaviour
     public ARCameraController m_ARCameraController;
     public ProjectorController m_ProjectorController;
 
-    public Dropdown m_DropDown;
+    public Dropdown m_DropDownAnchorType;
+    public Dropdown m_DropDownUserStudyType;
     public Text m_TextCameraPos;
     public Text m_TextPortalPos;
-    //public Text m_TextHumanPos;
-    //public Camera m_CameraB;
     public GameObject m_HumanSpritePrefab;
     public GameObject m_CameraBPrefab;
+    public GameObject m_PortalPlanePrefab;
     public Texture2D m_Frame0;
     public Texture2D m_Frame1;
     public GameObject m_ProjectorPrefabBG; // background projector
@@ -33,6 +33,7 @@ public class ARContorller : MonoBehaviour
     private Vector2 m_HumanLowestUV;
     private Vector3 m_HumanLowestPointDirFromCamB;
     private GameObject m_HumanSprite;
+    private GameObject m_PortalPlane;
     private GameObject m_CameraB;
     private GameObject m_ProjectorBG;
     private GameObject m_ProjectorHM;
@@ -47,7 +48,7 @@ public class ARContorller : MonoBehaviour
     Vector3 up = Vector3.zero;
     Vector3 right = Vector3.zero;
 
-    // Portal coordinate system data
+    // Portal coordinate system data (generate in the ar world != precomputed)
     Vector3 portal_origin = Vector3.zero;
     Vector3 portal_x_axis = Vector3.zero;
     Vector3 portal_y_axis = Vector3.zero;
@@ -82,9 +83,15 @@ public class ARContorller : MonoBehaviour
         OBJ_POINT,
     };
 
-    public static ControlObjectType currentObjectType = ControlObjectType.OBJ_NONE;
+    public enum UserStudyType
+    {
+        TYPE_NONE,
+        TYPE_XRAY,
+        TYPE_TEXTURED
+    };
 
-    private List<ARPlane> m_DetectedPlanes = new List<ARPlane> ();
+    public static ControlObjectType currentObjectType = ControlObjectType.OBJ_NONE;
+    public static UserStudyType currentUserStudyType = UserStudyType.TYPE_NONE;
 
     // Start is called before the first frame update
     void Start()
@@ -117,7 +124,10 @@ public class ARContorller : MonoBehaviour
 
         if (m_IsPlaybackVideoClip)
         {
-            PlaybackCameraBVideoClip();
+            if (currentUserStudyType == UserStudyType.TYPE_XRAY)
+                PlaybackCameraBVideoClipInXRay();
+            else if (currentUserStudyType == UserStudyType.TYPE_TEXTURED)
+                PlayBackCameraBVideoClipInTextured();
         }
 
         
@@ -129,18 +139,27 @@ public class ARContorller : MonoBehaviour
 
         m_AnchorController.Reset();
 
-        Destroy(m_HumanSprite);
-        Destroy(m_CameraB);
-        Destroy(m_ProjectorBG);
-        Destroy(m_ProjectorHM);
+        if (m_HumanSprite) Destroy(m_HumanSprite);
+        if (m_CameraB) Destroy(m_CameraB);
+        if (m_ProjectorBG) Destroy(m_ProjectorBG);
+        if (m_ProjectorHM) Destroy(m_ProjectorHM);
+        if (m_PortalPlane) Destroy(m_PortalPlane);
 
         m_IsPlaybackSegment = false;
+        m_IsPlaybackVideoClip = false;
         m_IsCameraBRegisterd = false;
+
     }
 
-    public void onControlObjectChanged()
+    public void CleanUpScene()
     {
-        var selectedValue = m_DropDown.options[m_DropDown.value].text;
+        if (m_HumanSprite) Destroy(m_HumanSprite);
+        if (m_PortalPlane) Destroy(m_PortalPlane);
+    }
+
+    public void OnControlObjectChanged()
+    {
+        var selectedValue = m_DropDownAnchorType.options[m_DropDownAnchorType.value].text;
 
         Debug.Log("++++ " + selectedValue);
         switch (selectedValue)
@@ -162,6 +181,39 @@ public class ARContorller : MonoBehaviour
         }
     }
 
+    public void OnUserStudyTypeChanged()
+    {
+        var selected = m_DropDownUserStudyType.options[m_DropDownUserStudyType.value].text;
+
+        switch (selected)
+        {
+            case "None":
+                currentUserStudyType = UserStudyType.TYPE_NONE;
+                CleanUpScene();
+                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                break;
+
+            case "X-Ray":
+                currentUserStudyType = UserStudyType.TYPE_XRAY;
+                CleanUpScene();
+                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
+                m_IsPlaybackVideoClip = true;
+                m_ProjectorController.videoPlayer.Play();
+                break;
+
+            case "Textured":
+                currentUserStudyType = UserStudyType.TYPE_TEXTURED;
+                CleanUpScene();
+                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                m_IsPlaybackVideoClip = true;
+                m_ProjectorController.videoPlayer.Play();
+                break;
+
+            default:
+                break;
+        }
+    }
+
     public void UpdateCameraPosition()
     {
         m_TextCameraPos.text = $"CameraA Position:\n" +
@@ -174,40 +226,43 @@ public class ARContorller : MonoBehaviour
             $"{m_ARCamera.transform.position.ToString()}\n + " +
             $"CamB Pos:\n {camera_b_pos.ToString()}\n";
 
-            // calcualte the cameraA position with respective to the portal
-            Vector3 cam_pos0 = m_ARCamera.transform.position - portal_origin;
-            camera_a_pos_in_portal = new Vector3(
-                Vector3.Dot(portal_x_axis, cam_pos0),
-                Vector3.Dot(portal_y_axis, cam_pos0),
-                Vector3.Dot(portal_z_axis, cam_pos0)
-            );
+            if (currentUserStudyType == UserStudyType.TYPE_XRAY)
+            {
+                // calcualte the cameraA position with respective to the portal
+                Vector3 cam_pos0 = m_ARCamera.transform.position - portal_origin;
+                camera_a_pos_in_portal = new Vector3(
+                    Vector3.Dot(portal_x_axis, cam_pos0),
+                    Vector3.Dot(portal_y_axis, cam_pos0),
+                    Vector3.Dot(portal_z_axis, cam_pos0)
+                );
 
-            if (camera_a_pos_in_portal.x < portal_x_lower_bound)
-            {
-                m_TextCameraPos.text += $"left side {portal_x_lower_bound}:\n{camera_a_pos_in_portal.ToString()}\n";
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(false);
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(true);
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(true);
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
-                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
-                
-            }
-            else if (camera_a_pos_in_portal.x > portal_x_upper_bound)
-            {
-                m_TextCameraPos.text += $"right side {portal_x_upper_bound}:\n{camera_a_pos_in_portal.ToString()}\n ";
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(false);
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(true);
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(true);
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
-                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
-                
-            }
-            else
-            {
-                m_TextCameraPos.text += $"center:\n{camera_a_pos_in_portal.ToString()}\n ";
-                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
-            }
+                // set the visibility of the corridor
+                if (camera_a_pos_in_portal.x < portal_x_lower_bound)
+                {
+                    m_TextCameraPos.text += $"left side {portal_x_lower_bound}:\n{camera_a_pos_in_portal.ToString()}\n";
+                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(false);
+                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(true);
+                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(true);
+                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
+                    m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
 
+                }
+                else if (camera_a_pos_in_portal.x > portal_x_upper_bound)
+                {
+                    m_TextCameraPos.text += $"right side {portal_x_upper_bound}:\n{camera_a_pos_in_portal.ToString()}\n ";
+                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(false);
+                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(true);
+                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(true);
+                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
+                    m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
+
+                }
+                else
+                {
+                    m_TextCameraPos.text += $"center:\n{camera_a_pos_in_portal.ToString()}\n ";
+                    m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                }
+            }
         }
 
 
@@ -260,7 +315,9 @@ public class ARContorller : MonoBehaviour
             Debug.Log($"Camera B should be registered before disocclusion!");
             return;
         }
-        
+
+        CleanUpScene();
+
         // set the human texture for background subtraction
         m_HumanSpriteTex = m_Frame1;
 
@@ -290,6 +347,28 @@ public class ARContorller : MonoBehaviour
         }
         else
             Debug.Log($"Failed to visualize the human sprite! Please check the code!");
+    }
+
+    public void TexturedDisocclusion()
+    {
+        if (!m_IsCameraBRegisterd)
+        {
+            Debug.Log($"Camera B should be registered before disocclusion!");
+            return;
+        }
+
+        if (!m_AnchorController.m_PortalAnchor)
+        {
+            Debug.Log($"Portal should be created before disocclusion!");
+            return;
+        }
+
+        if (!m_PortalPlane)
+        {
+            Vector3 position = m_AnchorController.m_PortalAnchor.gameObject.transform.position;
+            Quaternion rotation = m_AnchorController.m_PortalAnchor.gameObject.transform.rotation;
+            m_PortalPlane = Instantiate(m_PortalPlanePrefab, position, rotation);
+        }
     }
 
     public void ProcessCameraBProjectorsPos()
@@ -477,7 +556,7 @@ public class ARContorller : MonoBehaviour
         playbackTime += Time.deltaTime;
     }
 
-    public void PlaybackCameraBVideoClip()
+    public void PlaybackCameraBVideoClipInXRay()
     {
         if (!m_IsCameraBRegisterd)
         {
@@ -519,6 +598,13 @@ public class ARContorller : MonoBehaviour
         
     }
 
+    public void PlayBackCameraBVideoClipInTextured()
+    {
+        TexturedDisocclusion();
+
+        ApplyHumanCurrentTexture(ControllerStates.PlaybackMode.PLAY_BACK_VIDEO_CLIP);
+    }
+
     public void SetPlayBackSegment()
     {
         if (m_IsPlaybackSegment)
@@ -532,9 +618,14 @@ public class ARContorller : MonoBehaviour
         m_IsPlaybackVideoClip = !m_IsPlaybackVideoClip;
 
         if (m_IsPlaybackVideoClip)
+        {
             m_ProjectorController.videoPlayer.Play();
+        }
         else
+        {
             m_ProjectorController.videoPlayer.Stop();
+
+        }
     }
 
     public void InitializeCameraBVideoFrames()
@@ -553,16 +644,16 @@ public class ARContorller : MonoBehaviour
 
     private void ApplyHumanCurrentTexture(ControllerStates.PlaybackMode mode)
     {
-        if (m_HumanSpriteTex == null)
-        {
-            Debug.Log($"Human sprite texture can not be null!");
-            return;
-        }
+        //if (m_HumanSpriteTex == null)
+        //{
+        //    Debug.Log($"Human sprite texture can not be null!");
+        //    return;
+        //}
 
         if (mode == ControllerStates.PlaybackMode.PLAY_BACK_SEGMENT)
             m_ProjectorController.SetRenderTexture(m_HumanSpriteTex);
         else if (mode == ControllerStates.PlaybackMode.PLAY_BACK_VIDEO_CLIP)
-            m_ProjectorController.SetRenderTexture();
+            m_ProjectorController.SetRenderTexture(currentUserStudyType);
 
     }
 
