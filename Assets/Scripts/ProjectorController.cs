@@ -37,7 +37,7 @@ public class ProjectorController : MonoBehaviour
 
     public void SetRenderTexture(ARContorller.UserStudyType type)
     {
-        if (type == ARContorller.UserStudyType.TYPE_XRAY)
+        if (type == ARContorller.UserStudyType.TYPE_XRAY || type == ARContorller.UserStudyType.TYPE_OCCLUDED)
             Graphics.Blit(BGSubInputRTex, BGSubOutputRTex, bgSubMaterial);
         else if (type == ARContorller.UserStudyType.TYPE_TEXTURED)
             Graphics.Blit(BGSubInputRTex, BGSubOutputRTex);

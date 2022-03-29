@@ -907,7 +907,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &647009421
 GameObject:
@@ -1526,7 +1526,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &916155158
 GameObject:
@@ -3988,6 +3988,8 @@ MonoBehaviour:
     - m_Text: X-Ray
       m_Image: {fileID: 0}
     - m_Text: Textured
+      m_Image: {fileID: 0}
+    - m_Text: Occluded
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

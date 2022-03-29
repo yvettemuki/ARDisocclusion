@@ -87,7 +87,8 @@ public class ARContorller : MonoBehaviour
     {
         TYPE_NONE,
         TYPE_XRAY,
-        TYPE_TEXTURED
+        TYPE_TEXTURED,
+        TYPE_OCCLUDED
     };
 
     public static ControlObjectType currentObjectType = ControlObjectType.OBJ_NONE;
@@ -124,7 +125,7 @@ public class ARContorller : MonoBehaviour
 
         if (m_IsPlaybackVideoClip)
         {
-            if (currentUserStudyType == UserStudyType.TYPE_XRAY)
+            if (currentUserStudyType == UserStudyType.TYPE_XRAY || currentUserStudyType == UserStudyType.TYPE_OCCLUDED)
                 PlaybackCameraBVideoClipInXRay();
             else if (currentUserStudyType == UserStudyType.TYPE_TEXTURED)
                 PlayBackCameraBVideoClipInTextured();
@@ -209,6 +210,14 @@ public class ARContorller : MonoBehaviour
                 m_ProjectorController.videoPlayer.Play();
                 break;
 
+            case "Occluded":
+                currentUserStudyType = UserStudyType.TYPE_OCCLUDED;
+                CleanUpScene();
+                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                m_IsPlaybackVideoClip = true;
+                m_ProjectorController.videoPlayer.Play();
+                break;
+
             default:
                 break;
         }
@@ -228,13 +237,7 @@ public class ARContorller : MonoBehaviour
 
             if (currentUserStudyType == UserStudyType.TYPE_XRAY)
             {
-                // calcualte the cameraA position with respective to the portal
-                Vector3 cam_pos0 = m_ARCamera.transform.position - portal_origin;
-                camera_a_pos_in_portal = new Vector3(
-                    Vector3.Dot(portal_x_axis, cam_pos0),
-                    Vector3.Dot(portal_y_axis, cam_pos0),
-                    Vector3.Dot(portal_z_axis, cam_pos0)
-                );
+                CalCameraAPositionInPortal();
 
                 // set the visibility of the corridor
                 if (camera_a_pos_in_portal.x < portal_x_lower_bound)
@@ -263,9 +266,44 @@ public class ARContorller : MonoBehaviour
                     m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
                 }
             }
+            else if (currentUserStudyType == UserStudyType.TYPE_OCCLUDED)
+            {
+                CalCameraAPositionInPortal();
+
+                // set the visibility of the human sprite
+                if (camera_a_pos_in_portal.x > portal_x_lower_bound && camera_a_pos_in_portal.x < portal_x_upper_bound)
+                {
+                    m_TextCameraPos.text += $"center:\n{camera_a_pos_in_portal.ToString()}\n ";
+                    m_IsPlaybackVideoClip = true;
+                }
+                else
+                {
+                    m_TextCameraPos.text += $"side:\n{camera_a_pos_in_portal.ToString()}\n ";
+                    CleanUpScene();
+                    m_IsPlaybackVideoClip = false;
+                }
+            }
+            
         }
 
 
+    }
+
+    public void CalCameraAPositionInPortal()
+    {
+        if (!m_AnchorController.m_PortalAnchor)
+        {
+            Debug.Log("Portal should be exist for calculation!");
+            return;
+        }
+
+        // calcualte the cameraA position with respective to the portal
+        Vector3 cam_pos0 = m_ARCamera.transform.position - portal_origin;
+        camera_a_pos_in_portal = new Vector3(
+            Vector3.Dot(portal_x_axis, cam_pos0),
+            Vector3.Dot(portal_y_axis, cam_pos0),
+            Vector3.Dot(portal_z_axis, cam_pos0)
+        );
     }
 
     public void RegisterSecondCamera()
@@ -315,8 +353,6 @@ public class ARContorller : MonoBehaviour
             Debug.Log($"Camera B should be registered before disocclusion!");
             return;
         }
-
-        CleanUpScene();
 
         // set the human texture for background subtraction
         m_HumanSpriteTex = m_Frame1;
@@ -644,11 +680,6 @@ public class ARContorller : MonoBehaviour
 
     private void ApplyHumanCurrentTexture(ControllerStates.PlaybackMode mode)
     {
-        //if (m_HumanSpriteTex == null)
-        //{
-        //    Debug.Log($"Human sprite texture can not be null!");
-        //    return;
-        //}
 
         if (mode == ControllerStates.PlaybackMode.PLAY_BACK_SEGMENT)
             m_ProjectorController.SetRenderTexture(m_HumanSpriteTex);
