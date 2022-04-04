@@ -24,6 +24,14 @@ public class ControllerStates : MonoBehaviour
     public static int HUMAN_HAND_SET_LOWEST_U = 290; // 282 280  290(1*1) 297 285
     public static int HUMAN_HAND_SET_LOWEST_V = 317; // 316 318  211(1*1) 166 192
 
+    // Commons
+    public static float GRAVITY_ACC = 9.8f;
+
+    // User Study Preset Datas
+    public static Vector3 CIRCLE_POS_IN_PORTAL_1 = new Vector3(0f, 0f, 2.06f);
+    public static Vector3 MIRROR_POS_IN_PORTAL = new Vector3(0.3951416f, 1.269997f, -1.824219f);
+    public static Quaternion MIRROR_ROT_IN_PORTAL = Quaternion.Euler(0f, -20f, 0f);
+
     public enum PlaybackMode
     {
         PLAY_BACK_SEGMENT,
