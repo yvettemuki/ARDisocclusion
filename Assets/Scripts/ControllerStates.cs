@@ -29,8 +29,8 @@ public class ControllerStates : MonoBehaviour
 
     // User Study Preset Datas
     public static Vector3 CIRCLE_POS_IN_PORTAL_1 = new Vector3(0f, 0f, 2.06f);
-    public static Vector3 MIRROR_POS_IN_PORTAL = new Vector3(0.3951416f, 1.269997f, -1.824219f);
-    public static Quaternion MIRROR_ROT_IN_PORTAL = Quaternion.Euler(0f, -20f, 0f);
+    public static Vector3 MIRROR_POS_IN_PORTAL = new Vector3(0.375f, 1.339066f, -2.048f);
+    public static Quaternion MIRROR_ROT_IN_PORTAL = Quaternion.Euler(0f, 330f, 0f);
 
     public enum PlaybackMode
     {
@@ -56,22 +56,40 @@ public class ControllerStates : MonoBehaviour
     //   new Vector2(280, 238)
     //};
 
+    //public static int VIDEO_CLIP_FRAME_NUM = 14;
+    //public static Vector2[] VIDEO_FOOT_UVs = {
+    //   new Vector2(283, 266),
+    //   new Vector2(287, 317),
+    //   new Vector2(292, 349),
+    //   new Vector2(292, 371),
+    //   new Vector2(290, 384),
+    //   new Vector2(290, 390),
+    //   new Vector2(289, 398),
+    //   new Vector2(291, 399),
+    //   new Vector2(290, 395),
+    //   new Vector2(289, 385),
+    //   new Vector2(288, 373),
+    //   new Vector2(288, 353),
+    //   new Vector2(291, 328),
+    //   new Vector2(285, 305)
+    //};
+
     public static int VIDEO_CLIP_FRAME_NUM = 14;
     public static Vector2[] VIDEO_FOOT_UVs = {
-       new Vector2(283, 266),
-       new Vector2(287, 317),
-       new Vector2(292, 349),
-       new Vector2(292, 371),
-       new Vector2(290, 384),
-       new Vector2(290, 390),
-       new Vector2(289, 398),
-       new Vector2(291, 399),
-       new Vector2(290, 395),
-       new Vector2(289, 385),
-       new Vector2(288, 373),
-       new Vector2(288, 353),
-       new Vector2(291, 328),
-       new Vector2(285, 305)
+       new Vector2(281, 302),
+       new Vector2(284, 339),
+       new Vector2(276, 361),
+       new Vector2(273, 377),
+       new Vector2(270, 386),
+       new Vector2(273, 386),
+       new Vector2(272, 392),
+       new Vector2(280, 390),
+       new Vector2(278, 383),
+       new Vector2(276, 369),
+       new Vector2(276, 356),
+       new Vector2(276, 334),
+       new Vector2(274, 303),
+       new Vector2(266, 259)
     };
 }
 

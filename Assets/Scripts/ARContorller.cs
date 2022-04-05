@@ -44,6 +44,7 @@ public class ARContorller : MonoBehaviour
     private bool m_IsPlaybackSegment = false;
     private bool m_IsPlaybackVideoClip = false;
     private Texture2D m_HumanSpriteTex;
+    private Camera m_MirrorCamera;
 
     // Camera B data as the child of Portal
     Vector3 camera_b_pos = Vector3.zero;
@@ -129,12 +130,13 @@ public class ARContorller : MonoBehaviour
 
         if (m_IsPlaybackVideoClip)
         {
-            if (currentUserStudyType == UserStudyType.TYPE_XRAY 
-                || currentUserStudyType == UserStudyType.TYPE_MIRROR
+            if (currentUserStudyType == UserStudyType.TYPE_XRAY
                 || currentUserStudyType == UserStudyType.TYPE_OCCLUDED)
-                PlaybackCameraBVideoClip();
+                PlaybackCameraBVideoClipInSideCorridor();
             else if (currentUserStudyType == UserStudyType.TYPE_TEXTURED)
                 PlayBackCameraBVideoClipInTextured();
+            else if (currentUserStudyType == UserStudyType.TYPE_MIRROR)
+                PlayBackCameraBVideoClipInMirror();
         }
 
         
@@ -220,8 +222,6 @@ public class ARContorller : MonoBehaviour
             case "Mirror":
                 currentUserStudyType = UserStudyType.TYPE_MIRROR;
                 CleanUpScene();
-                CreateMirror();
-                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
                 m_IsPlaybackVideoClip = true;
                 m_ProjectorController.videoPlayer.Play();
                 break;
@@ -299,18 +299,21 @@ public class ARContorller : MonoBehaviour
                     m_IsPlaybackVideoClip = false;
                 }
             }
-            else if (currentUserStudyType == UserStudyType.TYPE_MIRROR)
-            {
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(true);
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(true);
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(true);
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(true);
-                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
-            }
             
         }
 
 
+    }
+
+    public void SetSideCorridorViewActive(in bool isActive)
+    {
+        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(isActive);
+        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(isActive);
+        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(isActive);
+        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(isActive);
+        m_AnchorController.m_CorridorAnchor.gameObject.SetActive(isActive);
+
+        m_HumanSprite.SetActive(isActive);
     }
 
     public void CalCameraAPositionInPortal()
@@ -466,8 +469,7 @@ public class ARContorller : MonoBehaviour
         }
     }
 
-    // Mirror Disocclusion
-    public void CreateMirror()
+    public void MirrorDisocclusion()
     {
         if (!m_IsCameraBRegisterd)
         {
@@ -475,24 +477,27 @@ public class ARContorller : MonoBehaviour
             return;
         }
 
-        if (!m_AnchorController.m_PortalAnchor)
+        if (!m_Mirror)
         {
-            Debug.Log($"Portal should be created before disocclusion!");
-            return;
+            // create mirror
+            Vector3 mirror_position = Vector3.zero;
+            Quaternion mirror_rotation = Quaternion.identity;
+
+            PortalObjectPos2World(in ControllerStates.MIRROR_POS_IN_PORTAL, out mirror_position);
+            PortalObjectRot2World(in ControllerStates.MIRROR_ROT_IN_PORTAL, out mirror_rotation);
+            m_Mirror = Instantiate(m_MirrorPrefab, mirror_position, mirror_rotation);
+
+            // set cam not enable
+            m_MirrorCamera = m_Mirror.transform.GetChild(2).GetChild(0).gameObject.GetComponent<Camera>();
+            m_MirrorCamera.enabled = false;
+            
         }
 
-        if (m_Mirror)
-        {
-            Debug.Log("Mirror should not be create!");
-            return;
-        }
-
-        Vector3 mirror_position = Vector3.zero;
-        Quaternion mirror_rotation = Quaternion.identity;
-
-        PortalObjectPos2World(in ControllerStates.MIRROR_POS_IN_PORTAL, out mirror_position);
-        PortalObjectRot2World(in ControllerStates.MIRROR_ROT_IN_PORTAL, out mirror_rotation);
-        m_Mirror = Instantiate(m_MirrorPrefab, mirror_position, mirror_rotation);
+        SetSideCorridorViewActive(true);
+        m_MirrorCamera.Render();
+        //Texture render_texture = m_MirrorCamera.targetTexture;
+        //m_Mirror.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.mainTexture = render_texture;
+        SetSideCorridorViewActive(false);
     }
 
     public void ProcessCameraBProjectorsPos()
@@ -610,7 +615,6 @@ public class ARContorller : MonoBehaviour
 
 
         pointDir = cam_pos_to_clip_start_dir + uu * right + vv * up;
-        Debug.Log($"------ {pointDir.ToString()} ------");
 
     }
 
@@ -680,7 +684,7 @@ public class ARContorller : MonoBehaviour
         playbackTime += Time.deltaTime;
     }
 
-    public void PlaybackCameraBVideoClip()
+    public void PlaybackCameraBVideoClipInSideCorridor()
     {
         if (!m_IsCameraBRegisterd)
         {
@@ -727,6 +731,12 @@ public class ARContorller : MonoBehaviour
         TexturedDisocclusion();
 
         ApplyHumanCurrentTexture(ControllerStates.PlaybackMode.PLAY_BACK_VIDEO_CLIP);
+    }
+
+    public void PlayBackCameraBVideoClipInMirror()
+    {
+        PlaybackCameraBVideoClipInSideCorridor();
+        MirrorDisocclusion();
     }
 
     public void SetPlayBackSegment()
