@@ -76,20 +76,20 @@ public class ControllerStates : MonoBehaviour
 
     public static int VIDEO_CLIP_FRAME_NUM = 14;
     public static Vector2[] VIDEO_FOOT_UVs = {
-       new Vector2(281, 302),
-       new Vector2(284, 339),
-       new Vector2(276, 361),
-       new Vector2(273, 377),
-       new Vector2(270, 386),
-       new Vector2(273, 386),
-       new Vector2(272, 392),
-       new Vector2(280, 390),
-       new Vector2(278, 383),
-       new Vector2(276, 369),
-       new Vector2(276, 356),
-       new Vector2(276, 334),
-       new Vector2(274, 303),
-       new Vector2(266, 259)
+        new Vector2(270, 232),
+        new Vector2(281, 301),
+        new Vector2(284, 339),
+        new Vector2(276, 361),
+        new Vector2(273, 377),
+        new Vector2(272, 386),
+        new Vector2(272, 392),
+        new Vector2(280, 390),
+        new Vector2(278, 383),
+        new Vector2(276, 369),
+        new Vector2(276, 356),
+        new Vector2(276, 334),
+        new Vector2(274, 303),
+        new Vector2(266, 259)
     };
 }
 

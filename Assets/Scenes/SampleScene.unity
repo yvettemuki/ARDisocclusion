@@ -764,6 +764,7 @@ MonoBehaviour:
   m_Frame1: {fileID: 2800000, guid: 497121c4d5144404cbdfd88c00dfd86e, type: 3}
   m_ProjectorPrefabBG: {fileID: 1769279600775891930, guid: 980c5a9f33bd66043a84a5b5629007e3, type: 3}
   m_ProjectorPrefabHM: {fileID: 3058117821288416713, guid: 9d353c40fcd78f944848dd9cd3c9175f, type: 3}
+  m_ProjectorPrefabMULTI: {fileID: 4455720376716969035, guid: aaa65babe8aaa4e40adf364b98ea37ac, type: 3}
   m_Frames:
   - {fileID: 2800000, guid: 497121c4d5144404cbdfd88c00dfd86e, type: 3}
   - {fileID: 2800000, guid: 5d9455938d7971c48a047761f3ce8a07, type: 3}
@@ -1780,7 +1781,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 437207860}
         m_TargetAssemblyTypeName: ARContorller, Assembly-CSharp
-        m_MethodName: XRayDisocclusion
+        m_MethodName: CutAwayDisocclusion
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3986,13 +3987,11 @@ MonoBehaviour:
     m_Options:
     - m_Text: None
       m_Image: {fileID: 0}
-    - m_Text: X-Ray
+    - m_Text: Cut-Away
       m_Image: {fileID: 0}
-    - m_Text: Textured
+    - m_Text: Multipersp
       m_Image: {fileID: 0}
-    - m_Text: Mirror
-      m_Image: {fileID: 0}
-    - m_Text: Occluded
+    - m_Text: PicInPic
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

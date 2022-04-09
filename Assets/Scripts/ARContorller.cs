@@ -30,6 +30,7 @@ public class ARContorller : MonoBehaviour
     public Texture2D m_Frame1;
     public GameObject m_ProjectorPrefabBG; // background projector
     public GameObject m_ProjectorPrefabHM; // human projector
+    public GameObject m_ProjectorPrefabMULTI; // multiperspective projector
 
     private List<Vector3> m_4PortalCornerPositions;
     private Vector2 m_HumanLowestUV;
@@ -40,6 +41,7 @@ public class ARContorller : MonoBehaviour
     private GameObject m_CameraB;
     private GameObject m_ProjectorBG;
     private GameObject m_ProjectorHM;
+    private GameObject m_ProjectorMULTI;
     private bool m_IsCameraBRegisterd = false;
     private bool m_IsPlaybackSegment = false;
     private bool m_IsPlaybackVideoClip = false;
@@ -90,10 +92,9 @@ public class ARContorller : MonoBehaviour
     public enum UserStudyType
     {
         TYPE_NONE,
-        TYPE_XRAY,
-        TYPE_TEXTURED,
-        TYPE_MIRROR,
-        TYPE_OCCLUDED
+        TYPE_CUTAWAY,
+        TYPE_MULTIPERSPECTIVE,
+        TYPE_PICINPIC,
     };
 
     public static ControlObjectType currentObjectType = ControlObjectType.OBJ_NONE;
@@ -130,13 +131,11 @@ public class ARContorller : MonoBehaviour
 
         if (m_IsPlaybackVideoClip)
         {
-            if (currentUserStudyType == UserStudyType.TYPE_XRAY
-                || currentUserStudyType == UserStudyType.TYPE_OCCLUDED)
+            if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
                 PlaybackCameraBVideoClipInSideCorridor();
-            else if (currentUserStudyType == UserStudyType.TYPE_TEXTURED)
-                PlayBackCameraBVideoClipInTextured();
-            else if (currentUserStudyType == UserStudyType.TYPE_MIRROR)
-                PlayBackCameraBVideoClipInMirror();
+            else if (currentUserStudyType == UserStudyType.TYPE_MULTIPERSPECTIVE)
+                PlayBackCameraBVideoClipInMultiPersp();
+            // play back in picture in picture
         }
 
         
@@ -153,6 +152,7 @@ public class ARContorller : MonoBehaviour
         if (m_ProjectorBG) Destroy(m_ProjectorBG);
         if (m_ProjectorHM) Destroy(m_ProjectorHM);
         if (m_PortalPlane) Destroy(m_PortalPlane);
+        if (m_Mirror) Destroy(m_Mirror);
 
         m_IsPlaybackSegment = false;
         m_IsPlaybackVideoClip = false;
@@ -165,6 +165,7 @@ public class ARContorller : MonoBehaviour
         if (m_HumanSprite) Destroy(m_HumanSprite);
         if (m_PortalPlane) Destroy(m_PortalPlane);
         if (m_Mirror) Destroy(m_Mirror);
+        if (m_ProjectorMULTI.gameObject.activeSelf) m_ProjectorMULTI.gameObject.SetActive(false);
     }
 
     public void OnControlObjectChanged()
@@ -203,35 +204,24 @@ public class ARContorller : MonoBehaviour
                 m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
                 break;
 
-            case "X-Ray":
-                currentUserStudyType = UserStudyType.TYPE_XRAY;
+            case "Cut-Away":
+                currentUserStudyType = UserStudyType.TYPE_CUTAWAY;
                 CleanUpScene();
                 m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
                 m_IsPlaybackVideoClip = true;
                 m_ProjectorController.videoPlayer.Play();
                 break;
 
-            case "Textured":
-                currentUserStudyType = UserStudyType.TYPE_TEXTURED;
+            case "Multipersp":
+                currentUserStudyType = UserStudyType.TYPE_MULTIPERSPECTIVE;
                 CleanUpScene();
-                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                //m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
+                m_ProjectorMULTI.gameObject.SetActive(true);
                 m_IsPlaybackVideoClip = true;
                 m_ProjectorController.videoPlayer.Play();
                 break;
 
-            case "Mirror":
-                currentUserStudyType = UserStudyType.TYPE_MIRROR;
-                CleanUpScene();
-                m_IsPlaybackVideoClip = true;
-                m_ProjectorController.videoPlayer.Play();
-                break;
-
-            case "Occluded":
-                currentUserStudyType = UserStudyType.TYPE_OCCLUDED;
-                CleanUpScene();
-                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
-                m_IsPlaybackVideoClip = true;
-                m_ProjectorController.videoPlayer.Play();
+            case "PicInPic":
                 break;
 
             default:
@@ -251,7 +241,7 @@ public class ARContorller : MonoBehaviour
             $"{m_ARCamera.transform.position.ToString()}\n + " +
             $"CamB Pos:\n {camera_b_pos.ToString()}\n";
 
-            if (currentUserStudyType == UserStudyType.TYPE_XRAY)
+            if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
             {
                 CalCameraAPositionInPortal();
 
@@ -282,23 +272,6 @@ public class ARContorller : MonoBehaviour
                     m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
                 }
             }
-            else if (currentUserStudyType == UserStudyType.TYPE_OCCLUDED)
-            {
-                CalCameraAPositionInPortal();
-
-                // set the visibility of the human sprite
-                if (camera_a_pos_in_portal.x > portal_x_lower_bound && camera_a_pos_in_portal.x < portal_x_upper_bound)
-                {
-                    m_TextCameraPos.text += $"center:\n{camera_a_pos_in_portal.ToString()}\n ";
-                    m_IsPlaybackVideoClip = true;
-                }
-                else
-                {
-                    m_TextCameraPos.text += $"side:\n{camera_a_pos_in_portal.ToString()}\n ";
-                    CleanUpScene();
-                    m_IsPlaybackVideoClip = false;
-                }
-            }
             
         }
 
@@ -307,13 +280,13 @@ public class ARContorller : MonoBehaviour
 
     public void SetSideCorridorViewActive(in bool isActive)
     {
+        m_AnchorController.m_CorridorAnchor.gameObject.SetActive(isActive);
         m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(isActive);
         m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(isActive);
-        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(isActive);
-        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(isActive);
-        m_AnchorController.m_CorridorAnchor.gameObject.SetActive(isActive);
+        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
+        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
 
-        m_HumanSprite.SetActive(isActive);
+        m_HumanSprite.SetActive(isActive);   
     }
 
     public void CalCameraAPositionInPortal()
@@ -401,13 +374,10 @@ public class ARContorller : MonoBehaviour
          * */
         ProcessCameraBProjectorsPos();
 
-        // set the camera B status
-        m_IsCameraBRegisterd = true;
-
     }
 
-    // X-Ray disocclusion
-    public void XRayDisocclusion()
+    // Cut-away disocclusion
+    public void CutAwayDisocclusion()
     {
         if (!m_IsCameraBRegisterd)
         {
@@ -447,7 +417,7 @@ public class ARContorller : MonoBehaviour
     }
 
     // Textures disocclusion (Multiperspetive)
-    public void TexturedDisocclusion()
+    public void MultiperspDisocclusion()
     {
         if (!m_IsCameraBRegisterd)
         {
@@ -467,6 +437,10 @@ public class ARContorller : MonoBehaviour
             Quaternion rotation = m_AnchorController.m_PortalAnchor.gameObject.transform.rotation;
             m_PortalPlane = Instantiate(m_PortalPlanePrefab, position, rotation);
         }
+
+        SetSideCorridorViewActive(true);
+        m_CameraB.gameObject.GetComponent<Camera>().Render();
+        SetSideCorridorViewActive(false);
     }
 
     public void MirrorDisocclusion()
@@ -561,7 +535,8 @@ public class ARContorller : MonoBehaviour
             right = m_CameraB.transform.right.normalized;
 
             // set cameraB status
-            m_CameraB.gameObject.SetActive(false);
+            m_CameraB.gameObject.GetComponent<Camera>().enabled = false;
+            m_IsCameraBRegisterd = true;
 
             // create projector for side corridor
             m_ProjectorBG = Instantiate(m_ProjectorPrefabBG);
@@ -576,6 +551,10 @@ public class ARContorller : MonoBehaviour
             m_ProjectorHM.transform.localPosition = cam_pos_in_portal_coord;
             m_ProjectorHM.transform.localRotation = rotation_in_portal_coord;
             m_ProjectorHM.gameObject.SetActive(true);
+
+            // create projecto for multiperspective portal plane
+            m_ProjectorMULTI = Instantiate(m_ProjectorPrefabMULTI, camera_b_pos, Quaternion.LookRotation(forward, up));
+            m_ProjectorMULTI.gameObject.SetActive(false);
         }
         else
         {
@@ -726,11 +705,13 @@ public class ARContorller : MonoBehaviour
         
     }
 
-    public void PlayBackCameraBVideoClipInTextured()
+    public void PlayBackCameraBVideoClipInMultiPersp()
     {
-        TexturedDisocclusion();
+        PlaybackCameraBVideoClipInSideCorridor();
 
-        ApplyHumanCurrentTexture(ControllerStates.PlaybackMode.PLAY_BACK_VIDEO_CLIP);
+        MultiperspDisocclusion();
+
+        //ApplyHumanCurrentTexture(ControllerStates.PlaybackMode.PLAY_BACK_VIDEO_CLIP);
     }
 
     public void PlayBackCameraBVideoClipInMirror()
@@ -782,7 +763,7 @@ public class ARContorller : MonoBehaviour
         if (mode == ControllerStates.PlaybackMode.PLAY_BACK_SEGMENT)
             m_ProjectorController.SetRenderTexture(m_HumanSpriteTex);
         else if (mode == ControllerStates.PlaybackMode.PLAY_BACK_VIDEO_CLIP)
-            m_ProjectorController.SetRenderTexture(currentUserStudyType);
+            m_ProjectorController.SetHumanRenderTexture(currentUserStudyType);
 
     }
 

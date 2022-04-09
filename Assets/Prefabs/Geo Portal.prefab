@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3299583643219600222}
   - component: {fileID: 6896620039078394855}
   - component: {fileID: 4783220221544068019}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 2768876393319834371}
   - component: {fileID: 8195788449138327560}
   - component: {fileID: 1419693273095809484}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,7 +202,7 @@ GameObject:
   - component: {fileID: 1328155336143028149}
   - component: {fileID: 1673401459841678480}
   - component: {fileID: 1910329177856273206}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -294,7 +294,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8151193355652620669}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Geo Portal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -331,7 +331,7 @@ GameObject:
   - component: {fileID: 8723744301754127623}
   - component: {fileID: 1197052896710002004}
   - component: {fileID: 1411622174273725755}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

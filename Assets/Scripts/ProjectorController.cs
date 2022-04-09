@@ -35,13 +35,13 @@ public class ProjectorController : MonoBehaviour
         Graphics.Blit(humanSpriteFrame, BGSubOutputRTex, bgSubMaterial);
     }
 
-    public void SetRenderTexture(ARContorller.UserStudyType type)
+    public void SetHumanRenderTexture(ARContorller.UserStudyType type)
     {
-        if (type == ARContorller.UserStudyType.TYPE_XRAY 
-            || type == ARContorller.UserStudyType.TYPE_OCCLUDED
-            || type == ARContorller.UserStudyType.TYPE_MIRROR)
-            Graphics.Blit(BGSubInputRTex, BGSubOutputRTex, bgSubMaterial);
-        else if (type == ARContorller.UserStudyType.TYPE_TEXTURED)
-            Graphics.Blit(BGSubInputRTex, BGSubOutputRTex);
+        //if (type == ARContorller.UserStudyType.TYPE_CUTAWAY)
+        //    Graphics.Blit(BGSubInputRTex, BGSubOutputRTex, bgSubMaterial);
+        //else if (type == ARContorller.UserStudyType.TYPE_MULTIPERSPECTIVE)
+        //    Graphics.Blit(BGSubInputRTex, BGSubOutputRTex);
+        Graphics.Blit(BGSubInputRTex, BGSubOutputRTex, bgSubMaterial);
     }    
+
 }
