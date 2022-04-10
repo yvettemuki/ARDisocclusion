@@ -31,6 +31,7 @@ public class ARContorller : MonoBehaviour
     public GameObject m_ProjectorPrefabBG; // background projector
     public GameObject m_ProjectorPrefabHM; // human projector
     public GameObject m_ProjectorPrefabMULTI; // multiperspective projector
+    public RawImage m_RawImagePicInPic;  // pic in pic render image
 
     private List<Vector3> m_4PortalCornerPositions;
     private Vector2 m_HumanLowestUV;
@@ -134,8 +135,9 @@ public class ARContorller : MonoBehaviour
             if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
                 PlaybackCameraBVideoClipInSideCorridor();
             else if (currentUserStudyType == UserStudyType.TYPE_MULTIPERSPECTIVE)
-                PlayBackCameraBVideoClipInMultiPersp();
-            // play back in picture in picture
+                PlaybackCameraBVideoClipInMultiPersp();
+            else if (currentUserStudyType == UserStudyType.TYPE_PICINPIC)
+                PlaybackCameraBVideoClipInPicture();
         }
 
         
@@ -166,6 +168,7 @@ public class ARContorller : MonoBehaviour
         if (m_PortalPlane) Destroy(m_PortalPlane);
         if (m_Mirror) Destroy(m_Mirror);
         if (m_ProjectorMULTI.gameObject.activeSelf) m_ProjectorMULTI.gameObject.SetActive(false);
+        if (m_RawImagePicInPic.gameObject.activeSelf) m_RawImagePicInPic.gameObject.SetActive(false);
     }
 
     public void OnControlObjectChanged()
@@ -215,13 +218,18 @@ public class ARContorller : MonoBehaviour
             case "Multipersp":
                 currentUserStudyType = UserStudyType.TYPE_MULTIPERSPECTIVE;
                 CleanUpScene();
-                //m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
                 m_ProjectorMULTI.gameObject.SetActive(true);
                 m_IsPlaybackVideoClip = true;
                 m_ProjectorController.videoPlayer.Play();
                 break;
 
             case "PicInPic":
+                currentUserStudyType = UserStudyType.TYPE_PICINPIC;
+                CleanUpScene();
+                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                m_RawImagePicInPic.gameObject.SetActive(true);
+                m_IsPlaybackVideoClip = true;
+                m_ProjectorController.videoPlayer.Play();
                 break;
 
             default:
@@ -436,6 +444,25 @@ public class ARContorller : MonoBehaviour
             Vector3 position = m_AnchorController.m_PortalAnchor.gameObject.transform.position;
             Quaternion rotation = m_AnchorController.m_PortalAnchor.gameObject.transform.rotation;
             m_PortalPlane = Instantiate(m_PortalPlanePrefab, position, rotation);
+        }
+
+        SetSideCorridorViewActive(true);
+        m_CameraB.gameObject.GetComponent<Camera>().Render();
+        SetSideCorridorViewActive(false);
+    }
+
+    public void PicInPicDisocclusion()
+    {
+        if (!m_IsCameraBRegisterd)
+        {
+            Debug.Log($"Camera B should be registered before disocclusion!");
+            return;
+        }
+
+        if (!m_AnchorController.m_PortalAnchor)
+        {
+            Debug.Log($"Portal should be created before disocclusion!");
+            return;
         }
 
         SetSideCorridorViewActive(true);
@@ -705,13 +732,23 @@ public class ARContorller : MonoBehaviour
         
     }
 
-    public void PlayBackCameraBVideoClipInMultiPersp()
+    public void PlaybackCameraBVideoClipInMultiPersp()
     {
+        // play back human sprite in side corridor
         PlaybackCameraBVideoClipInSideCorridor();
 
+        // disocclusion
         MultiperspDisocclusion();
 
-        //ApplyHumanCurrentTexture(ControllerStates.PlaybackMode.PLAY_BACK_VIDEO_CLIP);
+    }
+
+    public void PlaybackCameraBVideoClipInPicture()
+    {
+        // play back human sprite in side corridor
+        PlaybackCameraBVideoClipInSideCorridor();
+
+        // disocclusion
+        PicInPicDisocclusion();
     }
 
     public void PlayBackCameraBVideoClipInMirror()
