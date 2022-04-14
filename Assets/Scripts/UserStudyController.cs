@@ -8,8 +8,10 @@ public class UserStudyController : MonoBehaviour
     [SerializeField]
     private ARContorller m_ARController;
 
+    // Prefab
+    public GameObject m_SpherePrefab;
+
     // UI
-    Button m_ButtonDrop;
 
     // Other
     public Material m_CircleMaterial;
@@ -53,7 +55,7 @@ public class UserStudyController : MonoBehaviour
             // set position one
             case 1:
                 {
-                    Vector3 portal_pos = ControllerStates.CIRCLE_POS_IN_PORTAL_1;
+                    Vector3 portal_pos = ControllerStates.CIRCLE_POS_IN_PORTAL;
                     m_ARController.PortalObjectPos2World(in portal_pos, out world_pos);
                     CreateCircle(world_pos);
                     // consider where to drop circle
@@ -80,6 +82,16 @@ public class UserStudyController : MonoBehaviour
     public void ResetCircle()
     {
 
+    }
+
+    public void PlaceSphere()
+    {
+        Vector3 pos_in_world = Vector3.zero;
+        m_ARController.PortalObjectPos2World(in ControllerStates.SPHERE_POS_IN_PORTAL_1, out pos_in_world);
+
+        // design a array of gameobjects with specific position
+
+        Instantiate(m_SpherePrefab, pos_in_world, Quaternion.identity);
     }
 
 }

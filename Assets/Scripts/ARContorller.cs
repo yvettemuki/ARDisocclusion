@@ -45,18 +45,19 @@ public class ARContorller : MonoBehaviour
     private GameObject m_ProjectorMULTI;
     private bool m_IsCameraBRegisterd = false;
     private bool m_IsPlaybackSegment = false;
-    private bool m_IsPlaybackVideoClip = false;
+    private bool m_IsPlaybackHumanSprite = false;
     private Texture2D m_HumanSpriteTex;
     private Camera m_MirrorCamera;
 
-    // Camera B data as the child of Portal
+    // Camera B data in world space
     Vector3 camera_b_pos = Vector3.zero;
     Vector3 forward = Vector3.zero;
     Vector3 up = Vector3.zero;
     Vector3 right = Vector3.zero;
+    float portal_depth = 0f;
 
-    // Portal coordinate system data (generate in the ar world != precomputed)
-    Vector3 portal_origin = Vector3.zero;
+   // Portal coordinate system data (generate in the ar world != precomputed)
+   Vector3 portal_origin = Vector3.zero;
     Vector3 portal_x_axis = Vector3.zero;
     Vector3 portal_y_axis = Vector3.zero;
     Vector3 portal_z_axis = Vector3.zero;
@@ -96,6 +97,7 @@ public class ARContorller : MonoBehaviour
         TYPE_CUTAWAY,
         TYPE_MULTIPERSPECTIVE,
         TYPE_PICINPIC,
+        TYPE_REFLECTION
     };
 
     public static ControlObjectType currentObjectType = ControlObjectType.OBJ_NONE;
@@ -125,22 +127,30 @@ public class ARContorller : MonoBehaviour
     {
         UpdateCameraPosition();
 
-        if (m_IsPlaybackSegment)
+        //if (m_IsPlaybackSegment)
+        //{
+        //    PlaybackCameraBSegment();
+        //}
+
+        if (m_IsPlaybackHumanSprite)
         {
-            PlaybackCameraBSegment();
+            PlaybackHumanSpriteInSideCorridor();
         }
 
-        if (m_IsPlaybackVideoClip)
-        {
-            if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
-                PlaybackCameraBVideoClipInSideCorridor();
-            else if (currentUserStudyType == UserStudyType.TYPE_MULTIPERSPECTIVE)
-                PlaybackCameraBVideoClipInMultiPersp();
-            else if (currentUserStudyType == UserStudyType.TYPE_PICINPIC)
-                PlaybackCameraBVideoClipInPicture();
-        }
+        if (currentUserStudyType == UserStudyType.TYPE_MULTIPERSPECTIVE)
+            MultiperspDisocclusion();
+        else if (currentUserStudyType == UserStudyType.TYPE_PICINPIC)
+            PicInPicDisocclusion();
+      
+        // methods to see around the corner (disocclusion)
+        //if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
+        //    PlaybackHumanSpriteInSideCorridor();
+        //else if (currentUserStudyType == UserStudyType.TYPE_MULTIPERSPECTIVE)
+        //    PlaybackCameraBVideoClipInMultiPersp();
+        //else if (currentUserStudyType == UserStudyType.TYPE_PICINPIC)
+        //    PlaybackCameraBVideoClipInPicture();
 
-        
+
     }
 
     public void Reset()
@@ -153,11 +163,12 @@ public class ARContorller : MonoBehaviour
         if (m_CameraB) Destroy(m_CameraB);
         if (m_ProjectorBG) Destroy(m_ProjectorBG);
         if (m_ProjectorHM) Destroy(m_ProjectorHM);
+        if (m_ProjectorMULTI) Destroy(m_ProjectorMULTI);
         if (m_PortalPlane) Destroy(m_PortalPlane);
         if (m_Mirror) Destroy(m_Mirror);
 
         m_IsPlaybackSegment = false;
-        m_IsPlaybackVideoClip = false;
+        m_IsPlaybackHumanSprite = false;
         m_IsCameraBRegisterd = false;
 
     }
@@ -211,25 +222,27 @@ public class ARContorller : MonoBehaviour
                 currentUserStudyType = UserStudyType.TYPE_CUTAWAY;
                 CleanUpScene();
                 m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
-                m_IsPlaybackVideoClip = true;
-                m_ProjectorController.videoPlayer.Play();
+                //m_IsPlaybackHumanSprite = true;
+                //m_ProjectorController.videoPlayer.Play();
                 break;
 
             case "Multipersp":
                 currentUserStudyType = UserStudyType.TYPE_MULTIPERSPECTIVE;
                 CleanUpScene();
+                m_CameraB.GetComponent<Camera>().nearClipPlane = portal_depth;
                 m_ProjectorMULTI.gameObject.SetActive(true);
-                m_IsPlaybackVideoClip = true;
-                m_ProjectorController.videoPlayer.Play();
+                //m_IsPlaybackHumanSprite = true;
+                //m_ProjectorController.videoPlayer.Play();
                 break;
 
             case "PicInPic":
                 currentUserStudyType = UserStudyType.TYPE_PICINPIC;
                 CleanUpScene();
-                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                m_CameraB.GetComponent<Camera>().nearClipPlane = 0.1f;
+                //m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
                 m_RawImagePicInPic.gameObject.SetActive(true);
-                m_IsPlaybackVideoClip = true;
-                m_ProjectorController.videoPlayer.Play();
+                //m_IsPlaybackHumanSprite = true;
+                //m_ProjectorController.videoPlayer.Play();
                 break;
 
             default:
@@ -288,13 +301,17 @@ public class ARContorller : MonoBehaviour
 
     public void SetSideCorridorViewActive(in bool isActive)
     {
-        m_AnchorController.m_CorridorAnchor.gameObject.SetActive(isActive);
-        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(isActive);
-        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(isActive);
-        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
-        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
-
-        m_HumanSprite.SetActive(isActive);   
+        if (m_AnchorController.m_CorridorAnchor)
+        {
+            m_AnchorController.m_CorridorAnchor.gameObject.SetActive(isActive);
+            m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(isActive);
+            m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(isActive);
+            m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
+            m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
+        }
+        
+        if (m_HumanSprite)
+            m_HumanSprite.SetActive(isActive);   
     }
 
     public void CalCameraAPositionInPortal()
@@ -312,39 +329,6 @@ public class ARContorller : MonoBehaviour
             Vector3.Dot(portal_y_axis, cam_pos0),
             Vector3.Dot(portal_z_axis, cam_pos0)
         );
-    }
-
-    public void PortalObjectPos2World(in Vector3 pos_in_portal, out Vector3 pos_in_world)
-    {
-        pos_in_world = Vector3.zero;
-        ARAnchor portal_anchor = m_AnchorController.m_PortalAnchor;
-
-        if (!portal_anchor)
-        {
-            Debug.Log("Must have portal for the transform!");
-            return;
-        }
-
-        pos_in_world = portal_anchor.gameObject.transform.TransformPoint(pos_in_portal);
-    }
-
-    public void PortalObjectRot2World(in Quaternion rot_in_portal, out Quaternion rot_in_world)
-    {
-        rot_in_world = Quaternion.identity;
-
-        ARAnchor portal_anchor = m_AnchorController.m_PortalAnchor;
-
-        if (!portal_anchor)
-        {
-            Debug.Log("Must have portal for the transform!");
-            return;
-        }
-
-        Vector3 forward_in_portal = ControllerStates.MIRROR_ROT_IN_PORTAL * Vector3.forward;
-        Vector3 up_in_portal = ControllerStates.MIRROR_ROT_IN_PORTAL * Vector3.up;
-        Vector3 forward_in_world = portal_anchor.gameObject.transform.TransformDirection(forward_in_portal);
-        Vector3 up_in_world = portal_anchor.gameObject.transform.TransformDirection(up_in_portal);
-        rot_in_world = Quaternion.LookRotation(forward_in_world, up_in_world);
     }
 
     public void RegisterSecondCamera()
@@ -447,7 +431,7 @@ public class ARContorller : MonoBehaviour
         }
 
         SetSideCorridorViewActive(true);
-        m_CameraB.gameObject.GetComponent<Camera>().Render();
+        m_CameraB.GetComponent<Camera>().Render();
         SetSideCorridorViewActive(false);
     }
 
@@ -466,7 +450,7 @@ public class ARContorller : MonoBehaviour
         }
 
         SetSideCorridorViewActive(true);
-        m_CameraB.gameObject.GetComponent<Camera>().Render();
+        m_CameraB.GetComponent<Camera>().Render();
         SetSideCorridorViewActive(false);
     }
 
@@ -508,37 +492,37 @@ public class ARContorller : MonoBehaviour
         Vector3 up_at_point = cam_pos + ControllerStates.CAM_B_UP;
 
         // calculate portal coordinate system (attention: this is the precomputed portal data)
-        Vector3 portal_bottom_left = ControllerStates.PORTAL_BOTTOM_LEFT;
-        Vector3 portal_bottom_right = ControllerStates.PORTAL_BOTTOM_RIGHT;
-        Vector3 portal_top_left = ControllerStates.PORTAL_TOP_LEFT;
-        Vector3 portal_origin = 0.5f * (portal_bottom_left + portal_bottom_right);
+        Vector3 portal_bottom_left_0 = ControllerStates.PORTAL_BOTTOM_LEFT;
+        Vector3 portal_bottom_right_0 = ControllerStates.PORTAL_BOTTOM_RIGHT;
+        Vector3 portal_top_left_0 = ControllerStates.PORTAL_TOP_LEFT;
+        Vector3 portal_origin_0 = 0.5f * (portal_bottom_left_0 + portal_bottom_right_0);
 
-        Vector3 portal_x_axis = (portal_bottom_right - portal_bottom_left).normalized;
-        Vector3 portal_y_axis = (portal_top_left - portal_bottom_left).normalized;
-        Vector3 portal_z_axis = Vector3.Cross(portal_x_axis, portal_y_axis).normalized;
+        Vector3 portal_x_axis_0 = (portal_bottom_right_0 - portal_bottom_left_0).normalized;
+        Vector3 portal_y_axis_0 = (portal_top_left_0 - portal_bottom_left_0).normalized;
+        Vector3 portal_z_axis_0 = Vector3.Cross(portal_x_axis_0, portal_y_axis_0).normalized;
 
-        // transform eye position to portal coord system
-        Vector3 cam_pos_0 = cam_pos - portal_origin;
+        // transform camB position to portal coord system
+        Vector3 cam_pos_0 = cam_pos - portal_origin_0;
         Vector3 cam_pos_in_portal_coord = new Vector3(
-            Vector3.Dot(portal_x_axis, cam_pos_0),
-            Vector3.Dot(portal_y_axis, cam_pos_0),
-            Vector3.Dot(portal_z_axis, cam_pos_0)
+            Vector3.Dot(portal_x_axis_0, cam_pos_0),
+            Vector3.Dot(portal_y_axis_0, cam_pos_0),
+            Vector3.Dot(portal_z_axis_0, cam_pos_0)
         );
 
         // transform look at position to portal coord system
-        Vector3 look_at_0 = look_at_point - portal_origin;
+        Vector3 look_at_0 = look_at_point - portal_origin_0;
         Vector3 look_at_in_portal_coord = new Vector3(
-            Vector3.Dot(portal_x_axis, look_at_0),
-            Vector3.Dot(portal_y_axis, look_at_0),
-            Vector3.Dot(portal_z_axis, look_at_0)
+            Vector3.Dot(portal_x_axis_0, look_at_0),
+            Vector3.Dot(portal_y_axis_0, look_at_0),
+            Vector3.Dot(portal_z_axis_0, look_at_0)
         );
 
         // transform up point position to portal coord system
-        Vector3 up_at_0 = up_at_point - portal_origin;
+        Vector3 up_at_0 = up_at_point - portal_origin_0;
         Vector3 up_at_in_portal_coord = new Vector3(
-            Vector3.Dot(portal_x_axis, up_at_0),
-            Vector3.Dot(portal_y_axis, up_at_0),
-            Vector3.Dot(portal_z_axis, up_at_0)
+            Vector3.Dot(portal_x_axis_0, up_at_0),
+            Vector3.Dot(portal_y_axis_0, up_at_0),
+            Vector3.Dot(portal_z_axis_0, up_at_0)
         );
 
         // calculate the rotation of the camera in portal coord system
@@ -562,7 +546,7 @@ public class ARContorller : MonoBehaviour
             right = m_CameraB.transform.right.normalized;
 
             // set cameraB status
-            m_CameraB.gameObject.GetComponent<Camera>().enabled = false;
+            m_CameraB.GetComponent<Camera>().enabled = false;
             m_IsCameraBRegisterd = true;
 
             // create projector for side corridor
@@ -582,6 +566,9 @@ public class ARContorller : MonoBehaviour
             // create projecto for multiperspective portal plane
             m_ProjectorMULTI = Instantiate(m_ProjectorPrefabMULTI, camera_b_pos, Quaternion.LookRotation(forward, up));
             m_ProjectorMULTI.gameObject.SetActive(false);
+
+            // get depth of the side corridor (portal) from the cameraB
+            portal_depth = Mathf.Abs(cam_pos_in_portal_coord.z);
         }
         else
         {
@@ -690,7 +677,7 @@ public class ARContorller : MonoBehaviour
         playbackTime += Time.deltaTime;
     }
 
-    public void PlaybackCameraBVideoClipInSideCorridor()
+    public void PlaybackHumanSpriteInSideCorridor()
     {
         if (!m_IsCameraBRegisterd)
         {
@@ -735,7 +722,7 @@ public class ARContorller : MonoBehaviour
     public void PlaybackCameraBVideoClipInMultiPersp()
     {
         // play back human sprite in side corridor
-        PlaybackCameraBVideoClipInSideCorridor();
+        //PlaybackHumanSpriteInSideCorridor();
 
         // disocclusion
         MultiperspDisocclusion();
@@ -745,7 +732,7 @@ public class ARContorller : MonoBehaviour
     public void PlaybackCameraBVideoClipInPicture()
     {
         // play back human sprite in side corridor
-        PlaybackCameraBVideoClipInSideCorridor();
+        //PlaybackHumanSpriteInSideCorridor();
 
         // disocclusion
         PicInPicDisocclusion();
@@ -753,7 +740,7 @@ public class ARContorller : MonoBehaviour
 
     public void PlayBackCameraBVideoClipInMirror()
     {
-        PlaybackCameraBVideoClipInSideCorridor();
+        //PlaybackHumanSpriteInSideCorridor();
         MirrorDisocclusion();
     }
 
@@ -765,11 +752,11 @@ public class ARContorller : MonoBehaviour
         m_IsPlaybackSegment = !m_IsPlaybackSegment;
     }
 
-    public void SetPlayBackVideoClip()
+    public void SetPlayBackHumanSprite()
     {
-        m_IsPlaybackVideoClip = !m_IsPlaybackVideoClip;
+        m_IsPlaybackHumanSprite = !m_IsPlaybackHumanSprite;
 
-        if (m_IsPlaybackVideoClip)
+        if (m_IsPlaybackHumanSprite)
         {
             m_ProjectorController.videoPlayer.Play();
         }
@@ -777,6 +764,8 @@ public class ARContorller : MonoBehaviour
         {
             m_ProjectorController.videoPlayer.Stop();
 
+            if (m_HumanSprite)
+                Destroy(m_HumanSprite);
         }
     }
 
@@ -813,6 +802,39 @@ public class ARContorller : MonoBehaviour
             Debug.Log("Get human sprite can not null!");
             return null;
         }
+    }
+
+    public void PortalObjectPos2World(in Vector3 pos_in_portal, out Vector3 pos_in_world)
+    {
+        pos_in_world = Vector3.zero;
+        ARAnchor portal_anchor = m_AnchorController.m_PortalAnchor;
+
+        if (!portal_anchor)
+        {
+            Debug.Log("Must have portal for the transform!");
+            return;
+        }
+
+        pos_in_world = portal_anchor.gameObject.transform.TransformPoint(pos_in_portal);
+    }
+
+    public void PortalObjectRot2World(in Quaternion rot_in_portal, out Quaternion rot_in_world)
+    {
+        rot_in_world = Quaternion.identity;
+
+        ARAnchor portal_anchor = m_AnchorController.m_PortalAnchor;
+
+        if (!portal_anchor)
+        {
+            Debug.Log("Must have portal for the transform!");
+            return;
+        }
+
+        Vector3 forward_in_portal = ControllerStates.MIRROR_ROT_IN_PORTAL * Vector3.forward;
+        Vector3 up_in_portal = ControllerStates.MIRROR_ROT_IN_PORTAL * Vector3.up;
+        Vector3 forward_in_world = portal_anchor.gameObject.transform.TransformDirection(forward_in_portal);
+        Vector3 up_in_world = portal_anchor.gameObject.transform.TransformDirection(up_in_portal);
+        rot_in_world = Quaternion.LookRotation(forward_in_world, up_in_world);
     }
 
 }
