@@ -872,6 +872,7 @@ MonoBehaviour:
   m_ARCamera: {fileID: 1552705265}
   m_ARCameraController: {fileID: 1298104232}
   m_ProjectorController: {fileID: 605371440}
+  m_UserStudyController: {fileID: 364948125}
   m_DropDownAnchorType: {fileID: 1105734431}
   m_DropDownUserStudyType: {fileID: 1744432626}
   m_TextCameraPos: {fileID: 1270414722}
@@ -1022,7 +1023,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 245, y: 73}
+  m_AnchoredPosition: {x: 242, y: 73}
   m_SizeDelta: {x: 140, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &553136820
@@ -1090,7 +1091,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 364948125}
         m_TargetAssemblyTypeName: UserStudyController, Assembly-CSharp
-        m_MethodName: PlaceSphere
+        m_MethodName: PlaceDynamicSphere
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

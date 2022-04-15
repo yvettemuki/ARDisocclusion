@@ -31,8 +31,22 @@ public class ControllerStates : MonoBehaviour
     public static Vector3 CIRCLE_POS_IN_PORTAL = new Vector3(0f, 0f, 2.06f);
     public static Vector3 MIRROR_POS_IN_PORTAL = new Vector3(0.375f, 1.339066f, -2.048f);
     public static Quaternion MIRROR_ROT_IN_PORTAL = Quaternion.Euler(0f, 330f, 0f);
-    public static Vector3 SPHERE_POS_IN_PORTAL_1 = new Vector3(-0.1f, 1.1f, -1.3f);
-    public static Vector3 SPHERE_POS_IN_PORTAL_2 = new Vector3(0.4f, 1.5f, 2f);
+
+    // Sphere Data
+    // Group 1 (3)
+    public static Vector3[] SPHERES_IN_PORTAL_POS_START =
+    {
+        new Vector3(-0.1f, 1.1f, 1.5f),
+        new Vector3(0.13f, 0.5f, 3.4f),
+        new Vector3(0.4f, 0.6f, 2f)
+    };
+    public static float[] SPHERES_SPEED =
+    {
+        10f,
+        5f,
+        2f
+    };
+    
     public static Vector3 SPHERE_POS_IN_PORTAL_3 = new Vector3(-0.4f, 0.45f, 3.6f);
 
     public enum PlaybackMode

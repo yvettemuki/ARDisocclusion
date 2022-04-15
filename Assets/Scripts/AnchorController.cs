@@ -330,8 +330,6 @@ public class AnchorController : MonoBehaviour
         if (geoPrefab == null || pose == null)
             return;
 
-        Debug.Log("--- in the attach function of the geometry! ----");
-
         ARTrackable plane = m_PlaneController.GetTargetPlane();
         if (plane != null)
         {

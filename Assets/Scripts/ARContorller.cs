@@ -17,6 +17,7 @@ public class ARContorller : MonoBehaviour
     public Camera m_ARCamera;
     public ARCameraController m_ARCameraController;
     public ProjectorController m_ProjectorController;
+    public UserStudyController m_UserStudyController;
 
     public Dropdown m_DropDownAnchorType;
     public Dropdown m_DropDownUserStudyType;
@@ -56,8 +57,8 @@ public class ARContorller : MonoBehaviour
     Vector3 right = Vector3.zero;
     float portal_depth = 0f;
 
-   // Portal coordinate system data (generate in the ar world != precomputed)
-   Vector3 portal_origin = Vector3.zero;
+    // Portal coordinate system data (generate in the ar world != precomputed)
+    Vector3 portal_origin = Vector3.zero;
     Vector3 portal_x_axis = Vector3.zero;
     Vector3 portal_y_axis = Vector3.zero;
     Vector3 portal_z_axis = Vector3.zero;
@@ -301,6 +302,7 @@ public class ARContorller : MonoBehaviour
 
     public void SetSideCorridorViewActive(in bool isActive)
     {
+        // side corridor self view
         if (m_AnchorController.m_CorridorAnchor)
         {
             m_AnchorController.m_CorridorAnchor.gameObject.SetActive(isActive);
@@ -310,8 +312,12 @@ public class ARContorller : MonoBehaviour
             m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
         }
         
+        // human sprite view
         if (m_HumanSprite)
-            m_HumanSprite.SetActive(isActive);   
+            m_HumanSprite.SetActive(isActive);
+
+        // dynamic sphere view
+        m_UserStudyController.SetUserStudyObjectsActive(isActive);
     }
 
     public void CalCameraAPositionInPortal()
@@ -322,7 +328,7 @@ public class ARContorller : MonoBehaviour
             return;
         }
 
-        // calcualte the cameraA position with respective to the portal
+        // calcualte the cameraA position with respect to the portal
         Vector3 cam_pos0 = m_ARCamera.transform.position - portal_origin;
         camera_a_pos_in_portal = new Vector3(
             Vector3.Dot(portal_x_axis, cam_pos0),
@@ -804,6 +810,7 @@ public class ARContorller : MonoBehaviour
         }
     }
 
+    // transform object position from portal coord to world
     public void PortalObjectPos2World(in Vector3 pos_in_portal, out Vector3 pos_in_world)
     {
         pos_in_world = Vector3.zero;
@@ -818,6 +825,7 @@ public class ARContorller : MonoBehaviour
         pos_in_world = portal_anchor.gameObject.transform.TransformPoint(pos_in_portal);
     }
 
+    // transform object rotation from portal coord to world
     public void PortalObjectRot2World(in Quaternion rot_in_portal, out Quaternion rot_in_world)
     {
         rot_in_world = Quaternion.identity;
@@ -835,6 +843,37 @@ public class ARContorller : MonoBehaviour
         Vector3 forward_in_world = portal_anchor.gameObject.transform.TransformDirection(forward_in_portal);
         Vector3 up_in_world = portal_anchor.gameObject.transform.TransformDirection(up_in_portal);
         rot_in_world = Quaternion.LookRotation(forward_in_world, up_in_world);
+    }
+
+    // the transfrom of the portal
+    public Transform GetPortalTransform()
+    {
+        if (!m_AnchorController.m_PortalAnchor)
+        {
+            return null;
+        }
+
+        return m_AnchorController.m_PortalAnchor.gameObject.transform;
+    }
+
+    public void WorldObjectPos2Portal(in Vector3 pos_in_world, out Vector3 pos_in_portal)
+    {
+        pos_in_portal = Vector3.zero;
+
+        if (!m_AnchorController.m_PortalAnchor)
+        {
+            Debug.Log("Portal should be exist for calculation!");
+            return;
+        }
+
+        // calcualte the cameraA position with respect to the portal
+        Vector3 pos_in_portal_0 = pos_in_world - portal_origin;
+        pos_in_portal = new Vector3(
+            Vector3.Dot(portal_x_axis, pos_in_portal_0),
+            Vector3.Dot(portal_y_axis, pos_in_portal_0),
+            Vector3.Dot(portal_z_axis, pos_in_portal_0)
+        );
+
     }
 
 }
