@@ -8,8 +8,8 @@ public class UserStudyController : MonoBehaviour
     [SerializeField]
     private ARContorller m_ARController;
 
-    // Tasks Vairables 
-    TaskMode m_CurrentTaskMode = TaskMode.COUNTING_DYNAMIC_SPHERE;
+    // UI
+    public Dropdown m_DropdownTaskMode;
     
     // Sphere
     int m_DynamicSphereNum = 3;
@@ -35,8 +35,6 @@ public class UserStudyController : MonoBehaviour
     // Other
     public Material m_CircleMaterial;
 
-    // UI
-
     public enum CaptureDegree
     {
         HIGHLY_SUCCESS,
@@ -47,9 +45,12 @@ public class UserStudyController : MonoBehaviour
 
     public enum TaskMode
     {
+        NONE,
         COUNTING_DYNAMIC_SPHERE,
-
     };
+
+    // Tasks Vairables 
+    public static TaskMode m_CurrentTaskMode = TaskMode.NONE;
 
     void Start()
     {
@@ -58,7 +59,11 @@ public class UserStudyController : MonoBehaviour
 
     void Update()
     {
-        UpdateDynamicSpheres();
+        Debug.Log("----------");
+        Debug.Log($"{m_CurrentTaskMode} what happend!");
+        if (m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE)
+            UpdateDynamicSpheres();
+
     }
 
     public void CreateCircle(Vector3 position)
@@ -140,6 +145,19 @@ public class UserStudyController : MonoBehaviour
         }
     }
 
+    public void DestroyCurrentObjects()
+    {
+        if (m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE)
+        {
+            foreach (DynamicSphere obj in m_DynamicSpheres)
+            {
+                Destroy(obj.sphere);
+            }
+
+            m_DynamicSpheres.Clear();
+        }
+    }
+
     public void UpdateDynamicSpheres()
     {
         foreach (DynamicSphere obj in m_DynamicSpheres)
@@ -170,6 +188,28 @@ public class UserStudyController : MonoBehaviour
                 else
                     obj.sphere.SetActive(true);
             }
+        }
+    }
+
+    public void OnUserStudyTaskModeChange()
+    {
+        var selected = m_DropdownTaskMode.options[m_DropdownTaskMode.value].text;
+
+        DestroyCurrentObjects();
+
+        switch (selected)
+        {
+            case "None":
+                m_CurrentTaskMode = TaskMode.NONE;
+                break;
+
+            case "Dynm Sphere":
+                InitDynamicSpheres();
+                m_CurrentTaskMode = TaskMode.COUNTING_DYNAMIC_SPHERE;
+                break;
+
+            default:
+                break;
         }
     }
 }
