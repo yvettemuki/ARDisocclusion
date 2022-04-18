@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.ARFoundation;
 
-public class ARCameraController : MonoBehaviour
+public class CameraImageController : MonoBehaviour
 {
-    public ARCameraManager m_ARCameraManaegr;
+    [SerializeField]
+    ARCameraBackground m_ARCameraBackground;
+
+    public RenderTexture m_CameraARTex;
 
     // Start is called before the first frame update
     void Start()
@@ -20,13 +23,11 @@ public class ARCameraController : MonoBehaviour
         
     }
 
-    public void GetCurrentCameraImage(out XRCpuImage image)
+    public void ProjectCameraA()
     {
-        if (m_ARCameraManaegr != null)
-        {
-            m_ARCameraManaegr.TryAcquireLatestCpuImage(out image);
-        }
-
-        image = default(XRCpuImage); 
+        // output camera A capture to the render texture
+        Graphics.Blit(null, m_CameraARTex, m_ARCameraBackground.material);
     }
+
+    
 }

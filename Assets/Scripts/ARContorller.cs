@@ -15,7 +15,7 @@ public class ARContorller : MonoBehaviour
     // TODO: Serialize Field
     public AnchorController m_AnchorController;
     public Camera m_ARCamera;
-    public ARCameraController m_ARCameraController;
+    public CameraImageController m_CameraImageController;
     public ProjectorController m_ProjectorController;
     public UserStudyController m_UserStudyController;
 
@@ -29,9 +29,10 @@ public class ARContorller : MonoBehaviour
     public GameObject m_MirrorPrefab;
     public Texture2D m_Frame0;
     public Texture2D m_Frame1;
-    public GameObject m_ProjectorPrefabBG; // background projector
+    public GameObject m_ProjectorPrefabBG; // background projector for side corridor
     public GameObject m_ProjectorPrefabHM; // human projector
     public GameObject m_ProjectorPrefabMULTI; // multiperspective projector
+    public GameObject m_ProjectorPrefabMAINCORD; // main corridor projector
     public RawImage m_RawImagePicInPic;  // pic in pic render image
 
     private List<Vector3> m_4PortalCornerPositions;
@@ -44,9 +45,11 @@ public class ARContorller : MonoBehaviour
     private GameObject m_ProjectorBG;
     private GameObject m_ProjectorHM;
     private GameObject m_ProjectorMULTI;
+    private GameObject m_ProjectorMAINCORD;
     private bool m_IsCameraBRegisterd = false;
     private bool m_IsPlaybackSegment = false;
     private bool m_IsPlaybackHumanSprite = false;
+    private bool m_IsProjectMainCorridor = false;
     private Texture2D m_HumanSpriteTex;
     private Camera m_MirrorCamera;
 
@@ -142,6 +145,11 @@ public class ARContorller : MonoBehaviour
             MultiperspDisocclusion();
         else if (currentUserStudyType == UserStudyType.TYPE_PICINPIC)
             PicInPicDisocclusion();
+
+        if (m_IsProjectMainCorridor)
+        {
+            m_CameraImageController.ProjectCameraA();
+        }
       
         // methods to see around the corner (disocclusion)
         //if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
@@ -569,9 +577,13 @@ public class ARContorller : MonoBehaviour
             m_ProjectorHM.transform.localRotation = rotation_in_portal_coord;
             m_ProjectorHM.gameObject.SetActive(true);
 
-            // create projecto for multiperspective portal plane
+            // create projector for multiperspective portal plane
             m_ProjectorMULTI = Instantiate(m_ProjectorPrefabMULTI, camera_b_pos, Quaternion.LookRotation(forward, up));
             m_ProjectorMULTI.gameObject.SetActive(false);
+
+            // create projector for main corridor (set the projector as the child of ARCamera (cam A))
+            m_ProjectorMAINCORD = Instantiate(m_ProjectorPrefabMAINCORD, Vector3.zero, m_ARCamera.transform.rotation, m_ARCamera.transform);
+            m_IsProjectMainCorridor = true;
 
             // get depth of the side corridor (portal) from the cameraB
             portal_depth = Mathf.Abs(cam_pos_in_portal_coord.z);

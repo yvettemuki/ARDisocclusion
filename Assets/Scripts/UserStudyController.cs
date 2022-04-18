@@ -59,8 +59,6 @@ public class UserStudyController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("----------");
-        Debug.Log($"{m_CurrentTaskMode} what happend!");
         if (m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE)
             UpdateDynamicSpheres();
 

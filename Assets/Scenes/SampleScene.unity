@@ -157,8 +157,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 106.779785, y: -143}
-  m_SizeDelta: {x: 143.5596, y: 229.6963}
+  m_AnchoredPosition: {x: 115, y: -169}
+  m_SizeDelta: {x: 183.62, y: 293.7975}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &11257680
 MonoBehaviour:
@@ -1026,7 +1026,7 @@ MonoBehaviour:
   m_ARRaycastManager: {fileID: 2079571518}
   m_AnchorController: {fileID: 2079571521}
   m_ARCamera: {fileID: 1552705265}
-  m_ARCameraController: {fileID: 1298104232}
+  m_CameraImageController: {fileID: 1298104232}
   m_ProjectorController: {fileID: 605371440}
   m_UserStudyController: {fileID: 364948125}
   m_DropDownAnchorType: {fileID: 1105734431}
@@ -1042,6 +1042,7 @@ MonoBehaviour:
   m_ProjectorPrefabBG: {fileID: 1769279600775891930, guid: 980c5a9f33bd66043a84a5b5629007e3, type: 3}
   m_ProjectorPrefabHM: {fileID: 3058117821288416713, guid: 9d353c40fcd78f944848dd9cd3c9175f, type: 3}
   m_ProjectorPrefabMULTI: {fileID: 4455720376716969035, guid: aaa65babe8aaa4e40adf364b98ea37ac, type: 3}
+  m_ProjectorPrefabMAINCORD: {fileID: 6545745719437646518, guid: 182155cc786ab39499f0d3630ab44056, type: 3}
   m_RawImagePicInPic: {fileID: 11257680}
   m_Frames:
   - {fileID: 2800000, guid: 497121c4d5144404cbdfd88c00dfd86e, type: 3}
@@ -4351,7 +4352,7 @@ GameObject:
   - component: {fileID: 1298104233}
   - component: {fileID: 1298104232}
   m_Layer: 0
-  m_Name: AR Camera Controller
+  m_Name: Camera Image Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4369,7 +4370,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e28879df101ab0540b51c4d8c7733b2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ARCameraManaegr: {fileID: 1552705267}
+  m_ARCameraBackground: {fileID: 1552705266}
+  m_CameraARTex: {fileID: 8400000, guid: e3b1041126c754d498e8d0aa4aeaf4fd, type: 2}
 --- !u!4 &1298104233
 Transform:
   m_ObjectHideFlags: 0
