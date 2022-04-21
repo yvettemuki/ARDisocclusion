@@ -7,6 +7,7 @@ public class ControllerStates : MonoBehaviour
     public static float PORTAL_HEIGHT = 2.717906f;
     public static float PORTAL_WIDTH = 1.6f;          //1.519696f;
 
+    // Camera B Calibration Data
     public static float CAM_B_HFOV = 67.6615f;  // horizontal field of view!!!
     public static float CAM_B_VFOV = 94.007f;
     public static float CAM_RATIO = 0.624866f;
@@ -19,6 +20,10 @@ public class ControllerStates : MonoBehaviour
     public static Vector3 PORTAL_BOTTOM_RIGHT = new Vector3(0.7f, -1.2f, 1.8f);
     public static Vector3 PORTAL_TOP_LEFT = new Vector3(-0.9f, 1.5f, 1.8f);
     public static Vector3 PORTAL_TOP_RIGHT = new Vector3(0.7f, 1.5f, 1.8f);
+
+    // Camera A Projector Data
+    public static Vector3 PROJECTOR_MAIN_CORD_POS_IN_PORTAL = new Vector3(-6.13f, 1.49f, -1.65f);
+    public static Quaternion PROJECTOR_MAIN_CORD_ROT_IN_PORTAL = new Quaternion(0.07f, 0.56f, -0.06f, 0.83f);
 
     public static float HUMAN_HEIGHT = 1.62f;
     public static int HUMAN_HAND_SET_LOWEST_U = 290; // 282 280  290(1*1) 297 285
@@ -38,7 +43,11 @@ public class ControllerStates : MonoBehaviour
     {
         new Vector3(-0.1f, 1.1f, 1.5f),
         new Vector3(0.13f, 0.5f, 3.4f),
-        new Vector3(0.4f, 0.6f, 2f)
+        new Vector3(0.4f, 0.6f, 2f),
+        new Vector3(-0.364f, 1.5f, 3.8f),
+        new Vector3(0.51f, 0.388f, 1.97f),
+        new Vector3(0.122f, 0.711f, 5.4f),
+        new Vector3(0.194f, 1.55f, 5.08f)
     };
     public static float[] SPHERES_SPEED =
     {

@@ -1345,7 +1345,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &553136819
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2415,7 +2415,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 18
+    m_FontSize: 14
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
@@ -2426,7 +2426,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Cut-Away
+  m_Text: Setup CamA Projector
 --- !u!222 &916155161
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2625,12 +2625,12 @@ GameObject:
   - component: {fileID: 976024663}
   - component: {fileID: 976024666}
   m_Layer: 5
-  m_Name: Button Disocclusion
+  m_Name: Button Set Up Main Corridor Projector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &976024662
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2697,7 +2697,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 437207860}
         m_TargetAssemblyTypeName: ARContorller, Assembly-CSharp
-        m_MethodName: CutAwayDisocclusion
+        m_MethodName: CaptureCamAView
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3150,7 +3150,11 @@ MonoBehaviour:
     m_Options:
     - m_Text: None
       m_Image: {fileID: 0}
-    - m_Text: Dynm Sphere
+    - m_Text: Dynm Sphere 3
+      m_Image: {fileID: 0}
+    - m_Text: Dynm Sphere 5
+      m_Image: {fileID: 0}
+    - m_Text: Dynm Sphere 7
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4371,7 +4375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ARCameraBackground: {fileID: 1552705266}
-  m_CameraARTex: {fileID: 8400000, guid: e3b1041126c754d498e8d0aa4aeaf4fd, type: 2}
+  m_CameraARTex: {fileID: 8400000, guid: e3876dece1cecf44b9c7db3ed43d0e8c, type: 2}
 --- !u!4 &1298104233
 Transform:
   m_ObjectHideFlags: 0
@@ -4904,7 +4908,7 @@ MonoBehaviour:
   m_FocusMode: -1
   m_LightEstimationMode: -1
   m_AutoFocus: 1
-  m_LightEstimation: 0
+  m_LightEstimation: -1
   m_FacingDirection: 1
 --- !u!114 &1552705268
 MonoBehaviour:
@@ -5475,7 +5479,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: PicInPic
       m_Image: {fileID: 0}
-    - m_Text: Reflection
+    - m_Text: X-Ray
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

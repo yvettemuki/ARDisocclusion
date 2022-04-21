@@ -49,9 +49,9 @@ public class ARContorller : MonoBehaviour
     private bool m_IsCameraBRegisterd = false;
     private bool m_IsPlaybackSegment = false;
     private bool m_IsPlaybackHumanSprite = false;
-    private bool m_IsProjectMainCorridor = false;
     private Texture2D m_HumanSpriteTex;
     private Camera m_MirrorCamera;
+    private int m_CameraACullingMask = 0;
 
     // Camera B data in world space
     Vector3 camera_b_pos = Vector3.zero;
@@ -101,7 +101,7 @@ public class ARContorller : MonoBehaviour
         TYPE_CUTAWAY,
         TYPE_MULTIPERSPECTIVE,
         TYPE_PICINPIC,
-        TYPE_REFLECTION
+        TYPE_XRAY
     };
 
     public static ControlObjectType currentObjectType = ControlObjectType.OBJ_NONE;
@@ -124,6 +124,8 @@ public class ARContorller : MonoBehaviour
         //m_CameraB.enabled = false;
 
         InitializeCameraBVideoFrames();
+
+        m_CameraACullingMask = m_ARCamera.cullingMask;
     }
 
     // Update is called once per frame/
@@ -145,11 +147,8 @@ public class ARContorller : MonoBehaviour
             MultiperspDisocclusion();
         else if (currentUserStudyType == UserStudyType.TYPE_PICINPIC)
             PicInPicDisocclusion();
-
-        if (m_IsProjectMainCorridor)
-        {
-            m_CameraImageController.ProjectCameraA();
-        }
+        else if (currentUserStudyType == UserStudyType.TYPE_XRAY)
+            XRayDisocclusion();
       
         // methods to see around the corner (disocclusion)
         //if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
@@ -167,6 +166,7 @@ public class ARContorller : MonoBehaviour
         //m_Session.Reset();
 
         m_AnchorController.Reset();
+        m_UserStudyController.Reset();
 
         if (m_HumanSprite) Destroy(m_HumanSprite);
         if (m_CameraB) Destroy(m_CameraB);
@@ -189,6 +189,7 @@ public class ARContorller : MonoBehaviour
         if (m_Mirror) Destroy(m_Mirror);
         if (m_ProjectorMULTI.gameObject.activeSelf) m_ProjectorMULTI.gameObject.SetActive(false);
         if (m_RawImagePicInPic.gameObject.activeSelf) m_RawImagePicInPic.gameObject.SetActive(false);
+        if (m_ProjectorMAINCORD.gameObject.activeSelf) m_ProjectorMAINCORD.gameObject.SetActive(false);
     }
 
     public void OnControlObjectChanged()
@@ -231,27 +232,32 @@ public class ARContorller : MonoBehaviour
                 currentUserStudyType = UserStudyType.TYPE_CUTAWAY;
                 CleanUpScene();
                 m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
-                //m_IsPlaybackHumanSprite = true;
-                //m_ProjectorController.videoPlayer.Play();
+                m_UserStudyController.SetUserStudyObjectsActive(true);
                 break;
 
             case "Multipersp":
                 currentUserStudyType = UserStudyType.TYPE_MULTIPERSPECTIVE;
                 CleanUpScene();
+                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
                 m_CameraB.GetComponent<Camera>().nearClipPlane = portal_depth;
                 m_ProjectorMULTI.gameObject.SetActive(true);
-                //m_IsPlaybackHumanSprite = true;
-                //m_ProjectorController.videoPlayer.Play();
                 break;
 
             case "PicInPic":
                 currentUserStudyType = UserStudyType.TYPE_PICINPIC;
                 CleanUpScene();
                 m_CameraB.GetComponent<Camera>().nearClipPlane = 0.1f;
-                //m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
                 m_RawImagePicInPic.gameObject.SetActive(true);
-                //m_IsPlaybackHumanSprite = true;
-                //m_ProjectorController.videoPlayer.Play();
+                break;
+
+            case "X-Ray":
+                currentUserStudyType = UserStudyType.TYPE_XRAY;
+                CleanUpScene();
+                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
+                // dynamic sphere view
+                m_UserStudyController.SetUserStudyObjectsActive(true);
+                m_ProjectorMAINCORD.gameObject.SetActive(true);
                 break;
 
             default:
@@ -271,7 +277,7 @@ public class ARContorller : MonoBehaviour
             $"{m_ARCamera.transform.position.ToString()}\n + " +
             $"CamB Pos:\n {camera_b_pos.ToString()}\n";
 
-            if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
+            if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY || currentUserStudyType == UserStudyType.TYPE_XRAY)
             {
                 CalCameraAPositionInPortal();
 
@@ -281,8 +287,19 @@ public class ARContorller : MonoBehaviour
                     m_TextCameraPos.text += $"left side {portal_x_lower_bound}:\n{camera_a_pos_in_portal.ToString()}\n";
                     m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(false);
                     m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(true);
-                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(true);
-                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
+                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(true);
+                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(false);
+                    if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
+                    {
+                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(true);
+                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
+                    }
+                    else 
+                    {
+                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
+                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
+                    }
+
                     m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
 
                 }
@@ -291,8 +308,18 @@ public class ARContorller : MonoBehaviour
                     m_TextCameraPos.text += $"right side {portal_x_upper_bound}:\n{camera_a_pos_in_portal.ToString()}\n ";
                     m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(false);
                     m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(true);
-                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(true);
-                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
+                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(true);
+                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(false);
+                    if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
+                    {
+                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(true);
+                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
+                    }
+                    else 
+                    {
+                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
+                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
+                    }
                     m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
 
                 }
@@ -318,8 +345,10 @@ public class ARContorller : MonoBehaviour
             m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(isActive);
             m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
             m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
+            m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(false);
+            m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(false);
         }
-        
+
         // human sprite view
         if (m_HumanSprite)
             m_HumanSprite.SetActive(isActive);
@@ -499,6 +528,53 @@ public class ARContorller : MonoBehaviour
         SetSideCorridorViewActive(false);
     }
 
+    public void XRayDisocclusion()
+    {
+        if (!m_IsCameraBRegisterd)
+        {
+            Debug.Log($"Camera B should be registered before disocclusion!");
+            return;
+        }
+
+        if (!m_CameraImageController)
+        {
+            Debug.Log("Make sure camera image controller exist!");
+            return;
+        }
+
+        //m_CameraImageController.ProjectCameraA();
+    }
+
+    public void CaptureCamAView()
+    {
+        if (!m_IsCameraBRegisterd)
+        {
+            Debug.Log($"Camera B should be registered before disocclusion!");
+            return;
+        }
+
+        if (!m_CameraImageController)
+        {
+            Debug.Log("Make sure camera image controller exist!");
+            return;
+        }
+
+        // set projector position based on the current ar camera position
+        m_ProjectorMAINCORD = Instantiate(m_ProjectorPrefabMAINCORD, m_ARCamera.transform.position, m_ARCamera.transform.rotation);
+        m_ProjectorMAINCORD.gameObject.SetActive(false);
+        m_CameraImageController.ProjectCameraA();
+
+        Vector3 pos_in_portal = Vector3.zero;
+        Quaternion rot_in_portal = Quaternion.identity;
+        WorldObjectPos2Portal(m_ARCamera.transform.position, out pos_in_portal);
+        WorldObjectRot2Portal(m_ARCamera.transform, out rot_in_portal);
+
+        m_TextPortalPos.text = $"Cam A Pos in portal: \n" +
+            $"{pos_in_portal.ToString("F")} \n" +
+            $"Cam A rot in portal: \n " +
+            $"{rot_in_portal.ToString("F")}";
+    }
+
     public void ProcessCameraBProjectorsPos()
     {
         Vector3 cam_pos = ControllerStates.CAM_B_EYE_POS;
@@ -582,8 +658,12 @@ public class ARContorller : MonoBehaviour
             m_ProjectorMULTI.gameObject.SetActive(false);
 
             // create projector for main corridor (set the projector as the child of ARCamera (cam A))
-            m_ProjectorMAINCORD = Instantiate(m_ProjectorPrefabMAINCORD, Vector3.zero, m_ARCamera.transform.rotation, m_ARCamera.transform);
-            m_IsProjectMainCorridor = true;
+            m_ProjectorMAINCORD = Instantiate(m_ProjectorPrefabMAINCORD);
+            m_ProjectorMAINCORD.transform.parent = m_AnchorController.m_PortalAnchor.transform;
+            m_ProjectorMAINCORD.transform.localPosition = ControllerStates.PROJECTOR_MAIN_CORD_POS_IN_PORTAL;
+            m_ProjectorMAINCORD.transform.localRotation = ControllerStates.PROJECTOR_MAIN_CORD_ROT_IN_PORTAL;
+            m_ProjectorMAINCORD.gameObject.SetActive(true);
+
 
             // get depth of the side corridor (portal) from the cameraB
             portal_depth = Mathf.Abs(cam_pos_in_portal_coord.z);
@@ -886,6 +966,23 @@ public class ARContorller : MonoBehaviour
             Vector3.Dot(portal_z_axis, pos_in_portal_0)
         );
 
+    }
+
+    public void WorldObjectRot2Portal(in Transform transform_in_world, out Quaternion rot_in_portal)
+    {
+        rot_in_portal = Quaternion.identity;
+
+        if (!m_AnchorController.m_PortalAnchor)
+        {
+            Debug.Log("Portal should be exist for calculation!");
+            return;
+        }
+
+        Transform portal_transform = m_AnchorController.m_PortalAnchor.gameObject.transform;
+        Vector3 up_in_portal = portal_transform.InverseTransformDirection(transform_in_world.up);
+        Vector3 forward_in_portal = portal_transform.InverseTransformDirection(transform_in_world.forward);
+
+        rot_in_portal = Quaternion.LookRotation(forward_in_portal, up_in_portal);
     }
 
 }

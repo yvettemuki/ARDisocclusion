@@ -46,7 +46,9 @@ public class UserStudyController : MonoBehaviour
     public enum TaskMode
     {
         NONE,
-        COUNTING_DYNAMIC_SPHERE,
+        COUNTING_DYNAMIC_SPHERE_3,
+        COUNTING_DYNAMIC_SPHERE_5,
+        COUNTING_DYNAMIC_SPHERE_7
     };
 
     // Tasks Vairables 
@@ -59,9 +61,18 @@ public class UserStudyController : MonoBehaviour
 
     void Update()
     {
-        if (m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE)
+        if (m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_3
+            || m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_5
+            || m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_7)
+        {
             UpdateDynamicSpheres();
+        }
 
+    }
+
+    public void Reset()
+    {
+        DestroyCurrentObjects();
     }
 
     public void CreateCircle(Vector3 position)
@@ -114,15 +125,6 @@ public class UserStudyController : MonoBehaviour
 
     }
 
-    public void PlaceDynamicSphere()
-    {
-        //Vector3 pos_in_world = Vector3.zero;
-        //m_ARController.PortalObjectPos2World(in ControllerStates.SPHERE_POS_IN_PORTAL_1_MIN, out pos_in_world);
-
-        // design a array of gameobjects with specific position
-        InitDynamicSpheres();
-    }
-
     public void InitDynamicSpheres()
     {
         for (int i = 0; i < m_DynamicSphereNum; i++)
@@ -131,21 +133,24 @@ public class UserStudyController : MonoBehaviour
             Quaternion _rotation = m_ARController.GetPortalTransform().rotation;
             Vector3 _position_start = Vector3.zero;
             m_ARController.PortalObjectPos2World(in ControllerStates.SPHERES_IN_PORTAL_POS_START[i], out _position_start);
-            float longest_dist = Random.Range(1.5f, 2.5f);
+            float longest_dist = Random.Range(1.5f, 3.5f);
 
             GameObject _sphere = Instantiate(m_SpherePrefab, _position_start, _rotation);
 
-            float _range_scale = Random.Range(0.2f, 0.8f);
+            float _range_scale = Random.Range(0.2f, 0.6f);
             _sphere.transform.localScale = new Vector3(_range_scale, _range_scale, _range_scale);
 
-            DynamicSphere _dy_sphere = new DynamicSphere(_sphere, _position_start, longest_dist, Random.Range(2f, 8f));
+            DynamicSphere _dy_sphere = new DynamicSphere(_sphere, _position_start, longest_dist, Random.Range(1f, 2.5f));
             m_DynamicSpheres.Add(_dy_sphere);
         }
     }
 
     public void DestroyCurrentObjects()
     {
-        if (m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE)
+        // Dynamic Spheres
+        if (m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_3 
+            || m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_5 
+            || m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_7)
         {
             foreach (DynamicSphere obj in m_DynamicSpheres)
             {
@@ -154,6 +159,7 @@ public class UserStudyController : MonoBehaviour
 
             m_DynamicSpheres.Clear();
         }
+        
     }
 
     public void UpdateDynamicSpheres()
@@ -166,6 +172,7 @@ public class UserStudyController : MonoBehaviour
             float dist = Vector3.Distance(obj.sphere.transform.position, obj.startPos);
             if (dist > obj.longest_dist)
             {
+                obj.sphere.transform.position = obj.startPos + obj.sphere.transform.forward * obj.longest_dist * (obj.speed / Mathf.Abs(obj.speed));
                 obj.speed = -obj.speed;
             }
         }
@@ -173,18 +180,34 @@ public class UserStudyController : MonoBehaviour
 
     public void SetUserStudyObjectsActive(bool isActive)
     {
-        if (m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE)
+        if (m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_3 
+            || m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_5 
+            || m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_7)
         {
             foreach (DynamicSphere obj in m_DynamicSpheres)
             {
+                Vector3 scale = obj.sphere.transform.lossyScale;
+                float absoluteRadius = Mathf.Abs(Mathf.Max(Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.y)), Mathf.Abs(scale.z)) * 0.5f);
+                absoluteRadius = Mathf.Max(absoluteRadius, 0.00001f);
+
                 Vector3 _world_position = obj.sphere.transform.position;
                 Vector3 _portal_position = Vector3.zero;
                 m_ARController.WorldObjectPos2Portal(in _world_position, out _portal_position);
 
                 if (_portal_position.z > 0f)
-                    obj.sphere.SetActive(isActive);
+                {
+                    if (_portal_position.z - absoluteRadius < 0f)
+                        obj.sphere.SetActive(true);
+                    else
+                        obj.sphere.SetActive(isActive);
+                }
                 else
-                    obj.sphere.SetActive(true);
+                {
+                    if (_portal_position.z + absoluteRadius > 0f)
+                        obj.sphere.SetActive(isActive);
+                    else
+                        obj.sphere.SetActive(true);
+                }
             }
         }
     }
@@ -201,9 +224,22 @@ public class UserStudyController : MonoBehaviour
                 m_CurrentTaskMode = TaskMode.NONE;
                 break;
 
-            case "Dynm Sphere":
+            case "Dynm Sphere 3":
+                m_DynamicSphereNum = 3;
                 InitDynamicSpheres();
-                m_CurrentTaskMode = TaskMode.COUNTING_DYNAMIC_SPHERE;
+                m_CurrentTaskMode = TaskMode.COUNTING_DYNAMIC_SPHERE_3;
+                break;
+
+            case "Dynm Sphere 5":
+                m_DynamicSphereNum = 5;
+                InitDynamicSpheres();
+                m_CurrentTaskMode = TaskMode.COUNTING_DYNAMIC_SPHERE_5;
+                break;
+
+            case "Dynm Sphere 7":
+                m_DynamicSphereNum = 7;
+                InitDynamicSpheres();
+                m_CurrentTaskMode = TaskMode.COUNTING_DYNAMIC_SPHERE_7;
                 break;
 
             default:
