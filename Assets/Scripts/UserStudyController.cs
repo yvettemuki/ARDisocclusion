@@ -186,6 +186,7 @@ public class UserStudyController : MonoBehaviour
         {
             foreach (DynamicSphere obj in m_DynamicSpheres)
             {
+                // calculate the radius of the spheres
                 Vector3 scale = obj.sphere.transform.lossyScale;
                 float absoluteRadius = Mathf.Abs(Mathf.Max(Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.y)), Mathf.Abs(scale.z)) * 0.5f);
                 absoluteRadius = Mathf.Max(absoluteRadius, 0.00001f);
@@ -194,19 +195,17 @@ public class UserStudyController : MonoBehaviour
                 Vector3 _portal_position = Vector3.zero;
                 m_ARController.WorldObjectPos2Portal(in _world_position, out _portal_position);
 
-                if (_portal_position.z > 0f)
+                float dist_from_portal = Mathf.Abs(_portal_position.z);
+                if (dist_from_portal > absoluteRadius)
                 {
-                    if (_portal_position.z - absoluteRadius < 0f)
+                    if (_portal_position.z < 0f)
                         obj.sphere.SetActive(true);
                     else
                         obj.sphere.SetActive(isActive);
                 }
                 else
                 {
-                    if (_portal_position.z + absoluteRadius > 0f)
-                        obj.sphere.SetActive(isActive);
-                    else
-                        obj.sphere.SetActive(true);
+                    obj.sphere.SetActive(true);
                 }
             }
         }

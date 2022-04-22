@@ -1042,7 +1042,8 @@ MonoBehaviour:
   m_ProjectorPrefabBG: {fileID: 1769279600775891930, guid: 980c5a9f33bd66043a84a5b5629007e3, type: 3}
   m_ProjectorPrefabHM: {fileID: 3058117821288416713, guid: 9d353c40fcd78f944848dd9cd3c9175f, type: 3}
   m_ProjectorPrefabMULTI: {fileID: 4455720376716969035, guid: aaa65babe8aaa4e40adf364b98ea37ac, type: 3}
-  m_ProjectorPrefabMAINCORD: {fileID: 6545745719437646518, guid: 182155cc786ab39499f0d3630ab44056, type: 3}
+  m_ProjectorPrefabLeftMAINCORD: {fileID: 6545745719437646518, guid: 182155cc786ab39499f0d3630ab44056, type: 3}
+  m_ProjectorPrefabRightMAINCORD: {fileID: 7975056929528422426, guid: e9ab983315a33a64992bef7051ce6365, type: 3}
   m_RawImagePicInPic: {fileID: 11257680}
   m_Frames:
   - {fileID: 2800000, guid: 497121c4d5144404cbdfd88c00dfd86e, type: 3}
@@ -1511,6 +1512,7 @@ MonoBehaviour:
   BGSubOutputRTex: {fileID: 8400000, guid: 3dfa732829404d14285e0c5976661c55, type: 2}
   BGSubInputRTex: {fileID: 8400000, guid: d1ae412b8aacbca4e911b59aaa127cee, type: 2}
   bgSubMaterial: {fileID: 2100000, guid: 8111d7e04a3893341bad2a03beb05f3a, type: 2}
+  mainCorridorProjectorMaterial: {fileID: 2100000, guid: 5258354ea81f22f479f01a368a9ae3f6, type: 2}
   videoPlayer: {fileID: 761097362}
 --- !u!4 &605371441
 Transform:
@@ -1596,7 +1598,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: User Study Task Mode
+  m_Text: User Study Task
 --- !u!222 &612446979
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4829,6 +4831,7 @@ GameObject:
   - component: {fileID: 1552705268}
   - component: {fileID: 1552705267}
   - component: {fileID: 1552705266}
+  - component: {fileID: 1552705270}
   m_Layer: 0
   m_Name: AR Camera
   m_TagString: MainCamera
@@ -4846,7 +4849,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -4936,6 +4939,22 @@ Transform:
   m_Father: {fileID: 2079571515}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1552705270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552705264}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b15f82cc229284894964d2d30806969d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HumanSegmentationStencilMode: 0
+  m_HumanSegmentationDepthMode: 0
+  m_EnvironmentDepthMode: 1
+  m_OcclusionPreferenceMode: 0
 --- !u!1 &1559325210
 GameObject:
   m_ObjectHideFlags: 0
@@ -5085,7 +5104,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: User Study Type
+  m_Text: 'Disocclusion Method
+
+'
 --- !u!222 &1581702898
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5374,7 +5395,7 @@ GameObject:
   - component: {fileID: 1744432626}
   - component: {fileID: 1744432625}
   m_Layer: 5
-  m_Name: Dropdown User Study Type
+  m_Name: Dropdown User Study Method
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5480,6 +5501,8 @@ MonoBehaviour:
     - m_Text: PicInPic
       m_Image: {fileID: 0}
     - m_Text: X-Ray
+      m_Image: {fileID: 0}
+    - m_Text: Reflection
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

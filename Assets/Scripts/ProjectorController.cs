@@ -8,6 +8,7 @@ public class ProjectorController : MonoBehaviour
     public RenderTexture BGSubOutputRTex;  // after background subtraction human sprite output
     public RenderTexture BGSubInputRTex;  // for video having human
     public Material bgSubMaterial;
+    public Material mainCorridorProjectorMaterial;
     public VideoPlayer videoPlayer;
 
     // Start is called before the first frame update
@@ -42,6 +43,12 @@ public class ProjectorController : MonoBehaviour
         //else if (type == ARContorller.UserStudyType.TYPE_MULTIPERSPECTIVE)
         //    Graphics.Blit(BGSubInputRTex, BGSubOutputRTex);
         Graphics.Blit(BGSubInputRTex, BGSubOutputRTex, bgSubMaterial);
-    }    
+    }
+
+    public void SetMainCorridorProjectorMaterial(int srcMode, int dstMode)
+    {
+        mainCorridorProjectorMaterial.SetInt("_MySrcMode", srcMode);
+        mainCorridorProjectorMaterial.SetInt("_MyDstMode", dstMode);
+    }
 
 }

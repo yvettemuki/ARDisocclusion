@@ -1,9 +1,10 @@
 Shader "Projector/ProjectorMainCorridor"
 {
 	Properties{
-		_Color("Main Color", Color) = (1,1,1,1)
+		_Color("Main Color", Color) = (1,1,1,0.5)
 		_ShadowTex("Cookie", 2D) = "" {}
-		_FalloffTex("FallOff", 2D) = "" {}
+		_MySrcMode("SrcMode", Float) = 1
+		_MyDstMode("DstMode", Float) = 5
 	}
 
 		Subshader{
@@ -11,7 +12,7 @@ Shader "Projector/ProjectorMainCorridor"
 			Pass {
 				//ZWrite Off
 				//ColorMask RGB
-				//Blend One DstColor
+				Blend[_MySrcMode][_MyDstMode]
 				//Offset -1, -1
 
 				CGPROGRAM
@@ -22,7 +23,7 @@ Shader "Projector/ProjectorMainCorridor"
 
 				struct v2f {
 					float4 uvShadow : TEXCOORD0;
-					float4 uvFalloff : TEXCOORD1;
+					//float4 uvFalloff : TEXCOORD1;
 					//UNITY_FOG_COORDS(2)
 					float4 pos : SV_POSITION;
 				};
@@ -35,14 +36,14 @@ Shader "Projector/ProjectorMainCorridor"
 					v2f o;
 					o.pos = UnityObjectToClipPos(vertex);
 					o.uvShadow = mul(unity_Projector, vertex);
-					o.uvFalloff = mul(unity_ProjectorClip, vertex);
+					//o.uvFalloff = mul(unity_ProjectorClip, vertex);
 					//UNITY_TRANSFER_FOG(o,o.pos);
 					return o;
 				}
 
 				fixed4 _Color;
 				sampler2D _ShadowTex;
-				sampler2D _FalloffTex;
+				//sampler2D _FalloffTex;
 
 				fixed4 frag(v2f i) : SV_Target
 				{

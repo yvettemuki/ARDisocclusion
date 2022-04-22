@@ -32,7 +32,9 @@ public class ARContorller : MonoBehaviour
     public GameObject m_ProjectorPrefabBG; // background projector for side corridor
     public GameObject m_ProjectorPrefabHM; // human projector
     public GameObject m_ProjectorPrefabMULTI; // multiperspective projector
-    public GameObject m_ProjectorPrefabMAINCORD; // main corridor projector
+    public GameObject m_ProjectorPrefabLeftMAINCORD; // main corridor projector left
+    public GameObject m_ProjectorPrefabRightMAINCORD; // main corridor projector right
+
     public RawImage m_RawImagePicInPic;  // pic in pic render image
 
     private List<Vector3> m_4PortalCornerPositions;
@@ -45,7 +47,8 @@ public class ARContorller : MonoBehaviour
     private GameObject m_ProjectorBG;
     private GameObject m_ProjectorHM;
     private GameObject m_ProjectorMULTI;
-    private GameObject m_ProjectorMAINCORD;
+    private GameObject m_ProjectorLeftMAINCORD;
+    private GameObject m_ProjectorRightMAINCORD;
     private bool m_IsCameraBRegisterd = false;
     private bool m_IsPlaybackSegment = false;
     private bool m_IsPlaybackHumanSprite = false;
@@ -101,7 +104,8 @@ public class ARContorller : MonoBehaviour
         TYPE_CUTAWAY,
         TYPE_MULTIPERSPECTIVE,
         TYPE_PICINPIC,
-        TYPE_XRAY
+        TYPE_XRAY,
+        TYPE_REFLECTION
     };
 
     public static ControlObjectType currentObjectType = ControlObjectType.OBJ_NONE;
@@ -149,6 +153,8 @@ public class ARContorller : MonoBehaviour
             PicInPicDisocclusion();
         else if (currentUserStudyType == UserStudyType.TYPE_XRAY)
             XRayDisocclusion();
+        else if (currentUserStudyType == UserStudyType.TYPE_REFLECTION)
+            ReflectionDisocclusion();
       
         // methods to see around the corner (disocclusion)
         //if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
@@ -189,7 +195,8 @@ public class ARContorller : MonoBehaviour
         if (m_Mirror) Destroy(m_Mirror);
         if (m_ProjectorMULTI.gameObject.activeSelf) m_ProjectorMULTI.gameObject.SetActive(false);
         if (m_RawImagePicInPic.gameObject.activeSelf) m_RawImagePicInPic.gameObject.SetActive(false);
-        if (m_ProjectorMAINCORD.gameObject.activeSelf) m_ProjectorMAINCORD.gameObject.SetActive(false);
+        if (m_ProjectorLeftMAINCORD.gameObject.activeSelf) m_ProjectorLeftMAINCORD.gameObject.SetActive(false);
+        //if (m_ProjectorRightMAINCORD.gameObject.activeSelf) m_ProjectorRightMAINCORD.gameObject.SetActive(false);
     }
 
     public void OnControlObjectChanged()
@@ -257,7 +264,18 @@ public class ARContorller : MonoBehaviour
                 m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
                 // dynamic sphere view
                 m_UserStudyController.SetUserStudyObjectsActive(true);
-                m_ProjectorMAINCORD.gameObject.SetActive(true);
+                m_ProjectorLeftMAINCORD.gameObject.SetActive(true);
+                m_ProjectorController.SetMainCorridorProjectorMaterial(1, 5);
+                //m_ProjectorRightMAINCORD.gameObject.SetActive(true);
+                break;
+
+            case "Reflection":
+                currentUserStudyType = UserStudyType.TYPE_REFLECTION;
+                CleanUpScene();
+                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                m_ProjectorLeftMAINCORD.gameObject.SetActive(true);
+                m_ProjectorController.SetMainCorridorProjectorMaterial(1, 0);
+                //m_ProjectorRightMAINCORD.gameObject.SetActive(true);
                 break;
 
             default:
@@ -345,8 +363,18 @@ public class ARContorller : MonoBehaviour
             m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(isActive);
             m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
             m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
-            m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(false);
-            m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(false);
+
+            // mirror effect
+            if (currentUserStudyType == UserStudyType.TYPE_REFLECTION)
+            {
+                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(isActive);
+                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(isActive);
+            }
+            else
+            {
+                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(false);
+                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(false);
+            }
         }
 
         // human sprite view
@@ -355,6 +383,7 @@ public class ARContorller : MonoBehaviour
 
         // dynamic sphere view
         m_UserStudyController.SetUserStudyObjectsActive(isActive);
+        
     }
 
     public void CalCameraAPositionInPortal()
@@ -497,7 +526,7 @@ public class ARContorller : MonoBehaviour
         SetSideCorridorViewActive(false);
     }
 
-    public void MirrorDisocclusion()
+    public void ReflectionDisocclusion()
     {
         if (!m_IsCameraBRegisterd)
         {
@@ -560,8 +589,8 @@ public class ARContorller : MonoBehaviour
         }
 
         // set projector position based on the current ar camera position
-        m_ProjectorMAINCORD = Instantiate(m_ProjectorPrefabMAINCORD, m_ARCamera.transform.position, m_ARCamera.transform.rotation);
-        m_ProjectorMAINCORD.gameObject.SetActive(false);
+        m_ProjectorLeftMAINCORD = Instantiate(m_ProjectorPrefabLeftMAINCORD, m_ARCamera.transform.position, m_ARCamera.transform.rotation);
+        m_ProjectorLeftMAINCORD.gameObject.SetActive(false);
         m_CameraImageController.ProjectCameraA();
 
         Vector3 pos_in_portal = Vector3.zero;
@@ -657,13 +686,19 @@ public class ARContorller : MonoBehaviour
             m_ProjectorMULTI = Instantiate(m_ProjectorPrefabMULTI, camera_b_pos, Quaternion.LookRotation(forward, up));
             m_ProjectorMULTI.gameObject.SetActive(false);
 
-            // create projector for main corridor (set the projector as the child of ARCamera (cam A))
-            m_ProjectorMAINCORD = Instantiate(m_ProjectorPrefabMAINCORD);
-            m_ProjectorMAINCORD.transform.parent = m_AnchorController.m_PortalAnchor.transform;
-            m_ProjectorMAINCORD.transform.localPosition = ControllerStates.PROJECTOR_MAIN_CORD_POS_IN_PORTAL;
-            m_ProjectorMAINCORD.transform.localRotation = ControllerStates.PROJECTOR_MAIN_CORD_ROT_IN_PORTAL;
-            m_ProjectorMAINCORD.gameObject.SetActive(true);
+            // create projector for left main corridor (set the projector as the child of ARCamera (cam A))
+            m_ProjectorLeftMAINCORD = Instantiate(m_ProjectorPrefabLeftMAINCORD);
+            m_ProjectorLeftMAINCORD.transform.parent = m_AnchorController.m_PortalAnchor.transform;
+            m_ProjectorLeftMAINCORD.transform.localPosition = ControllerStates.PROJECTOR_MAIN_LEFT_CORD_POS_IN_PORTAL;
+            m_ProjectorLeftMAINCORD.transform.localRotation = ControllerStates.PROJECTOR_MAIN_LEFT_CORD_ROT_IN_PORTAL;
+            m_ProjectorLeftMAINCORD.gameObject.SetActive(false);
 
+            // create projector for main right corridor
+            //m_ProjectorRightMAINCORD = Instantiate(m_ProjectorPrefabRightMAINCORD);
+            //m_ProjectorRightMAINCORD.transform.parent = m_AnchorController.m_PortalAnchor.transform;
+            //m_ProjectorRightMAINCORD.transform.localPosition = ControllerStates.PROJECTOR_MAIN_RIGHT_CORD_POS_IN_PORTAL;
+            //m_ProjectorRightMAINCORD.transform.localRotation = ControllerStates.PROJECTOR_MAIN_RIGHT_CORD_ROT_IN_PORTAL;
+            //m_ProjectorRightMAINCORD.gameObject.SetActive(false);
 
             // get depth of the side corridor (portal) from the cameraB
             portal_depth = Mathf.Abs(cam_pos_in_portal_coord.z);
@@ -839,7 +874,7 @@ public class ARContorller : MonoBehaviour
     public void PlayBackCameraBVideoClipInMirror()
     {
         //PlaybackHumanSpriteInSideCorridor();
-        MirrorDisocclusion();
+        ReflectionDisocclusion();
     }
 
     public void SetPlayBackSegment()
