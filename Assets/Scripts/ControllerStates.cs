@@ -119,6 +119,38 @@ public class ControllerStates : MonoBehaviour
         new Vector2(274, 303),
         new Vector2(266, 259)
     };
+
+    // user study flow
+    public static int MAX_TASK_NUM = 4;
+    public static int MAX_METHOD_NUM = 5;
+    public static int MAX_TRIAL_NUM = 3;
+    
+    public static int DYNAMIC_BALL = 0;
+    public static int MATCH_SQUARE = 1;
+    public static int DIRECTION_INDICATION = 2;
+    public static int TWO_DOTS = 3;
+
+    public static int P_IN_P = 0;
+    public static int CUT_AWAY = 1;
+    public static int X_RAY = 2;
+    public static int MULTIVIEW = 3;
+    public static int MIRROR = 4;
+
+    public static string[,,] CHOICES = new string[,,] 
+    {
+        {{"1", "2", "3", "4", "5"}, {"3", "4", "5", "6", "7" }, {"5", "6", "7", "8", "9" } },
+        {{"1-2", "2-3", "3-4", "4-5", "5-6" }, {"1-2", "2-3", "3-4", "4-5", "5-6" }, {"1-2", "2-3", "3-4", "4-5", "5-6" } },
+        {{"ph", "ph", "ph", "ph", "ph" }, {"ph", "ph", "ph", "ph", "ph" }, {"ph", "ph", "ph", "ph", "ph" } },
+        {{"ph", "ph", "ph", "ph", "ph" }, {"ph", "ph", "ph", "ph", "ph" }, {"ph", "ph", "ph", "ph", "ph" } } 
+    };
+
+    public static int[,,] CORRECT_ANSWERS = new int[,,]
+    {
+        { {2, 0, 3 }, {3, 4, 1 }, {1, 3, 2 }, {2, 1, 0 }, {0, 4, 4} },
+        { {2, 0, 3 }, {3, 4, 1 }, {1, 3, 2 }, {2, 1, 0 }, {0, 4, 4} },
+        { {2, 0, 3 }, {3, 4, 1 }, {1, 3, 2 }, {2, 1, 0 }, {0, 4, 4} },
+        { {2, 0, 3 }, {3, 4, 1 }, {1, 3, 2 }, {2, 1, 0 }, {0, 4, 4} }
+    };
 }
 
 /** Data of Camera B by Extrinsic Calibration (Right Coord System)**/
