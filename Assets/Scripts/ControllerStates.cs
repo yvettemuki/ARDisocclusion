@@ -136,6 +136,14 @@ public class ControllerStates : MonoBehaviour
     public static int MULTIVIEW = 3;
     public static int MIRROR = 4;
 
+    public static string[] QUESTIONS = new string[]
+    {
+        "How many balls are moving in the corridor?",
+        "Between which two stickers is the person standing?",
+        "This is a placeholder of the question.",
+        "This is a placeholder of the question."
+    };
+
     public static string[,,] CHOICES = new string[,,] 
     {
         {{"1", "2", "3", "4", "5"}, {"3", "4", "5", "6", "7" }, {"5", "6", "7", "8", "9" } },
