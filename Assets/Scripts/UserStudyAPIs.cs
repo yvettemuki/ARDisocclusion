@@ -34,7 +34,19 @@ public class UserStudyAPIs : MonoBehaviour
             case UserStudyController.TaskMode.COUNTING_DYNAMIC_SPHERE_3:
                 m_UserStudyController.m_DynamicSphereNum = 3;
                 m_UserStudyController.InitDynamicSpheres();
-                
+                break;
+
+            case UserStudyController.TaskMode.COUNTING_DYNAMIC_SPHERE_5:
+                m_UserStudyController.m_DynamicSphereNum = 5;
+                m_UserStudyController.InitDynamicSpheres();
+                break;
+
+            case UserStudyController.TaskMode.COUNTING_DYNAMIC_SPHERE_7:
+                m_UserStudyController.m_DynamicSphereNum = 7;
+                m_UserStudyController.InitDynamicSpheres();
+                break;
+
+            default:
                 break;
         }
     }
