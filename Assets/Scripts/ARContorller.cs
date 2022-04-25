@@ -34,6 +34,7 @@ public class ARContorller : MonoBehaviour
     public GameObject m_ProjectorPrefabMULTI; // multiperspective projector
     public GameObject m_ProjectorPrefabLeftMAINCORD; // main corridor projector left
     public GameObject m_ProjectorPrefabRightMAINCORD; // main corridor projector right
+    public GameObject m_StencilMaskPortalAreaPrefab;
 
     public RawImage m_RawImagePicInPic;  // pic in pic render image
 
@@ -49,6 +50,7 @@ public class ARContorller : MonoBehaviour
     private GameObject m_ProjectorMULTI;
     private GameObject m_ProjectorLeftMAINCORD;
     private GameObject m_ProjectorRightMAINCORD;
+    private GameObject m_StencilMaskPortalArea;
     private bool m_IsCameraBRegisterd = false;
     private bool m_IsPlaybackSegment = false;
     private bool m_IsPlaybackHumanSprite = false;
@@ -196,7 +198,14 @@ public class ARContorller : MonoBehaviour
         if (m_ProjectorMULTI.gameObject.activeSelf) m_ProjectorMULTI.gameObject.SetActive(false);
         if (m_RawImagePicInPic.gameObject.activeSelf) m_RawImagePicInPic.gameObject.SetActive(false);
         if (m_ProjectorLeftMAINCORD.gameObject.activeSelf) m_ProjectorLeftMAINCORD.gameObject.SetActive(false);
-        //if (m_ProjectorRightMAINCORD.gameObject.activeSelf) m_ProjectorRightMAINCORD.gameObject.SetActive(false);
+        if (m_StencilMaskPortalArea) Destroy(m_StencilMaskPortalArea);
+    }
+
+    public void CreateStencilMaskArea()
+    {
+        // Create the Stencil Mask Portal Area
+        Transform portal_transform = GetPortalTransform();
+        m_StencilMaskPortalArea = Instantiate(m_StencilMaskPortalAreaPrefab, portal_transform.position, portal_transform.rotation);
     }
 
     public void OnControlObjectChanged()
@@ -256,6 +265,7 @@ public class ARContorller : MonoBehaviour
                 m_CameraB.GetComponent<Camera>().nearClipPlane = 0.1f;
                 m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
                 m_RawImagePicInPic.gameObject.SetActive(true);
+                CreateStencilMaskArea();
                 break;
 
             case "X-Ray":
@@ -275,7 +285,7 @@ public class ARContorller : MonoBehaviour
                 m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
                 m_ProjectorLeftMAINCORD.gameObject.SetActive(true);
                 m_ProjectorController.SetMainCorridorProjectorMaterial(1, 0);
-                //m_ProjectorRightMAINCORD.gameObject.SetActive(true);
+                CreateStencilMaskArea();
                 break;
 
             default:
@@ -521,6 +531,11 @@ public class ARContorller : MonoBehaviour
             return;
         }
 
+        if (!m_StencilMaskPortalArea)
+        {
+            CreateStencilMaskArea();
+        }
+
         SetSideCorridorViewActive(true);
         m_CameraB.GetComponent<Camera>().Render();
         SetSideCorridorViewActive(false);
@@ -545,9 +560,14 @@ public class ARContorller : MonoBehaviour
             m_Mirror = Instantiate(m_MirrorPrefab, mirror_position, mirror_rotation);
 
             // set cam not enable
-            m_MirrorCamera = m_Mirror.transform.GetChild(2).GetChild(0).gameObject.GetComponent<Camera>();
+            m_MirrorCamera = m_Mirror.transform.GetChild(2).gameObject.GetComponent<Camera>();
             m_MirrorCamera.enabled = false;
             
+        }
+
+        if (!m_StencilMaskPortalArea)
+        {
+            CreateStencilMaskArea();
         }
 
         SetSideCorridorViewActive(true);

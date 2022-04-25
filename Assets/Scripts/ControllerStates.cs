@@ -22,8 +22,8 @@ public class ControllerStates : MonoBehaviour
     public static Vector3 PORTAL_TOP_RIGHT = new Vector3(0.7f, 1.5f, 1.8f);
 
     // Camera A Projector Data
-    public static Vector3 PROJECTOR_MAIN_LEFT_CORD_POS_IN_PORTAL = new Vector3(-7.19f, 1.38f, -1.80f);
-    public static Quaternion PROJECTOR_MAIN_LEFT_CORD_ROT_IN_PORTAL = new Quaternion(0.08f, 0.56f, -0.05f, 0.82f);
+    public static Vector3 PROJECTOR_MAIN_LEFT_CORD_POS_IN_PORTAL = new Vector3(-6.65f, 1.53f, -2.27f);  //-6.13f, 1.49f, -1.65f
+    public static Quaternion PROJECTOR_MAIN_LEFT_CORD_ROT_IN_PORTAL = new Quaternion(0.05f, 0.54f, -0.05f, 0.84f);  //0.07f, 0.56f, -0.06f, 0.83f
     public static Vector3 PROJECTOR_MAIN_RIGHT_CORD_POS_IN_PORTAL = new Vector3(4.17f, 1.46f, -1.72f);
     public static Quaternion PROJECTOR_MAIN_RIGHT_CORD_ROT_IN_PORTAL = new Quaternion(0.09f, -0.48f, 0.02f, 0.87f);
 
