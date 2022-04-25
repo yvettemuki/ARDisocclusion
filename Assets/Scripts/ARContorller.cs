@@ -1040,4 +1040,48 @@ public class ARContorller : MonoBehaviour
         rot_in_portal = Quaternion.LookRotation(forward_in_portal, up_in_portal);
     }
 
+    public void SetCameraBNearClipToPortalDepth()
+    {
+        if (!m_IsCameraBRegisterd)
+        {
+            Debug.Log("This method should used after the camera B register!");
+            return;
+        }
+
+        m_CameraB.GetComponent<Camera>().nearClipPlane = portal_depth;
+    }
+
+    public void SetCameraBNearClipToDefaultDepth()
+    {
+        if (!m_IsCameraBRegisterd)
+        {
+            Debug.Log("This method should used after the camera B register!");
+            return;
+        }
+
+        m_CameraB.GetComponent<Camera>().nearClipPlane = 0.1f;
+    }
+
+    public void SetProjectorMULTIActive(bool isActive)
+    {
+        if (!m_IsCameraBRegisterd)
+        {
+            Debug.Log("This method should used after the camera B register!");
+            return;
+        }
+
+        m_ProjectorMULTI.gameObject.SetActive(isActive);
+    }
+
+    public void SetProjectorMAINCORDActive(bool isActive)
+    {
+        if (!m_IsCameraBRegisterd)
+        {
+            Debug.Log("This method should used after the camera B register!");
+            return;
+        }
+
+        m_ProjectorLeftMAINCORD.gameObject.SetActive(isActive);
+    }
+
 }

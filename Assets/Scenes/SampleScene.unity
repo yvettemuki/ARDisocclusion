@@ -1470,9 +1470,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ARController: {fileID: 437207860}
   m_DropdownTaskMode: {fileID: 1097228459}
+  m_DynamicSphereNum: 3
   m_SpherePrefab: {fileID: 1223829741526076524, guid: 88d46b45771720045a47b8dba71b4222, type: 3}
   m_CircleMaterial: {fileID: 2100000, guid: eab6ce36a5aa2ad4c8da6f68e1a325ed, type: 2}
-  m_SphereStandardMat: {fileID: 2100000, guid: 69cfe7f66be34564c96f526a38434982, type: 2}
+  m_SphereStandardMat: {fileID: 2100000, guid: c167394412d3679488d3dedd583c904b, type: 2}
   m_SphereStencilMat: {fileID: 2100000, guid: 49015b640790d0a4eba5b9647c77ee86, type: 2}
 --- !u!4 &364948126
 Transform:
