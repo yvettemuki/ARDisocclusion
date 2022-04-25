@@ -15,7 +15,7 @@ public class UserStudyController : MonoBehaviour
     public Dropdown m_DropdownTaskMode;
     
     // Sphere
-    int m_DynamicSphereNum = 3;
+    public int m_DynamicSphereNum = 3;
     List<DynamicSphere> m_DynamicSpheres = new List<DynamicSphere>();
     public class DynamicSphere
     {
@@ -57,7 +57,7 @@ public class UserStudyController : MonoBehaviour
     };
 
     // Tasks Vairables 
-    public static TaskMode m_CurrentTaskMode = TaskMode.NONE;
+    public static TaskMode currentTaskMode = TaskMode.NONE;
 
     // Constants
     // Object Material Mode
@@ -71,9 +71,9 @@ public class UserStudyController : MonoBehaviour
 
     void Update()
     {
-        if (m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_3
-            || m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_5
-            || m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_7)
+        if (currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_3
+            || currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_5
+            || currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_7)
         {
             UpdateDynamicSpheres();
         }
@@ -158,9 +158,9 @@ public class UserStudyController : MonoBehaviour
     public void DestroyCurrentObjects()
     {
         // Dynamic Spheres
-        if (m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_3 
-            || m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_5 
-            || m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_7)
+        if (currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_3 
+            || currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_5 
+            || currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_7)
         {
             foreach (DynamicSphere obj in m_DynamicSpheres)
             {
@@ -215,7 +215,6 @@ public class UserStudyController : MonoBehaviour
         }
         else if (type == MAT_STENCIL)
         {
-            Debug.Log("Set the stencil mat");
             // type == 1, stencil shader material
             foreach (DynamicSphere obj in m_DynamicSpheres)
             {
@@ -232,9 +231,9 @@ public class UserStudyController : MonoBehaviour
             ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_REFLECTION)
             return;
 
-        if (m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_3 
-            || m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_5 
-            || m_CurrentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_7)
+        if (currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_3 
+            || currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_5 
+            || currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_7)
         {
             foreach (DynamicSphere obj in m_DynamicSpheres)
             {
@@ -272,25 +271,25 @@ public class UserStudyController : MonoBehaviour
         switch (selected)
         {
             case "None":
-                m_CurrentTaskMode = TaskMode.NONE;
+                currentTaskMode = TaskMode.NONE;
                 break;
 
             case "Dynm Sphere 3":
                 m_DynamicSphereNum = 3;
                 InitDynamicSpheres();
-                m_CurrentTaskMode = TaskMode.COUNTING_DYNAMIC_SPHERE_3;
+                currentTaskMode = TaskMode.COUNTING_DYNAMIC_SPHERE_3;
                 break;
 
             case "Dynm Sphere 5":
                 m_DynamicSphereNum = 5;
                 InitDynamicSpheres();
-                m_CurrentTaskMode = TaskMode.COUNTING_DYNAMIC_SPHERE_5;
+                currentTaskMode = TaskMode.COUNTING_DYNAMIC_SPHERE_5;
                 break;
 
             case "Dynm Sphere 7":
                 m_DynamicSphereNum = 7;
                 InitDynamicSpheres();
-                m_CurrentTaskMode = TaskMode.COUNTING_DYNAMIC_SPHERE_7;
+                currentTaskMode = TaskMode.COUNTING_DYNAMIC_SPHERE_7;
                 break;
 
             default:
