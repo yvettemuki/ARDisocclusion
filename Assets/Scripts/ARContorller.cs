@@ -102,12 +102,12 @@ public class ARContorller : MonoBehaviour
 
     public enum UserStudyType
     {
-        TYPE_NONE,
         TYPE_CUTAWAY,
         TYPE_MULTIPERSPECTIVE,
         TYPE_PICINPIC,
         TYPE_XRAY,
-        TYPE_REFLECTION
+        TYPE_REFLECTION,
+        TYPE_NONE
     };
 
     public static ControlObjectType currentObjectType = ControlObjectType.OBJ_NONE;
@@ -199,6 +199,9 @@ public class ARContorller : MonoBehaviour
         if (m_RawImagePicInPic.gameObject.activeSelf) m_RawImagePicInPic.gameObject.SetActive(false);
         if (m_ProjectorLeftMAINCORD.gameObject.activeSelf) m_ProjectorLeftMAINCORD.gameObject.SetActive(false);
         if (m_StencilMaskPortalArea) Destroy(m_StencilMaskPortalArea);
+        
+        // reset the near clip plane of camera B
+        m_CameraB.GetComponent<Camera>().nearClipPlane = 0.1f;
     }
 
     public void CreateStencilMaskArea()
@@ -212,7 +215,6 @@ public class ARContorller : MonoBehaviour
     {
         var selectedValue = m_DropDownAnchorType.options[m_DropDownAnchorType.value].text;
 
-        Debug.Log("++++ " + selectedValue);
         switch (selectedValue)
         {
             case "None":
@@ -262,8 +264,8 @@ public class ARContorller : MonoBehaviour
             case "PicInPic":
                 currentUserStudyType = UserStudyType.TYPE_PICINPIC;
                 CleanUpScene();
-                m_CameraB.GetComponent<Camera>().nearClipPlane = 0.1f;
                 m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                m_UserStudyController.SetUserStudyObjectsActive(true);
                 m_RawImagePicInPic.gameObject.SetActive(true);
                 CreateStencilMaskArea();
                 break;
@@ -283,8 +285,9 @@ public class ARContorller : MonoBehaviour
                 currentUserStudyType = UserStudyType.TYPE_REFLECTION;
                 CleanUpScene();
                 m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
-                m_ProjectorLeftMAINCORD.gameObject.SetActive(true);
-                m_ProjectorController.SetMainCorridorProjectorMaterial(1, 0);
+                m_UserStudyController.SetUserStudyObjectsActive(true);
+                //m_ProjectorLeftMAINCORD.gameObject.SetActive(true);
+                //m_ProjectorController.SetMainCorridorProjectorMaterial(1, 0);
                 CreateStencilMaskArea();
                 break;
 
@@ -377,8 +380,10 @@ public class ARContorller : MonoBehaviour
             // mirror effect
             if (currentUserStudyType == UserStudyType.TYPE_REFLECTION)
             {
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(isActive);
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(isActive);
+                //m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(isActive);
+                //m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(isActive);
+                //m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Ceil Main").gameObject.SetActive(isActive);
+                //m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Floor Main").gameObject.SetActive(isActive);
             }
             else
             {
@@ -390,6 +395,13 @@ public class ARContorller : MonoBehaviour
         // human sprite view
         if (m_HumanSprite)
             m_HumanSprite.SetActive(isActive);
+
+        // set user study objects view
+        if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_PICINPIC ||
+            ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_REFLECTION)
+        {
+            return;
+        }
 
         // dynamic sphere view
         m_UserStudyController.SetUserStudyObjectsActive(isActive);

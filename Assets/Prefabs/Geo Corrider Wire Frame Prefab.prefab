@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 8109539145677583513}
   - component: {fileID: 2753226868238742234}
   - component: {fileID: 868667581484434866}
-  m_Layer: 0
-  m_Name: Geo Ceil 2
+  m_Layer: 10
+  m_Name: Geo Ceil Main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,11 +27,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 123546404352943898}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -196.1, y: -102.391, z: 313.79}
-  m_LocalScale: {x: 7.164, y: 0.01, z: 2.388}
+  m_LocalPosition: {x: -194.78, y: -102.391, z: 314.06}
+  m_LocalScale: {x: 8.806533, y: 0.01, z: 2.388}
   m_Children: []
   m_Father: {fileID: 2559544605160812006}
-  m_RootOrder: 10
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8109539145677583513
 MeshFilter:
@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: be285d82cd7ac0242be7d7dc53d80f96, type: 2}
+  - {fileID: 2100000, guid: 1b802e1230715554eb74c85e7eb9f272, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -978,6 +978,7 @@ Transform:
   m_Children:
   - {fileID: 5189231494614910552}
   - {fileID: 5189231494453637540}
+  - {fileID: 4747374735000041035}
   - {fileID: 5189231494398198148}
   - {fileID: 5189231493889105145}
   - {fileID: 5189231493830620738}
@@ -986,7 +987,6 @@ Transform:
   - {fileID: 6346675558622432456}
   - {fileID: 2451029797365700400}
   - {fileID: 5189231493303956970}
-  - {fileID: 4747374735000041035}
   - {fileID: 1773121920562324939}
   - {fileID: 267895065748238281}
   - {fileID: 1273451780780839132}
@@ -1363,7 +1363,7 @@ Transform:
   m_LocalScale: {x: 7.164, y: 2.79, z: 0.01}
   m_Children: []
   m_Father: {fileID: 2559544605160812006}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5189231493303956971
 MeshFilter:
@@ -1458,7 +1458,7 @@ Transform:
   m_LocalScale: {x: 7.3358526, y: 2.79, z: 0.001}
   m_Children: []
   m_Father: {fileID: 2559544605160812006}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5189231493526658230
 MeshFilter:
@@ -1535,7 +1535,7 @@ GameObject:
   - component: {fileID: 5189231493791917802}
   - component: {fileID: 5189231493791917803}
   m_Layer: 3
-  m_Name: Geo Ceil
+  m_Name: Geo Ceil Side Corridor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1553,7 +1553,7 @@ Transform:
   m_LocalScale: {x: 1.6, y: 0.01, z: 7.309018}
   m_Children: []
   m_Father: {fileID: 2559544605160812006}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5189231493791917801
 MeshFilter:
@@ -1648,7 +1648,7 @@ Transform:
   m_LocalScale: {x: 7.335853, y: 2.79, z: 0.01}
   m_Children: []
   m_Father: {fileID: 2559544605160812006}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5189231493830620739
 MeshFilter:
@@ -1743,7 +1743,7 @@ Transform:
   m_LocalScale: {x: 2.738965, y: 2.79, z: 0.01}
   m_Children: []
   m_Father: {fileID: 2559544605160812006}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5189231493889105146
 MeshFilter:
@@ -1838,7 +1838,7 @@ Transform:
   m_LocalScale: {x: 4.4281297, y: 2.79, z: 0.01}
   m_Children: []
   m_Father: {fileID: 2559544605160812006}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5189231494398198149
 MeshFilter:
@@ -1914,8 +1914,8 @@ GameObject:
   - component: {fileID: 5189231494453637541}
   - component: {fileID: 5189231494453637542}
   - component: {fileID: 5189231494453637543}
-  m_Layer: 0
-  m_Name: Geo Floor 1
+  m_Layer: 10
+  m_Name: Geo Floor Main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1929,8 +1929,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5189231494453637536}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -196.1, y: -105.17877, z: 313.79}
-  m_LocalScale: {x: 7.164, y: 0.01, z: 2.388}
+  m_LocalPosition: {x: -194.78, y: -105.17877, z: 314.06}
+  m_LocalScale: {x: 8.806533, y: 0.01, z: 2.4221485}
   m_Children: []
   m_Father: {fileID: 2559544605160812006}
   m_RootOrder: 1
@@ -1962,7 +1962,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 37de74f8ec8caf74fad8fc19899abe6a, type: 2}
+  - {fileID: 2100000, guid: 1b802e1230715554eb74c85e7eb9f272, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2388,7 +2388,7 @@ GameObject:
   - component: {fileID: 1330307046672734858}
   - component: {fileID: 3347642881524917798}
   m_Layer: 3
-  m_Name: Geo Floor 2
+  m_Name: Geo Floor Side Corridor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2406,7 +2406,7 @@ Transform:
   m_LocalScale: {x: 1.62, y: 0.01, z: 7.309018}
   m_Children: []
   m_Father: {fileID: 2559544605160812006}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7330361037287432376
 MeshFilter:
@@ -2976,7 +2976,7 @@ Transform:
   m_LocalScale: {x: 2.2409642, y: 2.79, z: 0.01}
   m_Children: []
   m_Father: {fileID: 2559544605160812006}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2984475161996675665
 MeshFilter:

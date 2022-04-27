@@ -37,8 +37,8 @@ public class UserStudyController : MonoBehaviour
 
     // Other
     public Material m_CircleMaterial;
-    public Material m_SphereStandardMat;
-    public Material m_SphereStencilMat;
+    public Material m_SphereStandardMat; // 0
+    public Material m_SphereStencilMat;  // 1
 
     public enum CaptureDegree
     {
@@ -50,10 +50,10 @@ public class UserStudyController : MonoBehaviour
 
     public enum TaskMode
     {
-        NONE,
         COUNTING_DYNAMIC_SPHERE_3,
         COUNTING_DYNAMIC_SPHERE_5,
-        COUNTING_DYNAMIC_SPHERE_7
+        COUNTING_DYNAMIC_SPHERE_7,
+        NONE
     };
 
     // Tasks Vairables 
@@ -200,8 +200,8 @@ public class UserStudyController : MonoBehaviour
 
     public void ChangeDynamicSphereMaterial(int type)
     {
-        if (m_DynamicSpheres.Count > 0 && currentMatType == type)
-            return;
+        //if (m_DynamicSpheres.Count > 0 && currentMatType == type)
+        //    return;
 
         if (type == MAT_STANDARD)
         {
@@ -227,36 +227,40 @@ public class UserStudyController : MonoBehaviour
 
     public void SetUserStudyObjectsActive(bool isActive)
     {
-        if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_PICINPIC || 
-            ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_REFLECTION)
-            return;
-
         if (currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_3 
             || currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_5 
             || currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_7)
         {
             foreach (DynamicSphere obj in m_DynamicSpheres)
             {
-                // calculate the radius of the spheres
-                Vector3 scale = obj.sphere.transform.lossyScale;
-                float absoluteRadius = Mathf.Abs(Mathf.Max(Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.y)), Mathf.Abs(scale.z)) * 0.5f);
-                absoluteRadius = Mathf.Max(absoluteRadius, 0.00001f);
-
-                Vector3 _world_position = obj.sphere.transform.position;
-                Vector3 _portal_position = Vector3.zero;
-                m_ARController.WorldObjectPos2Portal(in _world_position, out _portal_position);
-
-                float dist_from_portal = Mathf.Abs(_portal_position.z);
-                if (dist_from_portal > absoluteRadius)
+                if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_MULTIPERSPECTIVE)
                 {
-                    if (_portal_position.z < 0f)
-                        obj.sphere.SetActive(true);
+                    // calculate the radius of the spheres
+                    Vector3 scale = obj.sphere.transform.lossyScale;
+                    float absoluteRadius = Mathf.Abs(Mathf.Max(Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.y)), Mathf.Abs(scale.z)) * 0.5f);
+                    absoluteRadius = Mathf.Max(absoluteRadius, 0.00001f);
+
+                    // get the position of sphere in portal coordinate
+                    Vector3 _world_position = obj.sphere.transform.position;
+                    Vector3 _portal_position = Vector3.zero;
+                    m_ARController.WorldObjectPos2Portal(in _world_position, out _portal_position);
+
+                    float dist_from_portal = Mathf.Abs(_portal_position.z);
+                    if (dist_from_portal > absoluteRadius)
+                    {
+                        if (_portal_position.z < 0f)
+                            obj.sphere.SetActive(true);
+                        else
+                            obj.sphere.SetActive(isActive);
+                    }
                     else
-                        obj.sphere.SetActive(isActive);
+                    {
+                        obj.sphere.SetActive(true);
+                    }
                 }
                 else
                 {
-                    obj.sphere.SetActive(true);
+                    obj.sphere.SetActive(isActive);
                 }
             }
         }
