@@ -14,7 +14,7 @@ public class UserStudyController : MonoBehaviour
     // UI
     public Dropdown m_DropdownTaskMode;
     
-    // Sphere
+    // Dynamic Spheres
     public int m_DynamicSphereNum = 3;
     List<DynamicSphere> m_DynamicSpheres = new List<DynamicSphere>();
     public class DynamicSphere
@@ -35,10 +35,16 @@ public class UserStudyController : MonoBehaviour
     }
     public GameObject m_SpherePrefab;
 
+    // Human Direction Indication
+    GameObject m_DirectDigitIndicator;
+    public GameObject m_DirectDigitIndicatorPrefab;
+
     // Other
     public Material m_CircleMaterial;
     public Material m_SphereStandardMat; // 0
     public Material m_SphereStencilMat;  // 1
+    public List<Material> m_IndicatorStandardMats; // 0
+    public List<Material> m_IndicatorStencilMats;  // 1
 
     public enum CaptureDegree
     {
@@ -53,6 +59,9 @@ public class UserStudyController : MonoBehaviour
         COUNTING_DYNAMIC_SPHERE_3,
         COUNTING_DYNAMIC_SPHERE_5,
         COUNTING_DYNAMIC_SPHERE_7,
+        DIRECT_INDICATOR_23,
+        DIRECT_INDICATOR_56,
+        DIRECT_INDICATOR_12,
         NONE
     };
 
@@ -76,6 +85,13 @@ public class UserStudyController : MonoBehaviour
             || currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_7)
         {
             UpdateDynamicSpheres();
+        }
+
+        if (currentTaskMode == TaskMode.DIRECT_INDICATOR_23
+            || currentTaskMode == TaskMode.DIRECT_INDICATOR_56
+            || currentTaskMode == TaskMode.DIRECT_INDICATOR_12)
+        {
+            UpdateDirectIndicator();
         }
 
     }
@@ -130,11 +146,6 @@ public class UserStudyController : MonoBehaviour
         // set position three
     }
 
-    public void ResetCircle()
-    {
-
-    }
-
     public void InitDynamicSpheres()
     {
         for (int i = 0; i < m_DynamicSphereNum; i++)
@@ -155,6 +166,16 @@ public class UserStudyController : MonoBehaviour
         }
     }
 
+    public void InitDigitsNumbersForHumanDir()
+    {
+        // get position and rotation based on the portal coordinate system
+        Quaternion _rotation = m_ARController.GetPortalTransform().rotation;
+        Vector3 _position = Vector3.zero;
+        m_ARController.PortalObjectPos2World(in ControllerStates.HUMAN_DIRECT_DIGIT_NUMBER, out _position);
+
+        m_DirectDigitIndicator = Instantiate(m_DirectDigitIndicatorPrefab, _position, _rotation);
+    }
+
     public void DestroyCurrentObjects()
     {
         // Dynamic Spheres
@@ -169,6 +190,10 @@ public class UserStudyController : MonoBehaviour
 
             m_DynamicSpheres.Clear();
         }
+
+        // human direction indicator
+        if (m_DirectDigitIndicator) Destroy(m_DirectDigitIndicator);
+        if (m_ARController.GetHumanSprite()) Destroy(m_ARController.GetHumanSprite());
         
     }
 
@@ -195,6 +220,46 @@ public class UserStudyController : MonoBehaviour
                 obj.sphere.transform.position = obj.startPos + obj.sphere.transform.forward * obj.longest_dist * (obj.speed / Mathf.Abs(obj.speed));
                 obj.speed = -obj.speed;
             }
+        }
+    }
+
+    public void UpdateDirectIndicator()
+    {
+        if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_PICINPIC
+            || ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_REFLECTION)
+        {
+            ChangeDirectIndicatorMaterial(MAT_STENCIL);
+        }
+        else
+        {
+            ChangeDirectIndicatorMaterial(MAT_STANDARD);
+        }
+    }
+
+    public void ChangeDirectIndicatorMaterial(int type)
+    {
+        if (type == MAT_STANDARD)
+        {
+            // type == 0, standard color material
+            m_DirectDigitIndicator.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_IndicatorStandardMats[0];
+            m_DirectDigitIndicator.transform.GetChild(1).GetComponent<MeshRenderer>().material = m_IndicatorStandardMats[1];
+            m_DirectDigitIndicator.transform.GetChild(2).GetComponent<MeshRenderer>().material = m_IndicatorStandardMats[2];
+            m_DirectDigitIndicator.transform.GetChild(3).GetComponent<MeshRenderer>().material = m_IndicatorStandardMats[3];
+            m_DirectDigitIndicator.transform.GetChild(4).GetComponent<MeshRenderer>().material = m_IndicatorStandardMats[4];
+            m_DirectDigitIndicator.transform.GetChild(5).GetComponent<MeshRenderer>().material = m_IndicatorStandardMats[5];
+            
+            currentMatType = MAT_STANDARD;
+        }
+        else if (type == MAT_STENCIL)
+        {
+            // type == 1, stencil shader material
+            m_DirectDigitIndicator.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_IndicatorStencilMats[0];
+            m_DirectDigitIndicator.transform.GetChild(1).GetComponent<MeshRenderer>().material = m_IndicatorStencilMats[1];
+            m_DirectDigitIndicator.transform.GetChild(2).GetComponent<MeshRenderer>().material = m_IndicatorStencilMats[2];
+            m_DirectDigitIndicator.transform.GetChild(3).GetComponent<MeshRenderer>().material = m_IndicatorStencilMats[3];
+            m_DirectDigitIndicator.transform.GetChild(4).GetComponent<MeshRenderer>().material = m_IndicatorStencilMats[4];
+            m_DirectDigitIndicator.transform.GetChild(5).GetComponent<MeshRenderer>().material = m_IndicatorStencilMats[5];
+            currentMatType = MAT_STENCIL;
         }
     }
 
@@ -231,6 +296,7 @@ public class UserStudyController : MonoBehaviour
             || currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_5 
             || currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_7)
         {
+            // dynamic spheres
             foreach (DynamicSphere obj in m_DynamicSpheres)
             {
                 if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_MULTIPERSPECTIVE)
@@ -264,6 +330,20 @@ public class UserStudyController : MonoBehaviour
                 }
             }
         }
+
+        if (currentTaskMode == TaskMode.DIRECT_INDICATOR_23
+            || currentTaskMode == TaskMode.DIRECT_INDICATOR_56
+            || currentTaskMode == TaskMode.DIRECT_INDICATOR_12)
+        {
+            // human sprite
+            if (m_ARController.GetHumanSprite())
+                m_ARController.GetHumanSprite().SetActive(isActive);
+
+            // indicator
+            if (m_DirectDigitIndicator)
+                m_DirectDigitIndicator.SetActive(isActive);
+        }
+        
     }
 
     public void OnUserStudyTaskModeChange()
@@ -294,6 +374,24 @@ public class UserStudyController : MonoBehaviour
                 m_DynamicSphereNum = 7;
                 InitDynamicSpheres();
                 currentTaskMode = TaskMode.COUNTING_DYNAMIC_SPHERE_7;
+                break;
+
+            case "Human Dir 23":
+                InitDigitsNumbersForHumanDir();
+                m_ARController.InitHumanSpriteForUserStudy(TaskMode.DIRECT_INDICATOR_23);
+                currentTaskMode = TaskMode.DIRECT_INDICATOR_23;
+                break;
+
+            case "Human Dir 56":
+                InitDigitsNumbersForHumanDir();
+                m_ARController.InitHumanSpriteForUserStudy(TaskMode.DIRECT_INDICATOR_56);
+                currentTaskMode = TaskMode.DIRECT_INDICATOR_56;
+                break;
+
+            case "Human Dir 12":
+                InitDigitsNumbersForHumanDir();
+                m_ARController.InitHumanSpriteForUserStudy(TaskMode.DIRECT_INDICATOR_12);
+                currentTaskMode = TaskMode.DIRECT_INDICATOR_56;
                 break;
 
             default:

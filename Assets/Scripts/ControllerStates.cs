@@ -38,9 +38,10 @@ public class ControllerStates : MonoBehaviour
     public static Vector3 CIRCLE_POS_IN_PORTAL = new Vector3(0f, 0f, 2.06f);
     public static Vector3 MIRROR_POS_IN_PORTAL = new Vector3(0f, 1.43f, -2.38f);
     public static Quaternion MIRROR_ROT_IN_PORTAL = Quaternion.Euler(0f, 360f, 0f);
+    
 
     // Sphere Data
-    // Group 1 (3)
+    // 3 Group 
     public static Vector3[] SPHERES_IN_PORTAL_POS_START =
     {
         new Vector3(-0.1f, 1.1f, 1.5f),
@@ -60,6 +61,15 @@ public class ControllerStates : MonoBehaviour
     
     public static Vector3 SPHERE_POS_IN_PORTAL_3 = new Vector3(-0.4f, 0.45f, 3.6f);
 
+    // Human Direction Indicator
+    public static Vector3 HUMAN_DIRECT_DIGIT_NUMBER = new Vector3(0.7f, 1.62f, 1.78f);
+    public static Vector3[] USER_STUDY_DIRECT_INDI_FONT_UVs =
+    {
+        new Vector2(277, 334),
+        new Vector2(277, 369),
+        new Vector2(269, 257)
+    };
+
     public enum PlaybackMode
     {
         PLAY_BACK_SEGMENT,
@@ -74,6 +84,7 @@ public class ControllerStates : MonoBehaviour
        new Vector2(285, 346),
        new Vector2(281, 247)
     };
+
 
     // data old for segment
     //public static Vector2[] FOOTUVs = {

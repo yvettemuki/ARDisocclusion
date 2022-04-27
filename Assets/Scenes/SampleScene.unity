@@ -1471,10 +1471,25 @@ MonoBehaviour:
   m_ARController: {fileID: 437207860}
   m_DropdownTaskMode: {fileID: 1097228459}
   m_DynamicSphereNum: 3
-  m_SpherePrefab: {fileID: 1223829741526076524, guid: 88d46b45771720045a47b8dba71b4222, type: 3}
+  m_SpherePrefab: {fileID: 8809301529282062103, guid: 075336d9a550c504ab45269bce3ec258, type: 3}
+  m_DirectDigitIndicatorPrefab: {fileID: 3799988484112708333, guid: 6e884881ce4d9644d926753e00f02677, type: 3}
   m_CircleMaterial: {fileID: 2100000, guid: eab6ce36a5aa2ad4c8da6f68e1a325ed, type: 2}
   m_SphereStandardMat: {fileID: 2100000, guid: c167394412d3679488d3dedd583c904b, type: 2}
   m_SphereStencilMat: {fileID: 2100000, guid: 49015b640790d0a4eba5b9647c77ee86, type: 2}
+  m_IndicatorStandardMats:
+  - {fileID: 2100000, guid: 8860cd3520bd71449aaaf8d3b4b60288, type: 2}
+  - {fileID: 2100000, guid: 33af64da7874e9e428df4515d93bddc8, type: 2}
+  - {fileID: 2100000, guid: 96096c5810ef1414fa9dec6232098a9e, type: 2}
+  - {fileID: 2100000, guid: 5ef7cf43a640a4a41a078f77f6ee5a05, type: 2}
+  - {fileID: 2100000, guid: c6b3505c18b60d74cac838cb90448711, type: 2}
+  - {fileID: 2100000, guid: 308e9ccce0993e047b4bdb5960b0e69f, type: 2}
+  m_IndicatorStencilMats:
+  - {fileID: 2100000, guid: fe44cfa43bb3fcc4cbddf8775f78bdac, type: 2}
+  - {fileID: 2100000, guid: 0d88c0f3ed62b9d408ddbbd358e8f339, type: 2}
+  - {fileID: 2100000, guid: 2f0439f9563bf914ea63eefa31b196d0, type: 2}
+  - {fileID: 2100000, guid: 85d0dde945948544ab8f7c6ae72773a1, type: 2}
+  - {fileID: 2100000, guid: fe6926340e55b2445a89f429d1a6b633, type: 2}
+  - {fileID: 2100000, guid: b7ca1ec371752ef478768c6ca2de78bd, type: 2}
 --- !u!4 &364948126
 Transform:
   m_ObjectHideFlags: 0
@@ -1617,12 +1632,10 @@ MonoBehaviour:
   m_ProjectorPrefabRightMAINCORD: {fileID: 7975056929528422426, guid: e9ab983315a33a64992bef7051ce6365, type: 3}
   m_StencilMaskPortalAreaPrefab: {fileID: 8809376501448269087, guid: 58e1fc4562fff994f9a3f40041a90ea6, type: 3}
   m_RawImagePicInPic: {fileID: 11257680}
-  m_Frames:
-  - {fileID: 2800000, guid: 497121c4d5144404cbdfd88c00dfd86e, type: 3}
-  - {fileID: 2800000, guid: 5d9455938d7971c48a047761f3ce8a07, type: 3}
-  - {fileID: 2800000, guid: 67017a1e48c0ee744a172652d7264f0b, type: 3}
-  - {fileID: 2800000, guid: 4a580dad07f9bf242842e6cb9f85fd84, type: 3}
-  - {fileID: 2800000, guid: 50d5e51d3ff01734c91231ac7dada89f, type: 3}
+  m_UserStudyFrames:
+  - {fileID: 2800000, guid: 320ff7ba95d2b5947a6c8be1dd5c7bea, type: 3}
+  - {fileID: 2800000, guid: cd218f81ca6cea047adc4fd446b53775, type: 3}
+  - {fileID: 2800000, guid: cde6ad674734e8d499ebd58dd7cecc27, type: 3}
 --- !u!4 &437207861
 Transform:
   m_ObjectHideFlags: 0
@@ -4838,6 +4851,12 @@ MonoBehaviour:
     - m_Text: Dynm Sphere 5
       m_Image: {fileID: 0}
     - m_Text: Dynm Sphere 7
+      m_Image: {fileID: 0}
+    - m_Text: Human Dir 23
+      m_Image: {fileID: 0}
+    - m_Text: Human Dir 56
+      m_Image: {fileID: 0}
+    - m_Text: Human Dir 12
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

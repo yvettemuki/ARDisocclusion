@@ -76,7 +76,8 @@ public class ARContorller : MonoBehaviour
 
     // Video stuff
     float playbackTime = 0f;
-    public List<Texture2D> m_Frames;
+    //public List<Texture2D> m_Frames;
+
 
     struct CameraBFrame
     {
@@ -89,7 +90,11 @@ public class ARContorller : MonoBehaviour
             this.footUV = footUV;
         }
     }
-    private List<CameraBFrame> m_CameraBFrames = new List<CameraBFrame>();
+    //private List<CameraBFrame> m_CameraBFrames = new List<CameraBFrame>();
+
+    // human video frame for user study
+    private List<CameraBFrame> m_UserStudyCamBFrames = new List<CameraBFrame>();
+    public List<Texture2D> m_UserStudyFrames;
 
 
     public enum ControlObjectType
@@ -123,15 +128,17 @@ public class ARContorller : MonoBehaviour
         }
 
         // Start the detected
-        TextLogger.Log("Start the AR session!");
+        //TextLogger.Log("Start the AR session!");
 
         // Start set up the camera
         //m_ARCamera.enabled = true;
         //m_CameraB.enabled = false;
 
-        InitializeCameraBVideoFrames();
+       //InitializeCameraBVideoFrames();
 
         m_CameraACullingMask = m_ARCamera.cullingMask;
+
+        InitializeCameraBVideoFrames();
     }
 
     // Update is called once per frame/
@@ -192,7 +199,8 @@ public class ARContorller : MonoBehaviour
 
     public void CleanUpScene()
     {
-        if (m_HumanSprite) Destroy(m_HumanSprite);
+        // let user study controlle to control it
+        //if (m_HumanSprite) Destroy(m_HumanSprite);
         if (m_PortalPlane) Destroy(m_PortalPlane);
         if (m_Mirror) Destroy(m_Mirror);
         if (m_ProjectorMULTI.gameObject.activeSelf) m_ProjectorMULTI.gameObject.SetActive(false);
@@ -462,7 +470,7 @@ public class ARContorller : MonoBehaviour
 
     }
 
-    // Cut-away disocclusion
+    // Deprecated: cut-away disocclusion with human sprite
     public void CutAwayDisocclusion()
     {
         if (!m_IsCameraBRegisterd)
@@ -500,6 +508,58 @@ public class ARContorller : MonoBehaviour
         }
         else
             Debug.Log($"Failed to visualize the human sprite! Please check the code!");
+    }
+
+    public void InitHumanSpriteForUserStudy(UserStudyController.TaskMode taskMode)
+    {
+        if (!m_IsCameraBRegisterd)
+        {
+            Debug.Log($"Camera B should be registered before disocclusion!");
+            return;
+        }
+
+        if (taskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_23)
+        {
+            m_HumanSpriteTex = m_UserStudyCamBFrames[0].tex;
+            m_HumanLowestUV = new Vector2(ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[0].x, ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[0].y);
+        }
+        else if (taskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_56)
+        {
+            m_HumanSpriteTex = m_UserStudyCamBFrames[1].tex;
+            m_HumanLowestUV = new Vector2(ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[1].x, ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[1].y);
+        }
+        else if (taskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_12)
+        {
+            m_HumanSpriteTex = m_UserStudyCamBFrames[2].tex;
+            m_HumanLowestUV = new Vector2(ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[2].x, ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[2].y);
+        }
+        else
+        {
+            Debug.Log($"Should be used in the human direction indicator taks!");
+            return;
+        }
+
+        m_ProjectorController.SetRenderTexture(m_HumanSpriteTex);
+
+        TransformFromUVToWorldPoint(in m_HumanLowestUV, out m_HumanLowestPointDirFromCamB);
+
+        Ray ray = new Ray(camera_b_pos, m_HumanLowestPointDirFromCamB);
+
+        RaycastHumanSpritePosition(ray);
+    }
+
+    public void InitializeCameraBVideoFrames()
+    {
+        for (int i = 0; i < ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs.Length; i++)
+        {
+            Vector2 uv = ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[i];
+
+            if (m_UserStudyFrames[i] != null && uv != Vector2.zero)
+            {
+                CameraBFrame frame = new CameraBFrame(m_UserStudyFrames[i], uv);
+                m_UserStudyCamBFrames.Add(frame);
+            }
+        }
     }
 
     // Textures disocclusion (Multiperspetive)
@@ -800,47 +860,47 @@ public class ARContorller : MonoBehaviour
             Debug.Log($"Failed to register camera B! Please check the code!");
     }
 
-    public void PlaybackCameraBSegment()
-    {
-        if (m_CameraBFrames.Count <= 0)
-        { 
-            Debug.Log($"Video frames should not be empty!");
-            return;
-        }
+    //public void PlaybackCameraBSegment()
+    //{
+    //    if (m_CameraBFrames.Count <= 0)
+    //    { 
+    //        Debug.Log($"Video frames should not be empty!");
+    //        return;
+    //    }
 
-        if (!m_IsCameraBRegisterd)
-        {
-            Debug.Log($"Please first register the camera B!");
-            return;
-        }
+    //    if (!m_IsCameraBRegisterd)
+    //    {
+    //        Debug.Log($"Please first register the camera B!");
+    //        return;
+    //    }
 
-        int index = (int)Mathf.Floor(playbackTime) % ControllerStates.SEGMENT_FRAME_NUM;
-        CameraBFrame frame = m_CameraBFrames[index];
+    //    int index = (int)Mathf.Floor(playbackTime) % ControllerStates.SEGMENT_FRAME_NUM;
+    //    CameraBFrame frame = m_CameraBFrames[index];
 
-        if (!frame.Equals(default(CameraBFrame)))
-        {
-            Vector2 uv = frame.footUV;
-            Texture2D tex = frame.tex;
-            Vector3 dirFromCamBToUV = Vector3.zero;
+    //    if (!frame.Equals(default(CameraBFrame)))
+    //    {
+    //        Vector2 uv = frame.footUV;
+    //        Texture2D tex = frame.tex;
+    //        Vector3 dirFromCamBToUV = Vector3.zero;
 
-            // apply projector texture to the human sprite
-            m_HumanSpriteTex = tex;
+    //        // apply projector texture to the human sprite
+    //        m_HumanSpriteTex = tex;
 
-            // apply human projector texture
-            ApplyHumanCurrentTexture(ControllerStates.PlaybackMode.PLAY_BACK_SEGMENT);
+    //        // apply human projector texture
+    //        ApplyHumanCurrentTexture(ControllerStates.PlaybackMode.PLAY_BACK_SEGMENT);
 
-            // transform uv to world space
-            TransformFromUVToWorldPoint(in uv, out dirFromCamBToUV);
+    //        // transform uv to world space
+    //        TransformFromUVToWorldPoint(in uv, out dirFromCamBToUV);
 
-            // generate ray
-            Ray ray = new Ray(camera_b_pos, dirFromCamBToUV);
+    //        // generate ray
+    //        Ray ray = new Ray(camera_b_pos, dirFromCamBToUV);
 
-            // update the human position
-            RaycastHumanSpritePosition(ray);
-        }
+    //        // update the human position
+    //        RaycastHumanSpritePosition(ray);
+    //    }
 
-        playbackTime += Time.deltaTime;
-    }
+    //    playbackTime += Time.deltaTime;
+    //}
 
     public void PlaybackHumanSpriteInSideCorridor()
     {
@@ -934,28 +994,26 @@ public class ARContorller : MonoBehaviour
         }
     }
 
-    public void InitializeCameraBVideoFrames()
-    {
-       for (int i = 0; i < ControllerStates.FOOT_UVs.Length; i++)
-       {
-            Vector2 uv = ControllerStates.FOOT_UVs[i];
+    //public void InitializeCameraBVideoFrames()
+    //{
+    //   for (int i = 0; i < ControllerStates.FOOT_UVs.Length; i++)
+    //   {
+    //        Vector2 uv = ControllerStates.FOOT_UVs[i];
 
-            if (m_Frames[i] != null && uv != Vector2.zero)
-            {
-                CameraBFrame frame = new CameraBFrame(m_Frames[i], uv);
-                m_CameraBFrames.Add(frame);
-            }
-        }
-    }
+    //        if (m_Frames[i] != null && uv != Vector2.zero)
+    //        {
+    //            CameraBFrame frame = new CameraBFrame(m_Frames[i], uv);
+    //            m_CameraBFrames.Add(frame);
+    //        }
+    //    }
+    //}
 
     private void ApplyHumanCurrentTexture(ControllerStates.PlaybackMode mode)
     {
-
         if (mode == ControllerStates.PlaybackMode.PLAY_BACK_SEGMENT)
             m_ProjectorController.SetRenderTexture(m_HumanSpriteTex);
         else if (mode == ControllerStates.PlaybackMode.PLAY_BACK_VIDEO_CLIP)
             m_ProjectorController.SetHumanRenderTexture(currentUserStudyType);
-
     }
 
     public GameObject GetHumanSprite()
@@ -963,10 +1021,7 @@ public class ARContorller : MonoBehaviour
         if (m_HumanSprite)
             return m_HumanSprite;
         else
-        {
-            Debug.Log("Get human sprite can not null!");
             return null;
-        }
     }
 
     // transform object position from portal coord to world
