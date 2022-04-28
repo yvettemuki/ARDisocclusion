@@ -1473,6 +1473,11 @@ MonoBehaviour:
   m_DynamicSphereNum: 3
   m_SpherePrefab: {fileID: 8809301529282062103, guid: 075336d9a550c504ab45269bce3ec258, type: 3}
   m_DirectDigitIndicatorPrefab: {fileID: 3799988484112708333, guid: 6e884881ce4d9644d926753e00f02677, type: 3}
+  m_ClosestSpherePrefab: {fileID: 6705586882069662503, guid: 8af44c6b4febd6f41a17f0433e3e4370, type: 3}
+  m_ClosestSphereMat:
+  - {fileID: 2100000, guid: 597a395ff5d028e45ba43f620614d33c, type: 2}
+  - {fileID: 2100000, guid: 2f352e7338beb7347a76a2e1a06424da, type: 2}
+  - {fileID: 2100000, guid: c167394412d3679488d3dedd583c904b, type: 2}
   m_CircleMaterial: {fileID: 2100000, guid: eab6ce36a5aa2ad4c8da6f68e1a325ed, type: 2}
   m_SphereStandardMat: {fileID: 2100000, guid: c167394412d3679488d3dedd583c904b, type: 2}
   m_SphereStencilMat: {fileID: 2100000, guid: 49015b640790d0a4eba5b9647c77ee86, type: 2}
@@ -4857,6 +4862,12 @@ MonoBehaviour:
     - m_Text: Human Dir 56
       m_Image: {fileID: 0}
     - m_Text: Human Dir 12
+      m_Image: {fileID: 0}
+    - m_Text: Closest 1
+      m_Image: {fileID: 0}
+    - m_Text: Closest 2
+      m_Image: {fileID: 0}
+    - m_Text: Closest 3
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

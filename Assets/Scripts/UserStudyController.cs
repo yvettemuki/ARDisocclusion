@@ -39,6 +39,11 @@ public class UserStudyController : MonoBehaviour
     GameObject m_DirectDigitIndicator;
     public GameObject m_DirectDigitIndicatorPrefab;
 
+    // Closest Sphere
+    List<GameObject> m_ClosestSpheres = new List<GameObject>();
+    public GameObject m_ClosestSpherePrefab;
+    public List<Material> m_ClosestSphereMat;
+
     // Other
     public Material m_CircleMaterial;
     public Material m_SphereStandardMat; // 0
@@ -62,6 +67,9 @@ public class UserStudyController : MonoBehaviour
         DIRECT_INDICATOR_23,
         DIRECT_INDICATOR_56,
         DIRECT_INDICATOR_12,
+        ClOSEST_SPHERE_GROUP_1,
+        ClOSEST_SPHERE_GROUP_2,
+        ClOSEST_SPHERE_GROUP_3,
         NONE
     };
 
@@ -92,6 +100,13 @@ public class UserStudyController : MonoBehaviour
             || currentTaskMode == TaskMode.DIRECT_INDICATOR_12)
         {
             UpdateDirectIndicator();
+        }
+
+        if (currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_1
+            || currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_2
+            || currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_3)
+        {
+            UpdateClosestSphere();
         }
 
     }
@@ -176,6 +191,45 @@ public class UserStudyController : MonoBehaviour
         m_DirectDigitIndicator = Instantiate(m_DirectDigitIndicatorPrefab, _position, _rotation);
     }
 
+    public void InitClosestSphereGroup(TaskMode taskMode)
+    {
+        if (taskMode == TaskMode.ClOSEST_SPHERE_GROUP_1)
+        {
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_1[0], m_ClosestSphereMat[0]);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_1[1], m_ClosestSphereMat[1]);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_1[2], m_ClosestSphereMat[2]);
+        }
+        else if (taskMode == TaskMode.ClOSEST_SPHERE_GROUP_2)
+        {
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_2[0], m_ClosestSphereMat[0]);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_2[1], m_ClosestSphereMat[1]);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_2[2], m_ClosestSphereMat[2]);
+        }
+        else if (taskMode == TaskMode.ClOSEST_SPHERE_GROUP_3)
+        {
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_3[0], m_ClosestSphereMat[0]);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_3[1], m_ClosestSphereMat[1]);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_3[2], m_ClosestSphereMat[2]);
+        }
+        else
+        {
+            Debug.Log("Should not use the function about the closest sphere task!");
+        }
+    }
+
+    public void CreateClosestSphere(Vector3 pos_in_portal, Material mat)
+    {
+        Quaternion _rotation = m_ARController.GetPortalTransform().rotation;
+
+        Vector3 _position = Vector3.zero;
+        m_ARController.PortalObjectPos2World(in pos_in_portal, out _position);
+
+        GameObject sphere = Instantiate(m_ClosestSpherePrefab, _position, _rotation);
+        sphere.GetComponent<MeshRenderer>().material = mat;
+
+        m_ClosestSpheres.Add(sphere);
+    }
+
     public void DestroyCurrentObjects()
     {
         // Dynamic Spheres
@@ -194,7 +248,17 @@ public class UserStudyController : MonoBehaviour
         // human direction indicator
         if (m_DirectDigitIndicator) Destroy(m_DirectDigitIndicator);
         if (m_ARController.GetHumanSprite()) Destroy(m_ARController.GetHumanSprite());
-        
+
+        // closest sphere
+        if (m_ClosestSpheres.Count > 0)
+        {
+            foreach (GameObject obj in m_ClosestSpheres)
+            {
+                Destroy(obj);
+            }
+
+            m_ClosestSpheres.Clear();
+        }
     }
 
     public void UpdateDynamicSpheres()
@@ -233,6 +297,19 @@ public class UserStudyController : MonoBehaviour
         else
         {
             ChangeDirectIndicatorMaterial(MAT_STANDARD);
+        }
+    }
+
+    public void UpdateClosestSphere()
+    {
+        if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_PICINPIC
+            || ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_REFLECTION)
+        {
+            ChangeClosestSphereMaterial(MAT_STENCIL);
+        }
+        else
+        {
+            ChangeClosestSphereMaterial(MAT_STANDARD);
         }
     }
 
@@ -290,6 +367,22 @@ public class UserStudyController : MonoBehaviour
         }
     }
 
+    public void ChangeClosestSphereMaterial(int type)
+    {
+        if (type == MAT_STANDARD)
+        {
+            // type == 0, standard color material
+            m_ClosestSpheres[2].GetComponent<MeshRenderer>().material = m_SphereStandardMat;
+            currentMatType = MAT_STANDARD;
+        }
+        else if (type == MAT_STENCIL)
+        {
+            // type == 1, stencil shader material
+            m_ClosestSpheres[2].GetComponent<MeshRenderer>().material = m_SphereStencilMat;
+            currentMatType = MAT_STENCIL;
+        }
+    }
+
     public void SetUserStudyObjectsActive(bool isActive)
     {
         if (currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_3 
@@ -343,6 +436,22 @@ public class UserStudyController : MonoBehaviour
             if (m_DirectDigitIndicator)
                 m_DirectDigitIndicator.SetActive(isActive);
         }
+
+        if (currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_1
+            || currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_2
+            || currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_3)
+        {
+            // closest sphere
+            if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_MULTIPERSPECTIVE)
+                m_ClosestSpheres[2].SetActive(isActive);
+            else
+            {
+                // if the spheres have many, can replace to foreach
+                m_ClosestSpheres[0].SetActive(isActive);
+                m_ClosestSpheres[1].SetActive(isActive);
+                m_ClosestSpheres[2].SetActive(isActive);
+            }
+        }
         
     }
 
@@ -392,6 +501,21 @@ public class UserStudyController : MonoBehaviour
                 InitDigitsNumbersForHumanDir();
                 m_ARController.InitHumanSpriteForUserStudy(TaskMode.DIRECT_INDICATOR_12);
                 currentTaskMode = TaskMode.DIRECT_INDICATOR_56;
+                break;
+
+            case "Closest 1":
+                InitClosestSphereGroup(TaskMode.ClOSEST_SPHERE_GROUP_1);
+                currentTaskMode = TaskMode.ClOSEST_SPHERE_GROUP_1;
+                break;
+
+            case "Closest 2":
+                InitClosestSphereGroup(TaskMode.ClOSEST_SPHERE_GROUP_2);
+                currentTaskMode = TaskMode.ClOSEST_SPHERE_GROUP_2;
+                break;
+
+            case "Closest 3":
+                InitClosestSphereGroup(TaskMode.ClOSEST_SPHERE_GROUP_3);
+                currentTaskMode = TaskMode.ClOSEST_SPHERE_GROUP_3;
                 break;
 
             default:

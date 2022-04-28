@@ -857,7 +857,7 @@ public class ARContorller : MonoBehaviour
 
         }
         else
-            Debug.Log($"Failed to register camera B! Please check the code!");
+            Debug.Log($"filed to place the human sprite, the plane is not large enough!");
     }
 
     //public void PlaybackCameraBSegment()

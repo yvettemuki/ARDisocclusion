@@ -70,6 +70,29 @@ public class ControllerStates : MonoBehaviour
         new Vector2(269, 257)
     };
 
+    // Closest Sphere
+    public static Vector3[] CLOSEST_SPHERE_GROUP_1 =
+    {
+        // Order: up, down, inner
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.031f, 0.1f),
+        new Vector3(-0.65f, 1.4f, 1.484f)
+    };
+
+    public static Vector3[] CLOSEST_SPHERE_GROUP_2 =
+    {
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.031f, 0.1f),
+        new Vector3(-0.676f, 1.4f, 0.1f)
+    };
+
+    public static Vector3[] CLOSEST_SPHERE_GROUP_3 =
+    {
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.266f, 0.1f),
+        new Vector3(-0.676f, 1.4f, 0.1f)
+    };
+
     public enum PlaybackMode
     {
         PLAY_BACK_SEGMENT,
