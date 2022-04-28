@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(UserStudyController))]
 public class UserStudyAPIs : MonoBehaviour
 {
-    UserStudyController m_UserStudyController;
-    ARContorller m_ARController;
+    [SerializeField]
+    private UserStudyController m_UserStudyController;
+    [SerializeField]
+    private ARContorller m_ARController;
 
     void Start()
     {
@@ -15,7 +16,7 @@ public class UserStudyAPIs : MonoBehaviour
 
     void Awake()
     {
-        m_UserStudyController = GetComponent<UserStudyController>();
+        //m_UserStudyController = GetComponent<UserStudyController>();
     }
 
     void Update()

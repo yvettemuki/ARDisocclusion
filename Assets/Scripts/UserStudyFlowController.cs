@@ -10,6 +10,7 @@ public class UserStudyFlowController : MonoBehaviour
     public GameObject m_ToggleGroup, m_DebugText, m_QuestionText;
     public Button m_NextButton, m_RedoButton, m_StartButton;
     public Toggle[] m_Toggles;
+    public UserStudyAPIs m_api;
     
     private ToggleGroup choices;
     private int currentTask, currentMethod, currentTrial;
@@ -32,11 +33,6 @@ public class UserStudyFlowController : MonoBehaviour
         answers = new string[ControllerStates.MAX_TASK_NUM, ControllerStates.MAX_METHOD_NUM * ControllerStates.MAX_TRIAL_NUM];
         started = false;
         finished = false;
-    }
-
-    public void StartTest()
-    {
-        started = true;
     }
 
     // Update is called once per frame
@@ -75,9 +71,11 @@ public class UserStudyFlowController : MonoBehaviour
         //m_DebugText.GetComponent<Text>().text = string.Format("The current task is {0}, method is {1}, and trial is {2}.", currentTask, currentMethod, currentTrial);
     }
 
-    private void StartNewTrial()
+    public void StartNewTrial()
     {
-        // TODO: start new trial
+        started = true;
+        m_api.SetUserStudyMethod((ARContorller.UserStudyType)currentMethod);
+        m_api.SetUserStudyTask((UserStudyController.TaskMode) (currentTask * 3 + currentTrial));
     }
 
     public void NextTrial()
