@@ -93,6 +93,14 @@ public class ControllerStates : MonoBehaviour
         new Vector3(-0.676f, 1.4f, 0.1f)
     };
 
+    // Find similar 
+    public static Vector3[] FIND_SIMILAR_GROUPs =
+    {
+        new Vector3(-1.5f, 1.4f, -0.1f),
+        new Vector3(-1.5f, 1.4f, -0.1f),
+        new Vector3(-1.5f, 1.4f, -0.1f)
+    };
+
     public enum PlaybackMode
     {
         PLAY_BACK_SEGMENT,

@@ -44,12 +44,18 @@ public class UserStudyController : MonoBehaviour
     public GameObject m_ClosestSpherePrefab;
     public List<Material> m_ClosestSphereMat;
 
+    // Similar Object
+    GameObject m_SimilarGroup;
+    public GameObject m_SimilarObjectPrefab;
+
     // Other
     public Material m_CircleMaterial;
     public Material m_SphereStandardMat; // 0
     public Material m_SphereStencilMat;  // 1
     public List<Material> m_IndicatorStandardMats; // 0
     public List<Material> m_IndicatorStencilMats;  // 1
+    public List<Material> m_SimilarGroup1StandardMats; // 0
+    public List<Material> m_SimilarGroup1StencilMats;  // 1
 
     public enum CaptureDegree
     {
@@ -70,6 +76,9 @@ public class UserStudyController : MonoBehaviour
         ClOSEST_SPHERE_GROUP_1,
         ClOSEST_SPHERE_GROUP_2,
         ClOSEST_SPHERE_GROUP_3,
+        SIMILAR_GROUP_1,
+        SIMILAR_GROUP_2,
+        SIMILAR_GROUP_3,
         NONE
     };
 
@@ -107,6 +116,13 @@ public class UserStudyController : MonoBehaviour
             || currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_3)
         {
             UpdateClosestSphere();
+        }
+
+        if (currentTaskMode == TaskMode.SIMILAR_GROUP_1
+           || currentTaskMode == TaskMode.SIMILAR_GROUP_2
+           || currentTaskMode == TaskMode.SIMILAR_GROUP_3)
+        {
+            UpdateSimilarGroup();
         }
 
     }
@@ -217,6 +233,36 @@ public class UserStudyController : MonoBehaviour
         }
     }
 
+    public void InitSimilarGroup(TaskMode taskMode)
+    {
+        if (taskMode == TaskMode.SIMILAR_GROUP_1)
+        {
+            CreateSimilarGroup(ControllerStates.FIND_SIMILAR_GROUPs[0]);
+        }
+        else if (taskMode == TaskMode.SIMILAR_GROUP_2)
+        {
+            CreateSimilarGroup(ControllerStates.FIND_SIMILAR_GROUPs[1]);
+        }
+        else if (taskMode == TaskMode.SIMILAR_GROUP_3)
+        {
+            CreateSimilarGroup(ControllerStates.FIND_SIMILAR_GROUPs[2]);
+        }
+        else
+        {
+            Debug.Log("Should not use the function about the similar object!");
+        }
+    }
+
+    public void CreateSimilarGroup(Vector3 pos_in_portal)
+    {
+        Quaternion _rotation = m_ARController.GetPortalTransform().rotation;
+
+        Vector3 _position = Vector3.zero;
+        m_ARController.PortalObjectPos2World(in pos_in_portal, out _position);
+
+        m_SimilarGroup = Instantiate(m_SimilarObjectPrefab, _position, _rotation);
+    }
+
     public void CreateClosestSphere(Vector3 pos_in_portal, Material mat)
     {
         Quaternion _rotation = m_ARController.GetPortalTransform().rotation;
@@ -259,6 +305,9 @@ public class UserStudyController : MonoBehaviour
 
             m_ClosestSpheres.Clear();
         }
+
+        // similar object group
+        if (m_SimilarGroup) Destroy(m_SimilarGroup);
     }
 
     public void UpdateDynamicSpheres()
@@ -310,6 +359,19 @@ public class UserStudyController : MonoBehaviour
         else
         {
             ChangeClosestSphereMaterial(MAT_STANDARD);
+        }
+    }
+
+    public void UpdateSimilarGroup()
+    {
+        if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_PICINPIC
+            || ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_REFLECTION)
+        {
+            ChangeSimilarMaterial(MAT_STENCIL);
+        }
+        else
+        {
+            ChangeSimilarMaterial(MAT_STANDARD);
         }
     }
 
@@ -383,6 +445,32 @@ public class UserStudyController : MonoBehaviour
         }
     }
 
+    public void ChangeSimilarMaterial(int type)
+    {
+        if (type == MAT_STANDARD)
+        {
+            // type == 0, standard color material
+            m_SimilarGroup.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[0];
+            m_SimilarGroup.transform.GetChild(1).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[1];
+            m_SimilarGroup.transform.GetChild(2).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[2];
+            m_SimilarGroup.transform.GetChild(3).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[3];
+            m_SimilarGroup.transform.GetChild(4).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[4];
+            m_SimilarGroup.transform.GetChild(5).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[5];
+            currentMatType = MAT_STANDARD;
+        }
+        else if (type == MAT_STENCIL)
+        {
+            // type == 1, stencil shader material
+            m_SimilarGroup.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[0];
+            m_SimilarGroup.transform.GetChild(1).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[1];
+            m_SimilarGroup.transform.GetChild(2).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[2];
+            m_SimilarGroup.transform.GetChild(3).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[3];
+            m_SimilarGroup.transform.GetChild(4).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[4];
+            m_SimilarGroup.transform.GetChild(5).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[5];
+            currentMatType = MAT_STENCIL;
+        }
+    }
+
     public void SetUserStudyObjectsActive(bool isActive)
     {
         if (currentTaskMode == TaskMode.COUNTING_DYNAMIC_SPHERE_3 
@@ -452,7 +540,32 @@ public class UserStudyController : MonoBehaviour
                 m_ClosestSpheres[2].SetActive(isActive);
             }
         }
-        
+
+        if (currentTaskMode == TaskMode.SIMILAR_GROUP_1
+            || currentTaskMode == TaskMode.SIMILAR_GROUP_2
+            || currentTaskMode == TaskMode.SIMILAR_GROUP_3)
+        {
+            // similar group
+            if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_MULTIPERSPECTIVE)
+            {
+                m_SimilarGroup.transform.GetChild(1).gameObject.SetActive(isActive);
+                m_SimilarGroup.transform.GetChild(2).gameObject.SetActive(isActive);
+                m_SimilarGroup.transform.GetChild(3).gameObject.SetActive(isActive);
+                m_SimilarGroup.transform.GetChild(4).gameObject.SetActive(isActive);
+                m_SimilarGroup.transform.GetChild(5).gameObject.SetActive(isActive);
+            }
+            else
+            {
+                // if the spheres have many, can replace to foreach
+                m_SimilarGroup.transform.GetChild(0).gameObject.SetActive(isActive);
+                m_SimilarGroup.transform.GetChild(1).gameObject.SetActive(isActive);
+                m_SimilarGroup.transform.GetChild(2).gameObject.SetActive(isActive);
+                m_SimilarGroup.transform.GetChild(3).gameObject.SetActive(isActive);
+                m_SimilarGroup.transform.GetChild(4).gameObject.SetActive(isActive);
+                m_SimilarGroup.transform.GetChild(5).gameObject.SetActive(isActive);
+            }
+        }
+
     }
 
     public void OnUserStudyTaskModeChange()
@@ -516,6 +629,21 @@ public class UserStudyController : MonoBehaviour
             case "Closest 3":
                 InitClosestSphereGroup(TaskMode.ClOSEST_SPHERE_GROUP_3);
                 currentTaskMode = TaskMode.ClOSEST_SPHERE_GROUP_3;
+                break;
+
+            case "Similar 1":
+                InitSimilarGroup(TaskMode.SIMILAR_GROUP_1);
+                currentTaskMode = TaskMode.SIMILAR_GROUP_1;
+                break;
+
+            case "Similar 2":
+                InitSimilarGroup(TaskMode.SIMILAR_GROUP_2);
+                currentTaskMode = TaskMode.SIMILAR_GROUP_2;
+                break;
+
+            case "Similar 3":
+                InitSimilarGroup(TaskMode.SIMILAR_GROUP_3);
+                currentTaskMode = TaskMode.SIMILAR_GROUP_3;
                 break;
 
             default:
