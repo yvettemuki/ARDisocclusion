@@ -33,6 +33,7 @@ public class UserStudyFlowController : MonoBehaviour
         currentTrial = 0;
         choices.SetAllTogglesOff();
         answers = new string[ControllerStates.MAX_TASK_NUM, ControllerStates.MAX_METHOD_NUM * ControllerStates.MAX_TRIAL_NUM];
+        completionTime = new string[ControllerStates.MAX_TASK_NUM, ControllerStates.MAX_METHOD_NUM * ControllerStates.MAX_TRIAL_NUM];
         started = false;
         finished = false;
     }
@@ -52,7 +53,7 @@ public class UserStudyFlowController : MonoBehaviour
             m_Toggles[i].gameObject.SetActive(started && !finished);
             if (i == 0 || i == 2 || i == 4)
             {
-                m_Toggles[i].gameObject.SetActive(currentMethod == 2);
+                m_Toggles[i].gameObject.SetActive(currentMethod != 2);
             }
         }
         m_NextButton.gameObject.SetActive(choices.AnyTogglesOn() && started && !finished);
@@ -91,8 +92,10 @@ public class UserStudyFlowController : MonoBehaviour
     {
         if (currentTask >= ControllerStates.MAX_TASK_NUM)
             return;
-        
+        Debug.Log(1);
         string answer = choices.ActiveToggles().FirstOrDefault().gameObject.name;
+        Debug.Log(choices.ActiveToggles().FirstOrDefault());
+        Debug.Log("name" + choices.ActiveToggles().FirstOrDefault().gameObject.name);
         answers[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = answer;
         completionTime[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = (Time.time - timer).ToString("0.00");
         currentTrial++;

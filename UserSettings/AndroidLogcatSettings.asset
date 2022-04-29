@@ -11,12 +11,6 @@
         {
             "deviceId": "R52MB0ZJ7NY",
             "name": "com.yvettemuki.ARDisocclusion",
-            "processId": 18991,
-            "exited": true
-        },
-        {
-            "deviceId": "R52MB0ZJ7NY",
-            "name": "com.yvettemuki.ARDisocclusion",
             "processId": 19823,
             "exited": true
         },
@@ -48,6 +42,12 @@
             "deviceId": "R52MB0ZJ7NY",
             "name": "com.yvettemuki.ARDisocclusion",
             "processId": 28439,
+            "exited": true
+        },
+        {
+            "deviceId": "R52MB0ZJ7NY",
+            "name": "com.yvettemuki.ARDisocclusion",
+            "processId": 23879,
             "exited": false
         }
     ],
