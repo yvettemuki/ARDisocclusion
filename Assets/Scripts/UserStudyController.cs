@@ -450,7 +450,7 @@ public class UserStudyController : MonoBehaviour
         if (type == MAT_STANDARD)
         {
             // type == 0, standard color material
-            m_SimilarGroup.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[0];
+            //m_SimilarGroup.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[0];
             m_SimilarGroup.transform.GetChild(1).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[1];
             m_SimilarGroup.transform.GetChild(2).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[2];
             m_SimilarGroup.transform.GetChild(3).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[3];
@@ -461,7 +461,7 @@ public class UserStudyController : MonoBehaviour
         else if (type == MAT_STENCIL)
         {
             // type == 1, stencil shader material
-            m_SimilarGroup.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[0];
+            //m_SimilarGroup.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[0];
             m_SimilarGroup.transform.GetChild(1).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[1];
             m_SimilarGroup.transform.GetChild(2).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[2];
             m_SimilarGroup.transform.GetChild(3).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[3];

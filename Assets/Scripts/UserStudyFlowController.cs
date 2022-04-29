@@ -92,10 +92,7 @@ public class UserStudyFlowController : MonoBehaviour
     {
         if (currentTask >= ControllerStates.MAX_TASK_NUM)
             return;
-        Debug.Log(1);
         string answer = choices.ActiveToggles().FirstOrDefault().gameObject.name;
-        Debug.Log(choices.ActiveToggles().FirstOrDefault());
-        Debug.Log("name" + choices.ActiveToggles().FirstOrDefault().gameObject.name);
         answers[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = answer;
         completionTime[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = (Time.time - timer).ToString("0.00");
         currentTrial++;
