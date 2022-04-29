@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "R52MB0ZJ7NY",
         "name": "com.yvettemuki.ARDisocclusion",
-        "processId": 25697,
+        "processId": 28439,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -11,37 +11,43 @@
         {
             "deviceId": "R52MB0ZJ7NY",
             "name": "com.yvettemuki.ARDisocclusion",
-            "processId": 1981,
+            "processId": 18991,
             "exited": true
         },
         {
             "deviceId": "R52MB0ZJ7NY",
             "name": "com.yvettemuki.ARDisocclusion",
-            "processId": 9320,
+            "processId": 19823,
             "exited": true
         },
         {
             "deviceId": "R52MB0ZJ7NY",
             "name": "com.yvettemuki.ARDisocclusion",
-            "processId": 1006,
+            "processId": 27394,
             "exited": true
         },
         {
             "deviceId": "R52MB0ZJ7NY",
             "name": "com.yvettemuki.ARDisocclusion",
-            "processId": 24121,
+            "processId": 26527,
+            "exited": true
+        },
+        {
+            "deviceId": "R52MB0ZJ7NY",
+            "name": "com.sec.android.app.launcher",
+            "processId": 2339,
+            "exited": false
+        },
+        {
+            "deviceId": "R52MB0ZJ7NY",
+            "name": "com.yvettemuki.ARDisocclusion",
+            "processId": 27595,
             "exited": true
         },
         {
             "deviceId": "R52MB0ZJ7NY",
             "name": "com.yvettemuki.ARDisocclusion",
-            "processId": 24311,
-            "exited": true
-        },
-        {
-            "deviceId": "R52MB0ZJ7NY",
-            "name": "com.yvettemuki.ARDisocclusion",
-            "processId": 25697,
+            "processId": 28439,
             "exited": false
         }
     ],
@@ -95,7 +101,7 @@
         "MemoryGroup": 2,
         "Behavior": 0
     },
-    "m_Filter": "+++",
+    "m_Filter": "",
     "m_FilterIsRegularExpression": false,
     "m_SymbolPaths": []
 }

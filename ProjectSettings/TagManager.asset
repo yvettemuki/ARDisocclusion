@@ -9,15 +9,15 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Side Corridor
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - HumanSprite
+  - Mirror
+  - Portal
+  - MultiperspPlane
+  - Main Corridor Left
+  - Main Corridor Right
   - 
   - 
   - 
