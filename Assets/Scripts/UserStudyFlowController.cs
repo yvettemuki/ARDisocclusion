@@ -7,7 +7,7 @@ using System.IO;
 
 public class UserStudyFlowController : MonoBehaviour
 {
-    public GameObject m_ToggleGroup, m_DebugText, m_QuestionText;
+    public GameObject m_ToggleGroup, m_DebugText, m_QuestionText, m_SetupCanvas, m_StudyCanvas;
     public Button m_NextButton, m_RedoButton, m_StartButton;
     public Toggle[] m_Toggles;
     public UserStudyAPIs m_api;
@@ -15,7 +15,9 @@ public class UserStudyFlowController : MonoBehaviour
     private ToggleGroup choices;
     private int currentTask, currentMethod, currentTrial;
     private string[,] answers;
+    private string[,] completionTime;
     private bool started, finished;
+    private float timer;
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +50,10 @@ public class UserStudyFlowController : MonoBehaviour
         for (int i = 0; i < m_Toggles.Length; i++)
         {
             m_Toggles[i].gameObject.SetActive(started && !finished);
+            if (i == 0 || i == 2 || i == 4)
+            {
+                m_Toggles[i].gameObject.SetActive(currentMethod == 2);
+            }
         }
         m_NextButton.gameObject.SetActive(choices.AnyTogglesOn() && started && !finished);
         m_RedoButton.gameObject.SetActive(started && !finished);
@@ -76,6 +82,9 @@ public class UserStudyFlowController : MonoBehaviour
         started = true;
         m_api.SetUserStudyMethod((ARContorller.UserStudyType)currentMethod);
         m_api.SetUserStudyTask((UserStudyController.TaskMode) (currentTask * 3 + currentTrial));
+        m_SetupCanvas.SetActive(false);
+        m_StudyCanvas.SetActive(true);
+        timer = Time.time;
     }
 
     public void NextTrial()
@@ -85,6 +94,7 @@ public class UserStudyFlowController : MonoBehaviour
         
         string answer = choices.ActiveToggles().FirstOrDefault().gameObject.name;
         answers[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = answer;
+        completionTime[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = (Time.time - timer).ToString("0.00");
         currentTrial++;
         if (currentTrial >= ControllerStates.MAX_TRIAL_NUM)
         {
@@ -149,6 +159,7 @@ public class UserStudyFlowController : MonoBehaviour
             for (int i = 0; i < ControllerStates.MAX_TASK_NUM; i++)
             {
                 writer.WriteLine(string.Join(",", GetRow(answers, i)));
+                writer.WriteLine(string.Join(",", GetRow(completionTime, i)));
             }
         }
     }

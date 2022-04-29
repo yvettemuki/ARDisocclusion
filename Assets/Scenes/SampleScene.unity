@@ -6425,7 +6425,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1325056556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6548,6 +6548,8 @@ MonoBehaviour:
   m_ToggleGroup: {fileID: 1065509739}
   m_DebugText: {fileID: 1805683665}
   m_QuestionText: {fileID: 644273279}
+  m_SetupCanvas: {fileID: 254408747}
+  m_StudyCanvas: {fileID: 1325056555}
   m_NextButton: {fileID: 240155513}
   m_RedoButton: {fileID: 957818962}
   m_StartButton: {fileID: 866705470}
