@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.ARFoundation;
 
-public class ARContorller : MonoBehaviour
+public class ARController : MonoBehaviour
 {
     [SerializeField]
     ARSession m_Session;
@@ -36,7 +36,8 @@ public class ARContorller : MonoBehaviour
     public GameObject m_ProjectorPrefabRightMAINCORD; // main corridor projector right
     public GameObject m_StencilMaskPortalAreaPrefab;
 
-    public RawImage m_RawImagePicInPic;  // pic in pic render image
+    public RawImage m_RawImagePicInPicInSetupCanvas;  // pic in pic render image
+    public RawImage m_RawImagePicInPicInUserCanvas;
 
     private List<Vector3> m_4PortalCornerPositions;
     private Vector2 m_HumanLowestUV;
@@ -204,7 +205,7 @@ public class ARContorller : MonoBehaviour
         if (m_PortalPlane) Destroy(m_PortalPlane);
         if (m_Mirror) Destroy(m_Mirror);
         if (m_ProjectorMULTI.gameObject.activeSelf) m_ProjectorMULTI.gameObject.SetActive(false);
-        if (m_RawImagePicInPic.gameObject.activeSelf) m_RawImagePicInPic.gameObject.SetActive(false);
+        if (m_RawImagePicInPicInUserCanvas.gameObject.activeSelf) m_RawImagePicInPicInUserCanvas.gameObject.SetActive(false);
         if (m_ProjectorLeftMAINCORD.gameObject.activeSelf) m_ProjectorLeftMAINCORD.gameObject.SetActive(false);
         if (m_StencilMaskPortalArea) Destroy(m_StencilMaskPortalArea);
         
@@ -274,7 +275,7 @@ public class ARContorller : MonoBehaviour
                 CleanUpScene();
                 m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
                 m_UserStudyController.SetUserStudyObjectsActive(true);
-                m_RawImagePicInPic.gameObject.SetActive(true);
+                m_RawImagePicInPicInUserCanvas.gameObject.SetActive(true);
                 CreateStencilMaskArea();
                 break;
 
@@ -401,12 +402,12 @@ public class ARContorller : MonoBehaviour
         }
 
         // human sprite view
-        if (m_HumanSprite)
-            m_HumanSprite.SetActive(isActive);
+        //if (m_HumanSprite)
+        //    m_HumanSprite.SetActive(isActive);
 
         // set user study objects view
-        if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_PICINPIC ||
-            ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_REFLECTION)
+        if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_PICINPIC ||
+            ARController.currentUserStudyType == ARController.UserStudyType.TYPE_REFLECTION)
         {
             return;
         }
@@ -545,7 +546,15 @@ public class ARContorller : MonoBehaviour
 
         Ray ray = new Ray(camera_b_pos, m_HumanLowestPointDirFromCamB);
 
-        RaycastHumanSpritePosition(ray);
+        List<ARRaycastHit> hits = new List<ARRaycastHit>();
+        if (m_ARRaycastManager.Raycast(ray, hits, TrackableType.PlaneWithinPolygon))
+        {
+            ARRaycastHit hit = hits[0];
+
+            m_HumanSprite = Instantiate(m_HumanSpritePrefab, hit.pose.position, Quaternion.LookRotation(forward, up));
+        }
+        else
+            Debug.Log($"filed to place the human sprite, the plane is not large enough!");
     }
 
     public void InitializeCameraBVideoFrames()

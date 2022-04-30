@@ -75,15 +75,15 @@ public class AnchorController : MonoBehaviour
             return;
 
         // Determine create type
-        if (!m_IsCorridorExist && ARContorller.currentObjectType == ARContorller.ControlObjectType.OBJ_CORRIDOR)
+        if (!m_IsCorridorExist && ARController.currentObjectType == ARController.ControlObjectType.OBJ_CORRIDOR)
         {
             CreateMainGeometry(prefabCorrider, corridorRayCastHits);
         }
-        else if (!m_IsPortalExist && ARContorller.currentObjectType == ARContorller.ControlObjectType.OBJ_PORTAL)
+        else if (!m_IsPortalExist && ARController.currentObjectType == ARController.ControlObjectType.OBJ_PORTAL)
         {
             CreateMainGeometry(prefabPortal, portalRayCastHits);
         }
-        else if (ARContorller.currentObjectType == ARContorller.ControlObjectType.OBJ_POINT)
+        else if (ARController.currentObjectType == ARController.ControlObjectType.OBJ_POINT)
         {
             m_CurrentPrefab = prefabPoint;
 
@@ -116,7 +116,7 @@ public class AnchorController : MonoBehaviour
 
             }
         }
-        else if (ARContorller.currentObjectType == ARContorller.ControlObjectType.OBJ_NONE)
+        else if (ARController.currentObjectType == ARController.ControlObjectType.OBJ_NONE)
             return;
 
     }
@@ -290,7 +290,7 @@ public class AnchorController : MonoBehaviour
                 // Add the anchor to our anchor list to manage
                 m_Anchors.Add(anchor);
 
-                if (ARContorller.currentObjectType == ARContorller.ControlObjectType.OBJ_PORTAL)
+                if (ARController.currentObjectType == ARController.ControlObjectType.OBJ_PORTAL)
                 {
                     m_PortalAnchor = anchor;
                     m_IsPortalExist = true;
@@ -301,7 +301,7 @@ public class AnchorController : MonoBehaviour
                     // attach the corridor geometry to the portal
                     AttachGeoToPortal(prefabCorrider, pose);
                 }
-                else if (ARContorller.currentObjectType == ARContorller.ControlObjectType.OBJ_CORRIDOR)
+                else if (ARController.currentObjectType == ARController.ControlObjectType.OBJ_CORRIDOR)
                 {
                     m_CorridorAnchor = anchor;
                     m_IsCorridorExist = true;

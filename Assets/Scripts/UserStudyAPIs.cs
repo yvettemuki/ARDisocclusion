@@ -7,7 +7,7 @@ public class UserStudyAPIs : MonoBehaviour
     [SerializeField]
     private UserStudyController m_UserStudyController;
     [SerializeField]
-    private ARContorller m_ARController;
+    private ARController m_ARController;
 
     void Start()
     {
@@ -45,42 +45,81 @@ public class UserStudyAPIs : MonoBehaviour
                 m_UserStudyController.InitDynamicSpheres();
                 break;
 
+            case UserStudyController.TaskMode.DIRECT_INDICATOR_23:
+                m_UserStudyController.InitDigitsNumbersForHumanDir();
+                m_ARController.InitHumanSpriteForUserStudy(UserStudyController.TaskMode.DIRECT_INDICATOR_23);
+                break;
+
+            case UserStudyController.TaskMode.DIRECT_INDICATOR_56:
+                m_UserStudyController.InitDigitsNumbersForHumanDir();
+                m_ARController.InitHumanSpriteForUserStudy(UserStudyController.TaskMode.DIRECT_INDICATOR_56);
+                break;
+
+            case UserStudyController.TaskMode.DIRECT_INDICATOR_12:
+                m_UserStudyController.InitDigitsNumbersForHumanDir();
+                m_ARController.InitHumanSpriteForUserStudy(UserStudyController.TaskMode.DIRECT_INDICATOR_12);
+                break;
+
+            case UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_1:
+                m_UserStudyController.InitClosestSphereGroup(UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_1);
+                break;
+
+            case UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_2:
+                m_UserStudyController.InitClosestSphereGroup(UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_2);
+                break;
+
+            case UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_3:
+                m_UserStudyController.InitClosestSphereGroup(UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_3);
+                break;
+
+            case UserStudyController.TaskMode.SIMILAR_GROUP_1:
+                m_UserStudyController.InitSimilarGroup(UserStudyController.TaskMode.SIMILAR_GROUP_1);
+                break;
+
+            case UserStudyController.TaskMode.SIMILAR_GROUP_2:
+                m_UserStudyController.InitSimilarGroup(UserStudyController.TaskMode.SIMILAR_GROUP_2);
+                break;
+
+            case UserStudyController.TaskMode.SIMILAR_GROUP_3:
+                m_UserStudyController.InitSimilarGroup(UserStudyController.TaskMode.SIMILAR_GROUP_3);
+                break;
+
             default:
                 break;
         }
     }
 
-    public void SetUserStudyMethod(ARContorller.UserStudyType methodMode)
+    public void SetUserStudyMethod(ARController.UserStudyType methodMode)
     {
         m_ARController.CleanUpScene();
-        ARContorller.currentUserStudyType = methodMode;
+        ARController.currentUserStudyType = methodMode;
 
         switch (methodMode)
         {
-            case ARContorller.UserStudyType.TYPE_NONE:
+            case ARController.UserStudyType.TYPE_NONE:
                 m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
                 // add user study task method disable?
                 break;
 
-            case ARContorller.UserStudyType.TYPE_CUTAWAY:
+            case ARController.UserStudyType.TYPE_CUTAWAY:
                 m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
                 m_UserStudyController.SetUserStudyObjectsActive(true);
                 break;
 
-            case ARContorller.UserStudyType.TYPE_MULTIPERSPECTIVE:
+            case ARController.UserStudyType.TYPE_MULTIPERSPECTIVE:
                 m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
                 m_ARController.SetCameraBNearClipToPortalDepth();
                 m_ARController.SetProjectorMULTIActive(true);
                 break;
 
-            case ARContorller.UserStudyType.TYPE_PICINPIC:
+            case ARController.UserStudyType.TYPE_PICINPIC:
                 m_ARController.SetCameraBNearClipToDefaultDepth();
                 m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
-                m_ARController.m_RawImagePicInPic.gameObject.SetActive(true);
+                m_ARController.m_RawImagePicInPicInSetupCanvas.gameObject.SetActive(true);
                 m_ARController.CreateStencilMaskArea();
                 break;
 
-            case ARContorller.UserStudyType.TYPE_XRAY:
+            case ARController.UserStudyType.TYPE_XRAY:
                 m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
                 // dynamic sphere view
                 m_UserStudyController.SetUserStudyObjectsActive(true);
@@ -89,7 +128,7 @@ public class UserStudyAPIs : MonoBehaviour
                 //m_ProjectorRightMAINCORD.gameObject.SetActive(true);
                 break;
 
-            case ARContorller.UserStudyType.TYPE_REFLECTION:
+            case ARController.UserStudyType.TYPE_REFLECTION:
                 m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
                 m_ARController.SetProjectorMAINCORDActive(true);
                 m_ARController.m_ProjectorController.SetMainCorridorProjectorMaterial(1, 0);

@@ -41,7 +41,7 @@ public class PortalManager : MonoBehaviour
     void Update()
     {
         // Get the current selected status
-        if (ARContorller.currentObjectType != ARContorller.ControlObjectType.OBJ_PORTAL)
+        if (ARController.currentObjectType != ARController.ControlObjectType.OBJ_PORTAL)
         {
             return;
         }

@@ -37,7 +37,7 @@ public class CorriderManager : MonoBehaviour
     void Update()
     {
         // Get the current selected status
-        if (ARContorller.currentObjectType != ARContorller.ControlObjectType.OBJ_CORRIDOR)
+        if (ARController.currentObjectType != ARController.ControlObjectType.OBJ_CORRIDOR)
         {
             return;
         }

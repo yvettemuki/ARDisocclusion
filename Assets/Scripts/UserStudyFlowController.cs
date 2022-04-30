@@ -81,7 +81,7 @@ public class UserStudyFlowController : MonoBehaviour
     public void StartNewTrial()
     {
         started = true;
-        m_api.SetUserStudyMethod((ARContorller.UserStudyType)currentMethod);
+        m_api.SetUserStudyMethod((ARController.UserStudyType)currentMethod);
         m_api.SetUserStudyTask((UserStudyController.TaskMode) (currentTask * 3 + currentTrial));
         m_SetupCanvas.SetActive(false);
         m_StudyCanvas.SetActive(true);

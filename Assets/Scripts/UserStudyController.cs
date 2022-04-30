@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UserStudyController : MonoBehaviour
 {
     [SerializeField]
-    private ARContorller m_ARController;
+    private ARController m_ARController;
 
     // Other
     int currentMatType = -1;
@@ -312,8 +312,8 @@ public class UserStudyController : MonoBehaviour
 
     public void UpdateDynamicSpheres()
     {
-        if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_PICINPIC
-            || ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_REFLECTION)
+        if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_PICINPIC
+            || ARController.currentUserStudyType == ARController.UserStudyType.TYPE_REFLECTION)
         {
             ChangeDynamicSphereMaterial(MAT_STENCIL);
         }
@@ -338,8 +338,8 @@ public class UserStudyController : MonoBehaviour
 
     public void UpdateDirectIndicator()
     {
-        if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_PICINPIC
-            || ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_REFLECTION)
+        if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_PICINPIC
+            || ARController.currentUserStudyType == ARController.UserStudyType.TYPE_REFLECTION)
         {
             ChangeDirectIndicatorMaterial(MAT_STENCIL);
         }
@@ -351,8 +351,8 @@ public class UserStudyController : MonoBehaviour
 
     public void UpdateClosestSphere()
     {
-        if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_PICINPIC
-            || ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_REFLECTION)
+        if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_PICINPIC
+            || ARController.currentUserStudyType == ARController.UserStudyType.TYPE_REFLECTION)
         {
             ChangeClosestSphereMaterial(MAT_STENCIL);
         }
@@ -364,8 +364,8 @@ public class UserStudyController : MonoBehaviour
 
     public void UpdateSimilarGroup()
     {
-        if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_PICINPIC
-            || ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_REFLECTION)
+        if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_PICINPIC
+            || ARController.currentUserStudyType == ARController.UserStudyType.TYPE_REFLECTION)
         {
             ChangeSimilarMaterial(MAT_STENCIL);
         }
@@ -480,7 +480,7 @@ public class UserStudyController : MonoBehaviour
             // dynamic spheres
             foreach (DynamicSphere obj in m_DynamicSpheres)
             {
-                if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_MULTIPERSPECTIVE)
+                if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_MULTIPERSPECTIVE)
                 {
                     // calculate the radius of the spheres
                     Vector3 scale = obj.sphere.transform.lossyScale;
@@ -530,7 +530,7 @@ public class UserStudyController : MonoBehaviour
             || currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_3)
         {
             // closest sphere
-            if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_MULTIPERSPECTIVE)
+            if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_MULTIPERSPECTIVE)
                 m_ClosestSpheres[2].SetActive(isActive);
             else
             {
@@ -546,7 +546,7 @@ public class UserStudyController : MonoBehaviour
             || currentTaskMode == TaskMode.SIMILAR_GROUP_3)
         {
             // similar group
-            if (ARContorller.currentUserStudyType == ARContorller.UserStudyType.TYPE_MULTIPERSPECTIVE)
+            if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_MULTIPERSPECTIVE)
             {
                 m_SimilarGroup.transform.GetChild(1).gameObject.SetActive(isActive);
                 m_SimilarGroup.transform.GetChild(2).gameObject.SetActive(isActive);

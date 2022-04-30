@@ -61,16 +61,16 @@
     <Compile Include="Assets\Scripts\UserStudyController.cs" />
     <Compile Include="Assets\Scripts\ProjectorController.cs" />
     <Compile Include="Assets\Scripts\CorriderManager.cs" />
+    <Compile Include="Assets\Scripts\UserStudyAPIs.cs" />
     <Compile Include="Assets\Scripts\CameraImageController.cs" />
     <Compile Include="Assets\Scripts\GameObjectEx.cs" />
+    <Compile Include="Assets\Scripts\UserStudyFlowController.cs" />
     <Compile Include="Assets\Scripts\CanvasTextManager.cs" />
     <Compile Include="Assets\Scripts\ARFeatheredPlaneMeshVisualizer.cs" />
-    <Compile Include="Assets\Scripts\ARContorller.cs" />
+    <Compile Include="Assets\Scripts\ARController.cs" />
     <Compile Include="Assets\Scripts\PlaneController.cs" />
     <Compile Include="Assets\Scripts\ControllerStates.cs" />
     <Compile Include="Assets\Scripts\TextureProcessor.cs" />
-    <Compile Include="Assets\Scripts\UserStudyFlowController.cs" />
-    <Compile Include="Assets\Scripts\UserStudyAPIs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\HumanStencil.shader" />

@@ -36,7 +36,7 @@ public class ProjectorController : MonoBehaviour
         Graphics.Blit(humanSpriteFrame, BGSubOutputRTex, bgSubMaterial);
     }
 
-    public void SetHumanRenderTexture(ARContorller.UserStudyType type)
+    public void SetHumanRenderTexture(ARController.UserStudyType type)
     {
         //if (type == ARContorller.UserStudyType.TYPE_CUTAWAY)
         //    Graphics.Blit(BGSubInputRTex, BGSubOutputRTex, bgSubMaterial);
