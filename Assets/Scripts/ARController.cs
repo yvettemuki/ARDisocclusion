@@ -402,8 +402,8 @@ public class ARController : MonoBehaviour
         }
 
         // human sprite view
-        //if (m_HumanSprite)
-        //    m_HumanSprite.SetActive(isActive);
+        if (m_HumanSprite)
+            m_HumanSprite.SetActive(isActive);
 
         // set user study objects view
         if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_PICINPIC ||
