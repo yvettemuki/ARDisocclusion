@@ -182,16 +182,16 @@ public class ControllerStates : MonoBehaviour
     {
         "How many balls are moving in the corridor?",
         "Between which two stickers is the person standing?",
-        "This is a placeholder of the question.",
-        "This is a placeholder of the question."
+        "Which ball is closer to the pink one?",
+        "Which two-digit number is the target number on the left wall?"
     };
 
     public static string[,,] CHOICES = new string[,,] 
     {
         {{"1", "2", "3", "4", "5"}, {"3", "4", "5", "6", "7" }, {"5", "6", "7", "8", "9" } },
         {{"1-2", "2-3", "3-4", "4-5", "5-6" }, {"1-2", "2-3", "3-4", "4-5", "5-6" }, {"1-2", "2-3", "3-4", "4-5", "5-6" } },
-        {{"ph", "ph", "ph", "ph", "ph" }, {"ph", "ph", "ph", "ph", "ph" }, {"ph", "ph", "ph", "ph", "ph" } },
-        {{"ph", "ph", "ph", "ph", "ph" }, {"ph", "ph", "ph", "ph", "ph" }, {"ph", "ph", "ph", "ph", "ph" } } 
+        {{"ph", "Blue", "ph", "Yellow", "ph" }, {"ph", "Blue", "ph", "Yellow", "ph" }, {"ph", "Blue", "ph", "Yellow", "ph" } },
+        {{"Yellow", "Blue", "Green", "Pink", "Black" }, {"Yellow", "Blue", "Green", "Pink", "Black"}, {"Yellow", "Blue", "Green", "Pink", "Black"} } 
     };
 
     public static int[,,] CORRECT_ANSWERS = new int[,,]

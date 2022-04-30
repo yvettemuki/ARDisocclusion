@@ -115,7 +115,7 @@ public class UserStudyAPIs : MonoBehaviour
             case ARController.UserStudyType.TYPE_PICINPIC:
                 m_ARController.SetCameraBNearClipToDefaultDepth();
                 m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
-                m_ARController.m_RawImagePicInPicInSetupCanvas.gameObject.SetActive(true);
+                m_ARController.m_RawImagePicInPicInUserCanvas.gameObject.SetActive(true);
                 m_ARController.CreateStencilMaskArea();
                 break;
 

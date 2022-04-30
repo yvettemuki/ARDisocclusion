@@ -50,11 +50,7 @@ public class UserStudyFlowController : MonoBehaviour
         m_QuestionText.SetActive(started);
         for (int i = 0; i < m_Toggles.Length; i++)
         {
-            m_Toggles[i].gameObject.SetActive(started && !finished);
-            if (i == 0 || i == 2 || i == 4)
-            {
-                m_Toggles[i].gameObject.SetActive(currentMethod != 2);
-            }
+            m_Toggles[i].gameObject.SetActive(((i == 0 || i == 2 || i == 4) && currentTask != 2) && started && !finished);
         }
         m_NextButton.gameObject.SetActive(choices.AnyTogglesOn() && started && !finished);
         m_RedoButton.gameObject.SetActive(started && !finished);
@@ -143,11 +139,12 @@ public class UserStudyFlowController : MonoBehaviour
     private void Conclude()
     {
         finished = true;
+        m_api.SetUserStudyMethod(ARController.UserStudyType.TYPE_NONE);
+        m_api.SetUserStudyTask(UserStudyController.TaskMode.NONE);
+
         string path = "";
         if (Application.platform == RuntimePlatform.Android)
             path = Application.persistentDataPath;
-        else
-            path = "C:/Users/zhouy/OneDrive - purdue.edu/Desktop/VRAR/final project/Data2";
 
         m_DebugText.GetComponent<Text>().text = string.Format("The path is {0}.", path);
 
