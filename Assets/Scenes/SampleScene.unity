@@ -1473,7 +1473,7 @@ MonoBehaviour:
   m_DropdownTaskMode: {fileID: 1097228459}
   m_DynamicSphereNum: 3
   m_SpherePrefab: {fileID: 8809301529282062103, guid: 075336d9a550c504ab45269bce3ec258, type: 3}
-  m_DirectDigitIndicatorPrefab: {fileID: 3799988484112708333, guid: 6e884881ce4d9644d926753e00f02677, type: 3}
+  m_DirectDigitIndicatorPrefab: {fileID: 1116165923442784262, guid: cc36614da90f671428e15f32430ac9c0, type: 3}
   m_ClosestSpherePrefab: {fileID: 6705586882069662503, guid: 8af44c6b4febd6f41a17f0433e3e4370, type: 3}
   m_ClosestSphereMat:
   - {fileID: 2100000, guid: 597a395ff5d028e45ba43f620614d33c, type: 2}
@@ -1658,6 +1658,18 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 320ff7ba95d2b5947a6c8be1dd5c7bea, type: 3}
   - {fileID: 2800000, guid: cd218f81ca6cea047adc4fd446b53775, type: 3}
   - {fileID: 2800000, guid: cde6ad674734e8d499ebd58dd7cecc27, type: 3}
+  - {fileID: 2800000, guid: bb81f881676ffc24ca72d1a88d4f4680, type: 3}
+  - {fileID: 2800000, guid: c766c935b6b21954ebd50182138efa85, type: 3}
+  - {fileID: 2800000, guid: 59760015d7ab6be4789e249905add68b, type: 3}
+  - {fileID: 2800000, guid: 7d8e26fb12641284d97f96f66f62d23c, type: 3}
+  - {fileID: 2800000, guid: 91f20cad2056e46479949fe31e7d996e, type: 3}
+  - {fileID: 2800000, guid: 1f05c04c6cc81834baa111cd548729de, type: 3}
+  - {fileID: 2800000, guid: 3056b533e6ee32a49b787d92daec731b, type: 3}
+  - {fileID: 2800000, guid: 740dd4cbfbb56a44d872ac1af7edfd5a, type: 3}
+  - {fileID: 2800000, guid: cde6ad674734e8d499ebd58dd7cecc27, type: 3}
+  - {fileID: 2800000, guid: 59760015d7ab6be4789e249905add68b, type: 3}
+  - {fileID: 2800000, guid: 3056b533e6ee32a49b787d92daec731b, type: 3}
+  - {fileID: 2800000, guid: c766c935b6b21954ebd50182138efa85, type: 3}
 --- !u!4 &437207861
 Transform:
   m_ObjectHideFlags: 0

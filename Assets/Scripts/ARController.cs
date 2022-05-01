@@ -557,6 +557,34 @@ public class ARController : MonoBehaviour
             Debug.Log($"filed to place the human sprite, the plane is not large enough!");
     }
 
+    public void InitHumanSpriteForUserStudy(int humanDataIndex)
+    {
+        if (!m_IsCameraBRegisterd)
+        {
+            Debug.Log($"Camera B should be registered before disocclusion!");
+            return;
+        }
+
+        m_HumanSpriteTex = m_UserStudyCamBFrames[humanDataIndex].tex;
+        m_HumanLowestUV = new Vector2(ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[humanDataIndex].x, ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[humanDataIndex].y);
+
+        m_ProjectorController.SetRenderTexture(m_HumanSpriteTex);
+
+        TransformFromUVToWorldPoint(in m_HumanLowestUV, out m_HumanLowestPointDirFromCamB);
+
+        Ray ray = new Ray(camera_b_pos, m_HumanLowestPointDirFromCamB);
+
+        List<ARRaycastHit> hits = new List<ARRaycastHit>();
+        if (m_ARRaycastManager.Raycast(ray, hits, TrackableType.PlaneWithinPolygon))
+        {
+            ARRaycastHit hit = hits[0];
+
+            m_HumanSprite = Instantiate(m_HumanSpritePrefab, hit.pose.position, Quaternion.LookRotation(forward, up));
+        }
+        else
+            Debug.Log($"filed to place the human sprite, the plane is not large enough!");
+    }
+
     public void InitializeCameraBVideoFrames()
     {
         for (int i = 0; i < ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs.Length; i++)

@@ -24,20 +24,29 @@ public class UserStudyAPIs : MonoBehaviour
         
     }
 
-    public void InitSphereByMethodAndMode()
+    public void InitSphereByMethodAndTask()
     {
         int currMethod = (int)ARController.currentUserStudyType;
         int currTaskMode = (int)UserStudyController.currentTaskMode;
-        int currTaskIndex = currMethod * 3 + currTaskMode;
+        int currTaskIndex = currMethod * 3 + currTaskMode;  // currTaskMode % 3
 
         m_UserStudyController.InitDynamicSpheres(currTaskIndex);
+    }
+
+    public void InitHumanByMethodAndTask()
+    {
+        int currMethod = (int)ARController.currentUserStudyType;
+        int currTaskMode = (int)UserStudyController.currentTaskMode;
+        int currTaskIndex = currMethod * 3 + (currTaskMode % 3);
+
+        m_ARController.InitHumanSpriteForUserStudy(currTaskIndex);
     }
 
     public void SetUserStudyTask(UserStudyController.TaskMode taskMode)
     {
         m_UserStudyController.Reset();
 
-        // should be set before the determination
+        // should be SET BEFORE the determination
         UserStudyController.currentTaskMode = taskMode;
 
         if (taskMode == UserStudyController.TaskMode.COUNTING_DYNAMIC_SPHERE_EASY
@@ -45,26 +54,20 @@ public class UserStudyAPIs : MonoBehaviour
             || taskMode == UserStudyController.TaskMode.COUNTING_DYNAMIC_SPHERE_HARD
         )
         {
-            InitSphereByMethodAndMode();
+            InitSphereByMethodAndTask();
+        }
+
+        if (taskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_EASY
+            || taskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_MEDIUM
+            || taskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_HARD
+        )
+        {
+            m_UserStudyController.InitDigitsNumbersForHumanDir();
+            InitHumanByMethodAndTask();
         }
 
         switch (taskMode)
         {
-            case UserStudyController.TaskMode.DIRECT_INDICATOR_EASY:
-                m_UserStudyController.InitDigitsNumbersForHumanDir();
-                m_ARController.InitHumanSpriteForUserStudy(UserStudyController.TaskMode.DIRECT_INDICATOR_EASY);
-                break;
-
-            case UserStudyController.TaskMode.DIRECT_INDICATOR_MEDIUM:
-                m_UserStudyController.InitDigitsNumbersForHumanDir();
-                m_ARController.InitHumanSpriteForUserStudy(UserStudyController.TaskMode.DIRECT_INDICATOR_MEDIUM);
-                break;
-
-            case UserStudyController.TaskMode.DIRECT_INDICATOR_HARD:
-                m_UserStudyController.InitDigitsNumbersForHumanDir();
-                m_ARController.InitHumanSpriteForUserStudy(UserStudyController.TaskMode.DIRECT_INDICATOR_HARD);
-                break;
-
             case UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_EASY:
                 m_UserStudyController.InitClosestSphereGroup(UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_EASY);
                 break;

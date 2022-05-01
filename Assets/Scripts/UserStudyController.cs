@@ -104,12 +104,12 @@ public class UserStudyController : MonoBehaviour
             UpdateDynamicSpheres();
         }
 
-        if (currentTaskMode == TaskMode.DIRECT_INDICATOR_EASY
-            || currentTaskMode == TaskMode.DIRECT_INDICATOR_MEDIUM
-            || currentTaskMode == TaskMode.DIRECT_INDICATOR_HARD)
-        {
-            UpdateDirectIndicator();
-        }
+        //if (currentTaskMode == TaskMode.DIRECT_INDICATOR_EASY
+        //    || currentTaskMode == TaskMode.DIRECT_INDICATOR_MEDIUM
+        //    || currentTaskMode == TaskMode.DIRECT_INDICATOR_HARD)
+        //{
+        //    UpdateDirectIndicator();
+        //}
 
         if (currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_EASY
             || currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_MEDIUM
@@ -542,9 +542,9 @@ public class UserStudyController : MonoBehaviour
             if (m_ARController.GetHumanSprite())
                 m_ARController.GetHumanSprite().SetActive(isActive);
 
-            // indicator
-            if (m_DirectDigitIndicator)
-                m_DirectDigitIndicator.SetActive(isActive);
+            //// indicator
+            //if (m_DirectDigitIndicator)
+            //    m_DirectDigitIndicator.SetActive(isActive);
         }
 
         if (currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_EASY

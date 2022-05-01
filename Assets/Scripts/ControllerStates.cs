@@ -85,13 +85,35 @@ public class ControllerStates : MonoBehaviour
     };
     
     // Human Direction Indicator
-    public static Vector3 HUMAN_DIRECT_DIGIT_NUMBER = new Vector3(0.7f, 1.62f, 1.78f);
+    public static Vector3 HUMAN_DIRECT_DIGIT_NUMBER = new Vector3(-1.318f, 0f, 0f);
     public static Vector3[] USER_STUDY_DIRECT_INDI_FONT_UVs =
     {
-        new Vector2(277, 334),
-        new Vector2(277, 369),
-        new Vector2(269, 257)
+        // CA
+        new Vector2(277, 334), // 11
+        new Vector2(277, 369), // 9
+        new Vector2(269, 257), // 13
+        
+        // MP
+        new Vector2(278, 359),  // 3
+        new Vector2(283, 298),  // 1
+        new Vector2(277, 383),  // 8
+
+        // PP
+        new Vector2(276, 356),  // 10
+        new Vector2(275, 303),  // 12
+        new Vector2(269, 676),  // 5
+
+        // XR
+        new Vector2(271, 392),  // 2
+        new Vector2(277, 564),  // 6
+        new Vector2(269, 257),  // 13
+
+        // MI
+        new Vector2(277, 383),  // 8
+        new Vector2(271, 392),  // 2
+        new Vector2(283, 298),  // 1
     };
+    
 
     // Closest Sphere
     public static Vector3[] CLOSEST_SPHERE_GROUP_1 =
