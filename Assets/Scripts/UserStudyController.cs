@@ -272,8 +272,8 @@ public class UserStudyController : MonoBehaviour
     public void InitClosestSphereGroup(int currTaskIndex)
     {
         CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUPs[currTaskIndex], m_ClosestSphereMat[0]);
-        CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_1[currTaskIndex + 1], m_ClosestSphereMat[1]);
-        CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_1[currTaskIndex + 2], m_ClosestSphereMat[2]);
+        CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUPs[currTaskIndex + 1], m_ClosestSphereMat[1]);
+        CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUPs[currTaskIndex + 2], m_ClosestSphereMat[2]);
     }
 
     public void CreateSimilarGroup(Vector3 pos_in_portal)
