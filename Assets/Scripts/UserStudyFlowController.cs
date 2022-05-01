@@ -48,10 +48,18 @@ public class UserStudyFlowController : MonoBehaviour
     private void SetVisibility()
     {
         m_QuestionText.SetActive(started);
-        for (int i = 0; i < m_Toggles.Length; i++)
+        if (started && !finished)
         {
-            m_Toggles[i].gameObject.SetActive(((i == 0 || i == 2 || i == 4) && currentTask != 2) && started && !finished);
-        }
+            for (int i = 0; i < m_Toggles.Length; i++)
+            {
+                m_Toggles[i].gameObject.SetActive(true);
+                if (currentTask == 2)
+                {
+                    m_Toggles[i].gameObject.SetActive(i == 1 || i == 3);
+                }
+            }
+        };
+        
         m_NextButton.gameObject.SetActive(choices.AnyTogglesOn() && started && !finished);
         m_RedoButton.gameObject.SetActive(started && !finished);
         m_StartButton.gameObject.SetActive(!started);
