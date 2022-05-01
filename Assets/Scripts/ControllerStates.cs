@@ -141,68 +141,68 @@ public class ControllerStates : MonoBehaviour
     public static Vector3[] CLOSEST_SPHERE_GROUPs =
     {
         // CA
-        new Vector3(-0.941f, 1.764f, 0.1f),
-        new Vector3(-0.941f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, 0.1f),
+        new Vector3(-0.96f, 1.011f, 0.1f),
         new Vector3(-0.676f, 1.886f, 0.655f),
 
-        new Vector3(-0.941f, 1.764f, 0.1f),
-        new Vector3(-0.941f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, 0.1f),
+        new Vector3(-0.96f, 1.011f, 0.1f),
         new Vector3(-0.676f, 1.074f, 0.655f),
 
-        new Vector3(-0.941f, 1.764f, 0.1f),
-        new Vector3(-0.941f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, 0.1f),
+        new Vector3(-0.96f, 1.011f, 0.1f),
         new Vector3(-0.676f, 1.495f, 0.655f),
 
         // MP
-        new Vector3(-0.941f, 1.764f, 0.1f),
-        new Vector3(-0.941f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, 0.1f),
+        new Vector3(-0.96f, 1.011f, 0.1f),
         new Vector3(-0.676f, 1.008f, 0.655f),
 
-        new Vector3(-0.941f, 1.764f, 0.1f),
-        new Vector3(-0.941f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, 0.1f),
+        new Vector3(-0.96f, 1.011f, 0.1f),
         new Vector3(-0.676f, 1.175f, 0.655f),
 
-        new Vector3(-0.941f, 1.764f, 0.1f),
-        new Vector3(-0.941f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, 0.1f),
+        new Vector3(-0.96f, 1.011f, 0.1f),
         new Vector3(-0.676f, 1.495f, 0.655f),
 
         // PP
-        new Vector3(-0.941f, 1.764f, 0.1f),
-        new Vector3(-0.941f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, 0.1f),
+        new Vector3(-0.96f, 1.011f, 0.1f),
         new Vector3(-0.676f, 0.98f, 0.655f),
 
-        new Vector3(-0.941f, 1.764f, 0.1f),
-        new Vector3(-0.941f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, 0.1f),
+        new Vector3(-0.96f, 1.011f, 0.1f),
         new Vector3(-0.676f, 1.642f, 0.655f),
 
-        new Vector3(-0.941f, 1.764f, 0.1f),
-        new Vector3(-0.941f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, 0.1f),
+        new Vector3(-0.96f, 1.011f, 0.1f),
         new Vector3(-0.676f, 1.524f, 0.655f),
 
         // XR
-        new Vector3(-0.941f, 1.764f, 0.1f),
-        new Vector3(-0.941f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, 0.1f),
+        new Vector3(-0.96f, 1.011f, 0.1f),
         new Vector3(-0.676f, 1.975f, 0.655f),
 
-        new Vector3(-0.941f, 1.764f, 0.1f),
-        new Vector3(-0.941f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, 0.1f),
+        new Vector3(-0.96f, 1.011f, 0.1f),
         new Vector3(-0.676f, 1.631f, 0.655f),
 
-        new Vector3(-0.941f, 1.764f, 0.1f),
-        new Vector3(-0.941f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, 0.1f),
+        new Vector3(-0.96f, 1.011f, 0.1f),
         new Vector3(-0.676f, 1.321f, 0.655f),
 
         // MI
-        new Vector3(-0.941f, 1.764f, 0.1f),
-        new Vector3(-0.941f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, 0.1f),
+        new Vector3(-0.96f, 1.011f, 0.1f),
         new Vector3(-0.676f, 0.992f, 0.655f),
 
-        new Vector3(-0.941f, 1.764f, 0.1f),
-        new Vector3(-0.941f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, 0.1f),
+        new Vector3(-0.96f, 1.011f, 0.1f),
         new Vector3(-0.676f, 1.589f, 0.655f),
 
-        new Vector3(-0.941f, 1.764f, 0.1f),
-        new Vector3(-0.941f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, 0.1f),
+        new Vector3(-0.96f, 1.011f, 0.1f),
         new Vector3(-0.676f, 1.276f, 0.655f),
 
     };

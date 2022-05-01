@@ -49,15 +49,6 @@ public class UserStudyController : MonoBehaviour
     public GameObject m_SimilarObjectPrefab;
     public List<GameObject> m_SimilarObjectPrefabs;
 
-    // Other
-    public Material m_CircleMaterial;
-    public Material m_SphereStandardMat; // 0
-    public Material m_SphereStencilMat;  // 1
-    public List<Material> m_IndicatorStandardMats; // 0
-    public List<Material> m_IndicatorStencilMats;  // 1
-    public List<Material> m_SimilarGroup1StandardMats; // 0
-    public List<Material> m_SimilarGroup1StencilMats;  // 1
-
     public enum CaptureDegree
     {
         HIGHLY_SUCCESS,
@@ -131,51 +122,6 @@ public class UserStudyController : MonoBehaviour
     public void Reset()
     {
         DestroyCurrentObjects();
-    }
-
-    public void CreateCircle(Vector3 position)
-    {
-        var circle = new GameObject { name = "Circle" };
-        circle.AddComponent<MeshRenderer>();
-        circle.GetComponent<MeshRenderer>().material = m_CircleMaterial;
-        circle.DrawCircle(0.8f, 0.05f);
-        circle.transform.position = position;
-        circle.transform.rotation = Quaternion.identity;
-    }
-
-    public void DropCircle(in int drop_time)  // the drop time should send by the arcontroller
-    {
-        GameObject human_sprite = m_ARController.GetHumanSprite();
-        Vector3 human_position = human_sprite.transform.position;
-        Vector3 world_pos = Vector3.zero;
-        
-        switch (drop_time)
-        {
-            // set position one
-            case 1:
-                {
-                    Vector3 portal_pos = ControllerStates.CIRCLE_POS_IN_PORTAL;
-                    m_ARController.PortalObjectPos2World(in portal_pos, out world_pos);
-                    CreateCircle(world_pos);
-                    // consider where to drop circle
-                    break;
-                }
-            case 2:
-                {
-                    break;
-                }
-            case 3:
-                {
-                    break;
-                }
-            default: 
-                break;
-        }
-        
-
-        // set position two
-
-        // set position three
     }
 
     public void InitDynamicSpheres()
@@ -422,24 +368,24 @@ public class UserStudyController : MonoBehaviour
         if (type == MAT_STANDARD)
         {
             // type == 0, standard color material
-            m_DirectDigitIndicator.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_IndicatorStandardMats[0];
-            m_DirectDigitIndicator.transform.GetChild(1).GetComponent<MeshRenderer>().material = m_IndicatorStandardMats[1];
-            m_DirectDigitIndicator.transform.GetChild(2).GetComponent<MeshRenderer>().material = m_IndicatorStandardMats[2];
-            m_DirectDigitIndicator.transform.GetChild(3).GetComponent<MeshRenderer>().material = m_IndicatorStandardMats[3];
-            m_DirectDigitIndicator.transform.GetChild(4).GetComponent<MeshRenderer>().material = m_IndicatorStandardMats[4];
-            m_DirectDigitIndicator.transform.GetChild(5).GetComponent<MeshRenderer>().material = m_IndicatorStandardMats[5];
+            m_DirectDigitIndicator.transform.GetChild(0).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            m_DirectDigitIndicator.transform.GetChild(1).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            m_DirectDigitIndicator.transform.GetChild(2).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            m_DirectDigitIndicator.transform.GetChild(3).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            m_DirectDigitIndicator.transform.GetChild(4).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            m_DirectDigitIndicator.transform.GetChild(5).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
             
             currentMatType = MAT_STANDARD;
         }
         else if (type == MAT_STENCIL)
         {
             // type == 1, stencil shader material
-            m_DirectDigitIndicator.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_IndicatorStencilMats[0];
-            m_DirectDigitIndicator.transform.GetChild(1).GetComponent<MeshRenderer>().material = m_IndicatorStencilMats[1];
-            m_DirectDigitIndicator.transform.GetChild(2).GetComponent<MeshRenderer>().material = m_IndicatorStencilMats[2];
-            m_DirectDigitIndicator.transform.GetChild(3).GetComponent<MeshRenderer>().material = m_IndicatorStencilMats[3];
-            m_DirectDigitIndicator.transform.GetChild(4).GetComponent<MeshRenderer>().material = m_IndicatorStencilMats[4];
-            m_DirectDigitIndicator.transform.GetChild(5).GetComponent<MeshRenderer>().material = m_IndicatorStencilMats[5];
+            m_DirectDigitIndicator.transform.GetChild(0).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            m_DirectDigitIndicator.transform.GetChild(1).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            m_DirectDigitIndicator.transform.GetChild(2).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            m_DirectDigitIndicator.transform.GetChild(3).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            m_DirectDigitIndicator.transform.GetChild(4).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            m_DirectDigitIndicator.transform.GetChild(5).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
             currentMatType = MAT_STENCIL;
         }
     }
@@ -454,7 +400,7 @@ public class UserStudyController : MonoBehaviour
             // type == 0, standard color material
             foreach (DynamicSphere obj in m_DynamicSpheres)
             {
-                obj.sphere.GetComponent<MeshRenderer>().material = m_SphereStandardMat;
+                obj.sphere.GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
             }
 
             currentMatType = MAT_STANDARD;
@@ -464,7 +410,7 @@ public class UserStudyController : MonoBehaviour
             // type == 1, stencil shader material
             foreach (DynamicSphere obj in m_DynamicSpheres)
             {
-                obj.sphere.GetComponent<MeshRenderer>().material = m_SphereStencilMat;
+                obj.sphere.GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
             }
 
             currentMatType = MAT_STENCIL;
@@ -476,13 +422,13 @@ public class UserStudyController : MonoBehaviour
         if (type == MAT_STANDARD)
         {
             // type == 0, standard color material
-            m_ClosestSpheres[2].GetComponent<MeshRenderer>().material = m_SphereStandardMat;
+            m_ClosestSpheres[2].GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
             currentMatType = MAT_STANDARD;
         }
         else if (type == MAT_STENCIL)
         {
             // type == 1, stencil shader material
-            m_ClosestSpheres[2].GetComponent<MeshRenderer>().material = m_SphereStencilMat;
+            m_ClosestSpheres[2].GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
             currentMatType = MAT_STENCIL;
         }
     }
@@ -493,22 +439,22 @@ public class UserStudyController : MonoBehaviour
         {
             // type == 0, standard color material
             //m_SimilarGroup.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[0];
-            m_SimilarGroup.transform.GetChild(1).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[1];
-            m_SimilarGroup.transform.GetChild(2).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[2];
-            m_SimilarGroup.transform.GetChild(3).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[3];
-            m_SimilarGroup.transform.GetChild(4).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[4];
-            m_SimilarGroup.transform.GetChild(5).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[5];
+            m_SimilarGroup.transform.GetChild(1).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            m_SimilarGroup.transform.GetChild(2).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            m_SimilarGroup.transform.GetChild(3).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            m_SimilarGroup.transform.GetChild(4).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            m_SimilarGroup.transform.GetChild(5).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
             currentMatType = MAT_STANDARD;
         }
         else if (type == MAT_STENCIL)
         {
             // type == 1, stencil shader material
             //m_SimilarGroup.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[0];
-            m_SimilarGroup.transform.GetChild(1).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[1];
-            m_SimilarGroup.transform.GetChild(2).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[2];
-            m_SimilarGroup.transform.GetChild(3).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[3];
-            m_SimilarGroup.transform.GetChild(4).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[4];
-            m_SimilarGroup.transform.GetChild(5).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[5];
+            m_SimilarGroup.transform.GetChild(1).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            m_SimilarGroup.transform.GetChild(2).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            m_SimilarGroup.transform.GetChild(3).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            m_SimilarGroup.transform.GetChild(4).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            m_SimilarGroup.transform.GetChild(5).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
             currentMatType = MAT_STENCIL;
         }
     }

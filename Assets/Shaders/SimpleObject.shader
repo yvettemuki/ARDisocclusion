@@ -4,6 +4,7 @@ Shader "Unlit/SimpleObject"
     {
         _Color("Color", Color) = (0.909, 0.478, 0.564, 1.0)
         _MainTex("Texture", 2D) = "white" {}
+        _CompFunc("StencilCompFunc", int) = 0  // 0:Always, 3:Equal
     }
         SubShader
     {
@@ -13,7 +14,7 @@ Shader "Unlit/SimpleObject"
         Stencil
         {
             Ref 1
-            Comp Equal
+            Comp [_CompFunc]
             Pass Keep
         }
 

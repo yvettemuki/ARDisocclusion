@@ -1478,55 +1478,25 @@ MonoBehaviour:
   m_ClosestSphereMat:
   - {fileID: 2100000, guid: 597a395ff5d028e45ba43f620614d33c, type: 2}
   - {fileID: 2100000, guid: 2f352e7338beb7347a76a2e1a06424da, type: 2}
-  - {fileID: 2100000, guid: c167394412d3679488d3dedd583c904b, type: 2}
+  - {fileID: 2100000, guid: 49015b640790d0a4eba5b9647c77ee86, type: 2}
   m_SimilarObjectPrefab: {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
   m_SimilarObjectPrefabs:
   - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
-  - {fileID: 1353783219153647071, guid: dc7d845aa5d891d43ba2346002bc25a7, type: 3}
   - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
-  - {fileID: 1353783219153647071, guid: dc7d845aa5d891d43ba2346002bc25a7, type: 3}
   - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
-  - {fileID: 1353783219153647071, guid: dc7d845aa5d891d43ba2346002bc25a7, type: 3}
   - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
-  - {fileID: 1353783219153647071, guid: dc7d845aa5d891d43ba2346002bc25a7, type: 3}
   - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
-  - {fileID: 1353783219153647071, guid: dc7d845aa5d891d43ba2346002bc25a7, type: 3}
   - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
-  - {fileID: 1353783219153647071, guid: dc7d845aa5d891d43ba2346002bc25a7, type: 3}
   - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
-  - {fileID: 1353783219153647071, guid: dc7d845aa5d891d43ba2346002bc25a7, type: 3}
+  - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
+  - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
+  - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
+  - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
+  - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
+  - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
+  - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
   - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
   m_CircleMaterial: {fileID: 2100000, guid: eab6ce36a5aa2ad4c8da6f68e1a325ed, type: 2}
-  m_SphereStandardMat: {fileID: 2100000, guid: c167394412d3679488d3dedd583c904b, type: 2}
-  m_SphereStencilMat: {fileID: 2100000, guid: 49015b640790d0a4eba5b9647c77ee86, type: 2}
-  m_IndicatorStandardMats:
-  - {fileID: 2100000, guid: 8860cd3520bd71449aaaf8d3b4b60288, type: 2}
-  - {fileID: 2100000, guid: 33af64da7874e9e428df4515d93bddc8, type: 2}
-  - {fileID: 2100000, guid: 96096c5810ef1414fa9dec6232098a9e, type: 2}
-  - {fileID: 2100000, guid: 5ef7cf43a640a4a41a078f77f6ee5a05, type: 2}
-  - {fileID: 2100000, guid: c6b3505c18b60d74cac838cb90448711, type: 2}
-  - {fileID: 2100000, guid: 308e9ccce0993e047b4bdb5960b0e69f, type: 2}
-  m_IndicatorStencilMats:
-  - {fileID: 2100000, guid: fe44cfa43bb3fcc4cbddf8775f78bdac, type: 2}
-  - {fileID: 2100000, guid: 0d88c0f3ed62b9d408ddbbd358e8f339, type: 2}
-  - {fileID: 2100000, guid: 2f0439f9563bf914ea63eefa31b196d0, type: 2}
-  - {fileID: 2100000, guid: 85d0dde945948544ab8f7c6ae72773a1, type: 2}
-  - {fileID: 2100000, guid: fe6926340e55b2445a89f429d1a6b633, type: 2}
-  - {fileID: 2100000, guid: b7ca1ec371752ef478768c6ca2de78bd, type: 2}
-  m_SimilarGroup1StandardMats:
-  - {fileID: 2100000, guid: fcf8bd08a342f1d4d98c5a61e8ad4b51, type: 2}
-  - {fileID: 2100000, guid: fcf8bd08a342f1d4d98c5a61e8ad4b51, type: 2}
-  - {fileID: 2100000, guid: 174569ec1de72c044be924a3b2b10200, type: 2}
-  - {fileID: 2100000, guid: 48ec22166e9273e4f8264495158c1623, type: 2}
-  - {fileID: 2100000, guid: d7a617d3d2bae0b42995c3932ce46da5, type: 2}
-  - {fileID: 2100000, guid: 5a3e8bdb9fe49f64a9f55d97b13144e5, type: 2}
-  m_SimilarGroup1StencilMats:
-  - {fileID: 2100000, guid: a458287f987f50c41bced65fbdfc9d52, type: 2}
-  - {fileID: 2100000, guid: a458287f987f50c41bced65fbdfc9d52, type: 2}
-  - {fileID: 2100000, guid: 4c650bead726a2b4daf99955b9a5732a, type: 2}
-  - {fileID: 2100000, guid: a66a8527472c21e43b8edd639278a5d0, type: 2}
-  - {fileID: 2100000, guid: 31a9062d024d8fb4cbe4af92a3599868, type: 2}
-  - {fileID: 2100000, guid: c37bdcfc6ee1a1b4bae9db0ec1301fea, type: 2}
 --- !u!4 &364948126
 Transform:
   m_ObjectHideFlags: 0
