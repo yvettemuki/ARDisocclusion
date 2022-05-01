@@ -52,15 +52,38 @@ public class ControllerStates : MonoBehaviour
         new Vector3(0.122f, 0.711f, 5.4f),
         new Vector3(0.194f, 1.55f, 5.08f)
     };
-    public static float[] SPHERES_SPEED =
+    // 2-6 spheres
+    public static Vector3[] DYM_SPHERES_POS_IN_PORTAL =
     {
-        10f,
-        5f,
-        2f
+        new Vector3(0.332f, 1.559f, 0.771f),
+        new Vector3(0.397f, 1.537f, 2.618f),
+        new Vector3(-0.321f, 1.236f, 3.52f),
+        new Vector3(-0.321f, 0.74f, 1.06f),
+        new Vector3(-0.083f, 1.77f, 2.13f),
+        new Vector3(0.166f, 0.939f, 0.611f),
+        new Vector3(-0.104f, 0.59f, 2.89f),
+        new Vector3(-0.321f, 1.7f, 4.61f),    
+        new Vector3(-0.25f, 0.84f, 3.93f),       
+        new Vector3(-0.321f, 2f, 2.95f),  
+        new Vector3(-0.44f, 0.91f, 4.68f), 
+        new Vector3(-0.097f, 1.236f, 2.09f), 
+        new Vector3(0.44f, 0.85f, 1.87f),
+        new Vector3(0.09f, 1.86f, 1.32f),
+        new Vector3(0.03f, 0.83f, 3.08f), //15
+        new Vector3(0.12f, 1.5f, 3.74f), //16
+        new Vector3(0.69f, 1.236f, 4.78f), //17
+        new Vector3(-0.037f, 0.57f, 0.93f), //18
+        new Vector3(0.111f, 1.252f, 1.556f), //19
+    };
+    public static int[] DYN_SPHERES_NUM =
+    {
+        3, 12, 16,  // CA
+        6,  8, 18,  // MP
+        2,  9, 15,  // PP
+        4, 10, 19,  // XR
+        5, 11, 17,  // MI
     };
     
-    public static Vector3 SPHERE_POS_IN_PORTAL_3 = new Vector3(-0.4f, 0.45f, 3.6f);
-
     // Human Direction Indicator
     public static Vector3 HUMAN_DIRECT_DIGIT_NUMBER = new Vector3(0.7f, 1.62f, 1.78f);
     public static Vector3[] USER_STUDY_DIRECT_INDI_FONT_UVs =

@@ -519,17 +519,17 @@ public class ARController : MonoBehaviour
             return;
         }
 
-        if (taskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_23)
+        if (taskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_EASY)
         {
             m_HumanSpriteTex = m_UserStudyCamBFrames[0].tex;
             m_HumanLowestUV = new Vector2(ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[0].x, ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[0].y);
         }
-        else if (taskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_56)
+        else if (taskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_MEDIUM)
         {
             m_HumanSpriteTex = m_UserStudyCamBFrames[1].tex;
             m_HumanLowestUV = new Vector2(ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[1].x, ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[1].y);
         }
-        else if (taskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_12)
+        else if (taskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_HARD)
         {
             m_HumanSpriteTex = m_UserStudyCamBFrames[2].tex;
             m_HumanLowestUV = new Vector2(ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[2].x, ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[2].y);
