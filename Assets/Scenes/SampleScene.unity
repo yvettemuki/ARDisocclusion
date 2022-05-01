@@ -1480,6 +1480,22 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 2f352e7338beb7347a76a2e1a06424da, type: 2}
   - {fileID: 2100000, guid: c167394412d3679488d3dedd583c904b, type: 2}
   m_SimilarObjectPrefab: {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
+  m_SimilarObjectPrefabs:
+  - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
+  - {fileID: 1353783219153647071, guid: dc7d845aa5d891d43ba2346002bc25a7, type: 3}
+  - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
+  - {fileID: 1353783219153647071, guid: dc7d845aa5d891d43ba2346002bc25a7, type: 3}
+  - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
+  - {fileID: 1353783219153647071, guid: dc7d845aa5d891d43ba2346002bc25a7, type: 3}
+  - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
+  - {fileID: 1353783219153647071, guid: dc7d845aa5d891d43ba2346002bc25a7, type: 3}
+  - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
+  - {fileID: 1353783219153647071, guid: dc7d845aa5d891d43ba2346002bc25a7, type: 3}
+  - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
+  - {fileID: 1353783219153647071, guid: dc7d845aa5d891d43ba2346002bc25a7, type: 3}
+  - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
+  - {fileID: 1353783219153647071, guid: dc7d845aa5d891d43ba2346002bc25a7, type: 3}
+  - {fileID: 1715130394019545136, guid: b928a426851bac546a4911bd4355b9f2, type: 3}
   m_CircleMaterial: {fileID: 2100000, guid: eab6ce36a5aa2ad4c8da6f68e1a325ed, type: 2}
   m_SphereStandardMat: {fileID: 2100000, guid: c167394412d3679488d3dedd583c904b, type: 2}
   m_SphereStencilMat: {fileID: 2100000, guid: 49015b640790d0a4eba5b9647c77ee86, type: 2}

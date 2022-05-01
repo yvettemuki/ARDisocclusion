@@ -138,12 +138,91 @@ public class ControllerStates : MonoBehaviour
         new Vector3(-0.676f, 1.4f, 0.1f)
     };
 
+    public static Vector3[] CLOSEST_SPHERE_GROUPs =
+    {
+        // CA
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.031f, 0.1f),
+        new Vector3(-0.65f, 1.4f, 1.484f),
+
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.031f, 0.1f),
+        new Vector3(-0.676f, 1.4f, 0.1f),
+
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.266f, 0.1f),
+        new Vector3(-0.676f, 1.4f, 0.1f),
+
+        // MP
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.031f, 0.1f),
+        new Vector3(-0.676f, 1.4f, 0.1f),
+
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.031f, 0.1f),
+        new Vector3(-0.65f, 1.4f, 1.484f),
+
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.266f, 0.1f),
+        new Vector3(-0.676f, 1.4f, 0.1f),
+
+        // PP
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.266f, 0.1f),
+        new Vector3(-0.676f, 1.4f, 0.1f),
+
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.031f, 0.1f),
+        new Vector3(-0.65f, 1.4f, 1.484f),
+
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.031f, 0.1f),
+        new Vector3(-0.676f, 1.4f, 0.1f),
+
+        // XR
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.031f, 0.1f),
+        new Vector3(-0.65f, 1.4f, 1.484f),
+
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.031f, 0.1f),
+        new Vector3(-0.676f, 1.4f, 0.1f),
+
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.266f, 0.1f),
+        new Vector3(-0.676f, 1.4f, 0.1f),
+
+        // MI
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.031f, 0.1f),
+        new Vector3(-0.65f, 1.4f, 1.484f),
+
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.031f, 0.1f),
+        new Vector3(-0.676f, 1.4f, 0.1f),
+
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.266f, 0.1f),
+        new Vector3(-0.676f, 1.4f, 0.1f),
+
+    };
+
     // Find similar 
+    public static Vector3 SIMILAR_DIGIT_GROUP_POS = new Vector3(-1.5f, 1.4f, -0.1f);
     public static Vector3[] FIND_SIMILAR_GROUPs =
     {
+        // MI
         new Vector3(-1.5f, 1.4f, -0.1f),
         new Vector3(-1.5f, 1.4f, -0.1f),
-        new Vector3(-1.5f, 1.4f, -0.1f)
+        new Vector3(-1.5f, 1.4f, -0.1f),
+
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.031f, 0.1f),
+        new Vector3(-0.676f, 1.4f, 0.1f),
+
+        new Vector3(-0.941f, 1.578f, 0.1f),
+        new Vector3(-0.941f, 1.266f, 0.1f),
+        new Vector3(-0.676f, 1.4f, 0.1f),
     };
 
     public enum PlaybackMode

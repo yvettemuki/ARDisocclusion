@@ -24,7 +24,7 @@ public class UserStudyAPIs : MonoBehaviour
         
     }
 
-    public void InitSphereByMethodAndTask()
+    public void InitDynamicSphereByMethodAndTask()
     {
         int currMethod = (int)ARController.currentUserStudyType;
         int currTaskMode = (int)UserStudyController.currentTaskMode;
@@ -42,6 +42,24 @@ public class UserStudyAPIs : MonoBehaviour
         m_ARController.InitHumanSpriteForUserStudy(currTaskIndex);
     }
 
+    public void InitClosestSphereByMethodAndTask()
+    {
+        int currMethod = (int)ARController.currentUserStudyType;
+        int currTaskMode = (int)UserStudyController.currentTaskMode;
+        int currTaskIndex = currMethod * 3 + (currTaskMode % 3);
+
+        m_UserStudyController.InitClosestSphereGroup(currTaskIndex);
+    }
+
+    public void InitSimilarDigitByMethodAndTask()
+    {
+        int currMethod = (int)ARController.currentUserStudyType;
+        int currTaskMode = (int)UserStudyController.currentTaskMode;
+        int currTaskIndex = currMethod * 3 + (currTaskMode % 3);
+
+        m_UserStudyController.InitSimilarGroup(currTaskIndex);
+    }
+
     public void SetUserStudyTask(UserStudyController.TaskMode taskMode)
     {
         m_UserStudyController.Reset();
@@ -54,7 +72,7 @@ public class UserStudyAPIs : MonoBehaviour
             || taskMode == UserStudyController.TaskMode.COUNTING_DYNAMIC_SPHERE_HARD
         )
         {
-            InitSphereByMethodAndTask();
+            InitDynamicSphereByMethodAndTask();
         }
 
         if (taskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_EASY
@@ -66,34 +84,20 @@ public class UserStudyAPIs : MonoBehaviour
             InitHumanByMethodAndTask();
         }
 
-        switch (taskMode)
+        if (taskMode == UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_EASY
+            || taskMode == UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_MEDIUM
+            || taskMode == UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_HARD
+        )
         {
-            case UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_EASY:
-                m_UserStudyController.InitClosestSphereGroup(UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_EASY);
-                break;
+            InitClosestSphereByMethodAndTask();
+        }
 
-            case UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_MEDIUM:
-                m_UserStudyController.InitClosestSphereGroup(UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_MEDIUM);
-                break;
-
-            case UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_HARD:
-                m_UserStudyController.InitClosestSphereGroup(UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_HARD);
-                break;
-
-            case UserStudyController.TaskMode.SIMILAR_GROUP_EASY:
-                m_UserStudyController.InitSimilarGroup(UserStudyController.TaskMode.SIMILAR_GROUP_EASY);
-                break;
-
-            case UserStudyController.TaskMode.SIMILAR_GROUP_MEDIUM:
-                m_UserStudyController.InitSimilarGroup(UserStudyController.TaskMode.SIMILAR_GROUP_MEDIUM);
-                break;
-
-            case UserStudyController.TaskMode.SIMILAR_GROUP_HARD:
-                m_UserStudyController.InitSimilarGroup(UserStudyController.TaskMode.SIMILAR_GROUP_HARD);
-                break;
-
-            default:
-                break;
+        if (taskMode == UserStudyController.TaskMode.SIMILAR_GROUP_EASY
+            || taskMode == UserStudyController.TaskMode.SIMILAR_GROUP_MEDIUM
+            || taskMode == UserStudyController.TaskMode.SIMILAR_GROUP_HARD
+        )
+        {
+            InitSimilarDigitByMethodAndTask();
         }
     }
 
