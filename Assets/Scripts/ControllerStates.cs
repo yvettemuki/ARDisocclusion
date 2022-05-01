@@ -312,7 +312,7 @@ public class ControllerStates : MonoBehaviour
 
     public static string[,,] CHOICES = new string[,,] 
     {
-        {{"1", "2", "3", "4", "5"}, {"3", "4", "5", "6", "7" }, {"5", "6", "7", "8", "9" } },
+        {{"2", "3", "4", "5", "6"}, {"8", "9", "10", "11", "12" }, {"15", "16", "17", "18", "19" } },
         {{"1-2", "2-3", "3-4", "4-5", "5-6" }, {"1-2", "2-3", "3-4", "4-5", "5-6" }, {"1-2", "2-3", "3-4", "4-5", "5-6" } },
         {{"ph", "Blue", "ph", "Yellow", "ph" }, {"ph", "Blue", "ph", "Yellow", "ph" }, {"ph", "Blue", "ph", "Yellow", "ph" } },
         {{"Yellow", "Blue", "Green", "Pink", "Black" }, {"Yellow", "Blue", "Green", "Pink", "Black"}, {"Yellow", "Blue", "Green", "Pink", "Black"} } 
