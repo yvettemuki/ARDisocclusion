@@ -439,22 +439,36 @@ public class UserStudyController : MonoBehaviour
         {
             // type == 0, standard color material
             //m_SimilarGroup.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[0];
-            m_SimilarGroup.transform.GetChild(1).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
-            m_SimilarGroup.transform.GetChild(2).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
-            m_SimilarGroup.transform.GetChild(3).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
-            m_SimilarGroup.transform.GetChild(4).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
-            m_SimilarGroup.transform.GetChild(5).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+
+            for (int i = 1; i < ControllerStates.SIMILAR_DIGIT_NUM_PER_GROUP; i++)
+            {
+                m_SimilarGroup.transform.GetChild(i).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            }
+            //m_SimilarGroup.transform.GetChild(1).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            //m_SimilarGroup.transform.GetChild(2).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            //m_SimilarGroup.transform.GetChild(3).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            //m_SimilarGroup.transform.GetChild(4).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            //m_SimilarGroup.transform.GetChild(5).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            //m_SimilarGroup.transform.GetChild(6).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            //m_SimilarGroup.transform.GetChild(7).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
             currentMatType = MAT_STANDARD;
         }
         else if (type == MAT_STENCIL)
         {
             // type == 1, stencil shader material
             //m_SimilarGroup.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[0];
-            m_SimilarGroup.transform.GetChild(1).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
-            m_SimilarGroup.transform.GetChild(2).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
-            m_SimilarGroup.transform.GetChild(3).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
-            m_SimilarGroup.transform.GetChild(4).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
-            m_SimilarGroup.transform.GetChild(5).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+
+            for (int i = 1; i < ControllerStates.SIMILAR_DIGIT_NUM_PER_GROUP; i++)
+            {
+                m_SimilarGroup.transform.GetChild(i).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            }
+            //m_SimilarGroup.transform.GetChild(1).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            //m_SimilarGroup.transform.GetChild(2).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            //m_SimilarGroup.transform.GetChild(3).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            //m_SimilarGroup.transform.GetChild(4).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            //m_SimilarGroup.transform.GetChild(5).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            //m_SimilarGroup.transform.GetChild(6).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            //m_SimilarGroup.transform.GetChild(7).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
             currentMatType = MAT_STENCIL;
         }
     }
@@ -536,21 +550,32 @@ public class UserStudyController : MonoBehaviour
             // similar group
             if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_MULTIPERSPECTIVE)
             {
-                m_SimilarGroup.transform.GetChild(1).gameObject.SetActive(isActive);
-                m_SimilarGroup.transform.GetChild(2).gameObject.SetActive(isActive);
-                m_SimilarGroup.transform.GetChild(3).gameObject.SetActive(isActive);
-                m_SimilarGroup.transform.GetChild(4).gameObject.SetActive(isActive);
-                m_SimilarGroup.transform.GetChild(5).gameObject.SetActive(isActive);
+                for (int i = 1; i < ControllerStates.SIMILAR_DIGIT_NUM_PER_GROUP; i++)
+                {
+                    m_SimilarGroup.transform.GetChild(i).gameObject.SetActive(isActive);
+                }
+                //m_SimilarGroup.transform.GetChild(1).gameObject.SetActive(isActive);
+                //m_SimilarGroup.transform.GetChild(2).gameObject.SetActive(isActive);
+                //m_SimilarGroup.transform.GetChild(3).gameObject.SetActive(isActive);
+                //m_SimilarGroup.transform.GetChild(4).gameObject.SetActive(isActive);
+                //m_SimilarGroup.transform.GetChild(5).gameObject.SetActive(isActive);
+                //m_SimilarGroup.transform.GetChild(6).gameObject.SetActive(isActive);
+                //m_SimilarGroup.transform.GetChild(7).gameObject.SetActive(isActive);
             }
             else
             {
-                // if the spheres have many, can replace to foreach
-                m_SimilarGroup.transform.GetChild(0).gameObject.SetActive(isActive);
-                m_SimilarGroup.transform.GetChild(1).gameObject.SetActive(isActive);
-                m_SimilarGroup.transform.GetChild(2).gameObject.SetActive(isActive);
-                m_SimilarGroup.transform.GetChild(3).gameObject.SetActive(isActive);
-                m_SimilarGroup.transform.GetChild(4).gameObject.SetActive(isActive);
-                m_SimilarGroup.transform.GetChild(5).gameObject.SetActive(isActive);
+                for (int i = 0; i < ControllerStates.SIMILAR_DIGIT_NUM_PER_GROUP; i++)
+                {
+                    m_SimilarGroup.transform.GetChild(i).gameObject.SetActive(isActive);
+                }
+                //m_SimilarGroup.transform.GetChild(0).gameObject.SetActive(isActive);
+                //m_SimilarGroup.transform.GetChild(1).gameObject.SetActive(isActive);
+                //m_SimilarGroup.transform.GetChild(2).gameObject.SetActive(isActive);
+                //m_SimilarGroup.transform.GetChild(3).gameObject.SetActive(isActive);
+                //m_SimilarGroup.transform.GetChild(4).gameObject.SetActive(isActive);
+                //m_SimilarGroup.transform.GetChild(5).gameObject.SetActive(isActive);
+                //m_SimilarGroup.transform.GetChild(6).gameObject.SetActive(isActive);
+                //m_SimilarGroup.transform.GetChild(7).gameObject.SetActive(isActive);
             }
         }
 

@@ -209,6 +209,7 @@ public class ControllerStates : MonoBehaviour
 
     // Find similar 
     public static Vector3 SIMILAR_DIGIT_GROUP_POS = new Vector3(-1.5f, 1.4f, -0.1f);
+    public static int SIMILAR_DIGIT_NUM_PER_GROUP = 8;  // including the target one
     public static Vector3[] FIND_SIMILAR_GROUPs =
     {
         // MI
