@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 453397125016546275}
   - component: {fileID: 4063895170792672440}
   - component: {fileID: 4696175219943722366}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Ditgit 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 5289268562411679423}
   - component: {fileID: 4530962506629083738}
   - component: {fileID: 8342328210925953711}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Ditgit 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4369383145271845179}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Digit Numbers For Human Direction 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -240,7 +240,7 @@ GameObject:
   - component: {fileID: 3522206246796040178}
   - component: {fileID: 6880609285433421051}
   - component: {fileID: 6424318116519774251}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Ditgit 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -336,7 +336,7 @@ GameObject:
   - component: {fileID: 50182985804178050}
   - component: {fileID: 8837098997683733794}
   - component: {fileID: 8173713704342658339}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Ditgit 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -432,7 +432,7 @@ GameObject:
   - component: {fileID: 2782652442978063695}
   - component: {fileID: 3613036667753098218}
   - component: {fileID: 7379965267431956624}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Ditgit 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -528,7 +528,7 @@ GameObject:
   - component: {fileID: 5387673616112749480}
   - component: {fileID: 2064674934516886739}
   - component: {fileID: 6207483300904061115}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Ditgit 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
