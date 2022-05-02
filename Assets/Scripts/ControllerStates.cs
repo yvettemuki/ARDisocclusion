@@ -101,16 +101,16 @@ public class ControllerStates : MonoBehaviour
         // PP
         new Vector2(276, 356),  // 10
         new Vector2(275, 303),  // 12
-        new Vector2(269, 676),  // 5
+        new Vector2(272, 388),  // 5
 
         // XR
-        new Vector2(271, 392),  // 2
-        new Vector2(277, 564),  // 6
+        new Vector2(285, 339),  // 2
+        new Vector2(271, 392),  // 6
         new Vector2(269, 257),  // 13
 
         // MI
         new Vector2(277, 383),  // 8
-        new Vector2(271, 392),  // 2
+        new Vector2(285, 339),  // 2
         new Vector2(283, 298),  // 1
     };
     
