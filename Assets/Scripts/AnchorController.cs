@@ -50,8 +50,6 @@ public class AnchorController : MonoBehaviour
     public ARAnchor m_PortalAnchor;
     public ARAnchor m_CorridorAnchor;
 
-    //public Text m_TextAnchorPostiion;
-
     void Awake()
     {
         m_RaycastManager = GetComponent<ARRaycastManager>();
@@ -67,10 +65,6 @@ public class AnchorController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // add the restriction for anchor creation
-        //if (m_Anchors.Count >= 1)
-        //    return;
-
         if (Input.touchCount == 0)
             return;
 
@@ -160,8 +154,8 @@ public class AnchorController : MonoBehaviour
             if (m_PlaneController.GetTargetPlane() == null)
             {
                 m_PlaneController.SetTargetPlane(plane);
-                m_PlaneController.SetPlaneDetection(false);
-                m_PlaneController.SetOtherPlaneActive(false);
+                //m_PlaneController.SetPlaneDetection(false);
+                m_PlaneController.isOtherPlaneActive = false;
             }
             
             var planeManager = GetComponent<ARPlaneManager>();
@@ -209,8 +203,8 @@ public class AnchorController : MonoBehaviour
         corridorRayCastHits.Clear();
         TextLogger.Log("Anchors has been cleared!");
 
-        m_PlaneController.SetPlaneDetection(true);
-        m_PlaneController.SetOtherPlaneActive(true);
+        //m_PlaneController.SetPlaneDetection(true);
+        m_PlaneController.isOtherPlaneActive = true;
         m_PlaneController.SetTargetPlane(null);
     }
 

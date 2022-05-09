@@ -10,6 +10,7 @@ public class PlaneController : MonoBehaviour
     ARPlaneManager m_ARPlaneManager;
 
     private ARPlane m_TargetPlane = null;
+    public bool isOtherPlaneActive = true;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +26,7 @@ public class PlaneController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        SetOtherPlaneActive(isOtherPlaneActive);
     }
 
     // !!!Some Problem: the lowest height plane is not equal to the target plane(floor)
