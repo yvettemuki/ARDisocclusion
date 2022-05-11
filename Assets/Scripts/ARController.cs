@@ -308,14 +308,14 @@ public class ARController : MonoBehaviour
     public void UpdateCameraPosition()
     {
         m_TextCameraPos.text = $"CameraA Position:\n" +
-            $"{m_ARCamera.transform.position.ToString()}\n";
+            $"{m_ARCamera.transform.position.ToString("F")}\n";
 
         // calculate cameraA position in portal coord system
         if (m_IsCameraBRegisterd)
         {
             m_TextCameraPos.text = $"CamA World Position:\n" +
-            $"{m_ARCamera.transform.position.ToString()}\n + " +
-            $"CamB Pos:\n {camera_b_pos.ToString()}\n";
+            $"{m_ARCamera.transform.position.ToString("F")}\n" +
+            $"CamB Pos:\n {camera_b_pos.ToString("F")}\n";
 
             if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY || currentUserStudyType == UserStudyType.TYPE_XRAY)
             {
@@ -447,10 +447,10 @@ public class ARController : MonoBehaviour
 
         m_TextPortalPos.text = 
             $"Portal Corner Position:\n" +
-            $"{m_4PortalCornerPositions[0].ToString()}\n" +
-            $"{m_4PortalCornerPositions[1].ToString()}\n" +
-            $"{m_4PortalCornerPositions[2].ToString()}\n" +
-            $"{m_4PortalCornerPositions[3].ToString()}";
+            $"{m_4PortalCornerPositions[0].ToString("F")}\n" +
+            $"{m_4PortalCornerPositions[1].ToString("F")}\n" +
+            $"{m_4PortalCornerPositions[2].ToString("F")}\n" +
+            $"{m_4PortalCornerPositions[3].ToString("F")}";
 
         // calculate portal coordinate system data
         Transform portal_transform = m_AnchorController.m_PortalAnchor.gameObject.transform;

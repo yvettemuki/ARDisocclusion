@@ -154,7 +154,7 @@ public class UserStudyController : MonoBehaviour
             Quaternion _rotation = m_ARController.GetPortalTransform().rotation;
             Vector3 _position_start = Vector3.zero;
             m_ARController.PortalObjectPos2World(in ControllerStates.DYM_SPHERES_POS_IN_PORTAL[i], out _position_start);
-            float longest_dist = Random.Range(1.5f, 3.5f);
+            float longest_dist = Random.Range(1.5f, 3.0f);
 
             GameObject _sphere = Instantiate(m_SpherePrefab, _position_start, _rotation);
 

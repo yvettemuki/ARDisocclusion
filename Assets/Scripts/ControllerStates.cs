@@ -77,11 +77,11 @@ public class ControllerStates : MonoBehaviour
     };
     public static int[] DYN_SPHERES_NUM =
     {
-        3, 12, 16,  // CA
-        6,  8, 18,  // MP
-        2,  9, 15,  // PP
-        4, 10, 19,  // XR
-        5, 11, 17,  // MI
+        3, 7, 8,  // CA
+        4, 6, 9,  // MP
+        4, 5, 10,  // PP
+        3, 5, 11,  // XR
+        5, 6, 8,  // MI
     };
     
     // Human Direction Indicator
@@ -289,7 +289,7 @@ public class ControllerStates : MonoBehaviour
 
     // user study flow
     public static int MAX_TASK_NUM = 4;
-    public static int MAX_METHOD_NUM = 5;
+    public static int MAX_METHOD_NUM = 4;
     public static int MAX_TRIAL_NUM = 3;
     
     public static int DYNAMIC_BALL = 0;
@@ -305,7 +305,7 @@ public class ControllerStates : MonoBehaviour
 
     public static string[] QUESTIONS = new string[]
     {
-        "How many balls are moving in the corridor?",
+        "How many balls are moving?",
         "Between which two stickers is the person standing?",
         "Which ball is closer to the pink one?",
         "Which two-digit number is the target number on the left wall?"
@@ -313,7 +313,7 @@ public class ControllerStates : MonoBehaviour
 
     public static string[,,] CHOICES = new string[,,] 
     {
-        {{"2", "3", "4", "5", "6"}, {"8", "9", "10", "11", "12" }, {"15", "16", "17", "18", "19" } },
+        {{"3", "4", "5", "6", "7"}, {"3", "4", "5", "6", "7" }, {"7", "8", "9", "10", "11" } },
         {{"1-2", "2-3", "3-4", "4-5", "5-6" }, {"1-2", "2-3", "3-4", "4-5", "5-6" }, {"1-2", "2-3", "3-4", "4-5", "5-6" } },
         {{"ph", "Blue", "ph", "Yellow", "ph" }, {"ph", "Blue", "ph", "Yellow", "ph" }, {"ph", "Blue", "ph", "Yellow", "ph" } },
         {{"Yellow", "Blue", "Green", "Pink", "Black" }, {"Yellow", "Blue", "Green", "Pink", "Black"}, {"Yellow", "Blue", "Green", "Pink", "Black"} } 
