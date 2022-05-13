@@ -459,7 +459,7 @@ public class UserStudyController : MonoBehaviour
             // type == 0, standard color material
             //m_SimilarGroup.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_SimilarGroup1StandardMats[0];
 
-            for (int i = 1; i < ControllerStates.SIMILAR_DIGIT_NUM_PER_GROUP; i++)
+            for (int i = ControllerStates.SIMILAR_DIGIT_START_INDEX; i < ControllerStates.SIMILAR_DIGIT_NUM_PER_GROUP; i++)
             {
                 m_SimilarGroup.transform.GetChild(i).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
             }
@@ -477,7 +477,7 @@ public class UserStudyController : MonoBehaviour
             // type == 1, stencil shader material
             //m_SimilarGroup.transform.GetChild(0).GetComponent<MeshRenderer>().material = m_SimilarGroup1StencilMats[0];
 
-            for (int i = 1; i < ControllerStates.SIMILAR_DIGIT_NUM_PER_GROUP; i++)
+            for (int i = ControllerStates.SIMILAR_DIGIT_START_INDEX; i < ControllerStates.SIMILAR_DIGIT_NUM_PER_GROUP; i++)
             {
                 m_SimilarGroup.transform.GetChild(i).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
             }
@@ -569,7 +569,7 @@ public class UserStudyController : MonoBehaviour
             // similar group
             if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_MULTIPERSPECTIVE)
             {
-                for (int i = 1; i < ControllerStates.SIMILAR_DIGIT_NUM_PER_GROUP; i++)
+                for (int i = ControllerStates.SIMILAR_DIGIT_START_INDEX; i < ControllerStates.SIMILAR_DIGIT_NUM_PER_GROUP; i++)
                 {
                     m_SimilarGroup.transform.GetChild(i).gameObject.SetActive(isActive);
                 }
