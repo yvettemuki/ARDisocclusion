@@ -6,6 +6,7 @@ Shader "Projector/Light" {
 		_Color ("Main Color", Color) = (1,1,1,1)
 		_ShadowTex ("Cookie", 2D) = "" {}
 		_FalloffTex ("FallOff", 2D) = "" {}
+		_MyDstMode("DstMode", Float) = 2
 	}
 	
 	Subshader {
@@ -13,7 +14,7 @@ Shader "Projector/Light" {
 		Pass {
 			//ZWrite Off
 			//ColorMask RGB
-			//Blend DstColor One
+			Blend One [_MyDstMode]
 			//Offset -1, -1
 	
 			CGPROGRAM
@@ -49,8 +50,8 @@ Shader "Projector/Light" {
 			fixed4 frag (v2f i) : SV_Target
 			{
 				fixed4 texS = tex2Dproj (_ShadowTex, UNITY_PROJ_COORD(i.uvShadow));
-				texS.rgb *= _Color.rgb;
-				texS.a = 1.0;
+				//texS.rgb *= _Color.rgb;
+				texS.a = _Color.a;
 				return texS;
 	
 				/*fixed4 texF = tex2Dproj (_FalloffTex, UNITY_PROJ_COORD(i.uvFalloff));

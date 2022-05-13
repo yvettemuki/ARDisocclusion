@@ -2459,6 +2459,7 @@ MonoBehaviour:
   BGSubInputRTex: {fileID: 8400000, guid: d1ae412b8aacbca4e911b59aaa127cee, type: 2}
   bgSubMaterial: {fileID: 2100000, guid: 8111d7e04a3893341bad2a03beb05f3a, type: 2}
   mainCorridorProjectorMaterial: {fileID: 2100000, guid: 5258354ea81f22f479f01a368a9ae3f6, type: 2}
+  sideCorridorProjectorMaterial: {fileID: 2100000, guid: c8c80c5b03f5c7e40b07eb2170e667e5, type: 2}
   videoPlayer: {fileID: 761097362}
 --- !u!4 &605371441
 Transform:

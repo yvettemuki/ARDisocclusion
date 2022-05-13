@@ -9,6 +9,7 @@ public class ProjectorController : MonoBehaviour
     public RenderTexture BGSubInputRTex;  // for video having human
     public Material bgSubMaterial;
     public Material mainCorridorProjectorMaterial;
+    public Material sideCorridorProjectorMaterial;
     public VideoPlayer videoPlayer;
 
     // Start is called before the first frame update
@@ -49,6 +50,11 @@ public class ProjectorController : MonoBehaviour
     {
         mainCorridorProjectorMaterial.SetInt("_MySrcMode", srcMode);
         mainCorridorProjectorMaterial.SetInt("_MyDstMode", dstMode);
+    }
+
+    public void SetSideCorridorProjectorMaterial(int dstMode)
+    {
+        sideCorridorProjectorMaterial.SetInt("_MyDstMode", dstMode);
     }
 
 }

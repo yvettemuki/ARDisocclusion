@@ -581,6 +581,20 @@ public class UserStudyController : MonoBehaviour
                 //m_SimilarGroup.transform.GetChild(6).gameObject.SetActive(isActive);
                 //m_SimilarGroup.transform.GetChild(7).gameObject.SetActive(isActive);
             }
+            else if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_CUTAWAY)
+            {
+                // hide the left near and side corridor wall
+                for (int i = 0; i < ControllerStates.SIMILAR_DIGIT_NUM_LEFT_WALL; i++)
+                {
+                    m_SimilarGroup.transform.GetChild(i).gameObject.SetActive(false);
+                }
+
+                // display the right wall 
+                for (int i = ControllerStates.SIMILAR_DIGIT_NUM_LEFT_WALL; i < ControllerStates.SIMILAR_DIGIT_NUM_PER_GROUP; i++)
+                {
+                    m_SimilarGroup.transform.GetChild(i).gameObject.SetActive(isActive);
+                }
+            }
             else
             {
                 for (int i = 0; i < ControllerStates.SIMILAR_DIGIT_NUM_PER_GROUP; i++)

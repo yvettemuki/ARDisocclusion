@@ -157,7 +157,9 @@ public class ARController : MonoBehaviour
             PlaybackHumanSpriteInSideCorridor();
         }
 
-        if (currentUserStudyType == UserStudyType.TYPE_MULTIPERSPECTIVE)
+        if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
+            CutawayDisocclusion();
+        else if (currentUserStudyType == UserStudyType.TYPE_MULTIPERSPECTIVE)
             MultiperspDisocclusion();
         else if (currentUserStudyType == UserStudyType.TYPE_PICINPIC)
             PicInPicDisocclusion();
@@ -211,6 +213,9 @@ public class ARController : MonoBehaviour
         
         // reset the near clip plane of camera B
         m_CameraB.GetComponent<Camera>().nearClipPlane = 0.1f;
+
+        // reset the side corridor projector blend mode
+        m_ProjectorController.SetSideCorridorProjectorMaterial(0);
     }
 
     public void CreateStencilMaskArea()
@@ -258,8 +263,8 @@ public class ARController : MonoBehaviour
             case "Cut-Away":
                 currentUserStudyType = UserStudyType.TYPE_CUTAWAY;
                 CleanUpScene();
-                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
                 m_UserStudyController.SetUserStudyObjectsActive(true);
+                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
                 break;
 
             case "Multipersp":
@@ -325,17 +330,18 @@ public class ARController : MonoBehaviour
                 if (camera_a_pos_in_portal.x < portal_x_lower_bound)
                 {
                     m_TextCameraPos.text += $"left side {portal_x_lower_bound}:\n{camera_a_pos_in_portal.ToString()}\n";
-                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(false);
                     m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(true);
                     m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(true);
                     m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(false);
                     if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
                     {
+                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(false);
                         m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(true);
                         m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
                     }
                     else 
                     {
+                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(true);
                         m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
                         m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
                     }
@@ -346,17 +352,18 @@ public class ARController : MonoBehaviour
                 else if (camera_a_pos_in_portal.x > portal_x_upper_bound)
                 {
                     m_TextCameraPos.text += $"right side {portal_x_upper_bound}:\n{camera_a_pos_in_portal.ToString()}\n ";
-                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(false);
                     m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(true);
                     m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(true);
                     m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(false);
                     if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
                     {
+                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(false);
                         m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(true);
                         m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
                     }
                     else 
                     {
+                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(true);
                         m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
                         m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
                     }
@@ -472,7 +479,7 @@ public class ARController : MonoBehaviour
     }
 
     // Deprecated: cut-away disocclusion with human sprite
-    public void CutAwayDisocclusion()
+    public void CutAwayDisocclusionWithHuman()
     {
         if (!m_IsCameraBRegisterd)
         {
@@ -700,7 +707,18 @@ public class ARController : MonoBehaviour
             return;
         }
 
-        //m_CameraImageController.ProjectCameraA();
+        m_ProjectorController.SetSideCorridorProjectorMaterial(2);
+    }
+
+    public void CutawayDisocclusion()
+    {
+        if (!m_IsCameraBRegisterd)
+        {
+            Debug.Log($"Camera B should be registered before disocclusion!");
+            return;
+        }
+
+        m_UserStudyController.SetUserStudyObjectsActive(true);
     }
 
     public void CaptureCamAView()

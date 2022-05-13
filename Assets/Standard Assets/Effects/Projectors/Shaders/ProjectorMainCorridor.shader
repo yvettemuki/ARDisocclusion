@@ -48,8 +48,8 @@ Shader "Projector/ProjectorMainCorridor"
 				fixed4 frag(v2f i) : SV_Target
 				{
 					fixed4 texS = tex2Dproj(_ShadowTex, UNITY_PROJ_COORD(i.uvShadow));
-					texS.rgba *= _Color.rgba;
-					//texS.a = 1.0;
+					//texS.rgba *= _Color.rgba;
+					texS.a = _Color.a;
 					return texS;
 
 					/*fixed4 texF = tex2Dproj (_FalloffTex, UNITY_PROJ_COORD(i.uvFalloff));

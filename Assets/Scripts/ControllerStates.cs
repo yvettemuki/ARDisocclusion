@@ -230,6 +230,7 @@ public class ControllerStates : MonoBehaviour
     public static Vector3 SIMILAR_DIGIT_GROUP_POS = new Vector3(-1.5f, 1.4f, -0.1f);
     public static int SIMILAR_DIGIT_NUM_PER_GROUP = 21;  // including the target one (16 + 5 back face display for left side)
     public static int SIMILAR_DIGIT_START_INDEX = 5;  // including the target one
+    public static int SIMILAR_DIGIT_NUM_LEFT_WALL = 15;
     public static Vector3[] FIND_SIMILAR_GROUPs =
     {
         // MI
