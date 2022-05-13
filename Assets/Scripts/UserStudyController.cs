@@ -126,6 +126,8 @@ public class UserStudyController : MonoBehaviour
 
     public void InitDynamicSpheres()
     {
+        Color random_color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+
         for (int i = 0; i < m_DynamicSphereNum; i++)
         {
             // get portal coordinate system direction as set it as the sphere direction
@@ -135,6 +137,9 @@ public class UserStudyController : MonoBehaviour
             float longest_dist = Random.Range(1.5f, 3.5f);
 
             GameObject _sphere = Instantiate(m_SpherePrefab, _position_start, _rotation);
+
+            // change the sphere color 
+            _sphere.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.blue);
 
             float _range_scale = Random.Range(0.1f, 0.4f);
             _sphere.transform.localScale = new Vector3(_range_scale, _range_scale, _range_scale);
@@ -154,11 +159,11 @@ public class UserStudyController : MonoBehaviour
             Quaternion _rotation = m_ARController.GetPortalTransform().rotation;
             Vector3 _position_start = Vector3.zero;
             m_ARController.PortalObjectPos2World(in ControllerStates.DYM_SPHERES_POS_IN_PORTAL[i], out _position_start);
-            float longest_dist = Random.Range(1.5f, 3.0f);
+            float longest_dist = Random.Range(1.5f, 2.5f);
 
             GameObject _sphere = Instantiate(m_SpherePrefab, _position_start, _rotation);
 
-            float _range_scale = Random.Range(0.1f, 0.25f);
+            float _range_scale = 0.25f;
             _sphere.transform.localScale = new Vector3(_range_scale, _range_scale, _range_scale);
 
             DynamicSphere _dy_sphere = new DynamicSphere(_sphere, _position_start, longest_dist, Random.Range(1f, 2.5f));
@@ -176,7 +181,7 @@ public class UserStudyController : MonoBehaviour
         m_DirectDigitIndicator = Instantiate(m_DirectDigitIndicatorPrefab, _position, _rotation);
     }
 
-    public void CreateClosestSphere(Vector3 pos_in_portal, Material mat)
+    public void CreateClosestSphere(Vector3 pos_in_portal, Material mat, bool scale_axis_mode)
     {
         Quaternion _rotation = m_ARController.GetPortalTransform().rotation;
 
@@ -185,6 +190,16 @@ public class UserStudyController : MonoBehaviour
 
         GameObject sphere = Instantiate(m_ClosestSpherePrefab, _position, _rotation);
         sphere.GetComponent<MeshRenderer>().material = mat;
+        if (scale_axis_mode)
+        {
+            // set z axis in portal system to 0.01
+            sphere.transform.localScale = new Vector3(0.2f, 0.2f, 0.02f);
+        }
+        else
+        {
+            // set x axis in portal system to 0.01
+            sphere.transform.localScale = new Vector3(0.02f, 0.2f, 0.2f);
+        }
 
         m_ClosestSpheres.Add(sphere);
     }
@@ -193,21 +208,21 @@ public class UserStudyController : MonoBehaviour
     {
         if (taskMode == TaskMode.ClOSEST_SPHERE_GROUP_EASY)
         {
-            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_1[0], m_ClosestSphereMat[0]);
-            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_1[1], m_ClosestSphereMat[1]);
-            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_1[2], m_ClosestSphereMat[2]);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_1[0], m_ClosestSphereMat[0], true);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_1[1], m_ClosestSphereMat[1], true);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_1[2], m_ClosestSphereMat[2], false);
         }
         else if (taskMode == TaskMode.ClOSEST_SPHERE_GROUP_MEDIUM)
         {
-            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_2[0], m_ClosestSphereMat[0]);
-            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_2[1], m_ClosestSphereMat[1]);
-            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_2[2], m_ClosestSphereMat[2]);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_2[0], m_ClosestSphereMat[0], true);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_2[1], m_ClosestSphereMat[1], true);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_2[2], m_ClosestSphereMat[2], false);
         }
         else if (taskMode == TaskMode.ClOSEST_SPHERE_GROUP_HARD)
         {
-            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_3[0], m_ClosestSphereMat[0]);
-            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_3[1], m_ClosestSphereMat[1]);
-            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_3[2], m_ClosestSphereMat[2]);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_3[0], m_ClosestSphereMat[0], true);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_3[1], m_ClosestSphereMat[1], true);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUP_3[2], m_ClosestSphereMat[2], false);
         }
         else
         {
@@ -217,9 +232,9 @@ public class UserStudyController : MonoBehaviour
 
     public void InitClosestSphereGroup(int currTaskIndex)
     {
-        CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUPs[currTaskIndex], m_ClosestSphereMat[0]);
-        CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUPs[currTaskIndex + 1], m_ClosestSphereMat[1]);
-        CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUPs[currTaskIndex + 2], m_ClosestSphereMat[2]);
+        CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUPs[currTaskIndex], m_ClosestSphereMat[0], true);
+        CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUPs[currTaskIndex + 1], m_ClosestSphereMat[1], true);
+        CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUPs[currTaskIndex + 2], m_ClosestSphereMat[2], false);
     }
 
     public void CreateSimilarGroup(Vector3 pos_in_portal)
@@ -392,8 +407,10 @@ public class UserStudyController : MonoBehaviour
 
     public void ChangeDynamicSphereMaterial(int type)
     {
-        //if (m_DynamicSpheres.Count > 0 && currentMatType == type)
-        //    return;
+        if (currentTaskMode != TaskMode.COUNTING_DYNAMIC_SPHERE_EASY
+            && currentTaskMode != TaskMode.COUNTING_DYNAMIC_SPHERE_MEDIUM
+            && currentTaskMode != TaskMode.COUNTING_DYNAMIC_SPHERE_HARD)
+            return;
 
         if (type == MAT_STANDARD)
         {
@@ -401,6 +418,7 @@ public class UserStudyController : MonoBehaviour
             foreach (DynamicSphere obj in m_DynamicSpheres)
             {
                 obj.sphere.GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+                obj.sphere.GetComponent<MeshRenderer>().material.SetColor("_Color", ControllerStates.DYN_SPHERE_COLOR[(int)currentTaskMode]);
             }
 
             currentMatType = MAT_STANDARD;
@@ -411,6 +429,7 @@ public class UserStudyController : MonoBehaviour
             foreach (DynamicSphere obj in m_DynamicSpheres)
             {
                 obj.sphere.GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+                obj.sphere.GetComponent<MeshRenderer>().material.SetColor("_Color", ControllerStates.DYN_SPHERE_COLOR[(int)currentTaskMode]);
             }
 
             currentMatType = MAT_STENCIL;

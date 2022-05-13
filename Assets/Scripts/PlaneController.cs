@@ -89,8 +89,15 @@ public class PlaneController : MonoBehaviour
     {
         foreach (var plane in m_ARPlaneManager.trackables)
         {
-            if (plane.trackableId != m_TargetPlane.trackableId)
+            if (m_TargetPlane)
+            {
+                if (plane.trackableId != m_TargetPlane.trackableId)
+                    plane.gameObject.SetActive(isEnable);
+            }
+            else
+            {
                 plane.gameObject.SetActive(isEnable);
+            }
         }    
     }
 

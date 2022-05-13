@@ -5,11 +5,11 @@ using UnityEngine;
 public class ControllerStates : MonoBehaviour
 {
     public static float PORTAL_HEIGHT = 2.717906f;
-    public static float PORTAL_WIDTH = 1.6f;          //1.519696f;
+    public static float PORTAL_WIDTH = 1.6f;
 
     // Camera B Calibration Data
     public static float CAM_B_HFOV = 67.6615f;  // horizontal field of view!!!
-    public static float CAM_B_VFOV = 94.007f;
+    public static float CAM_B_VFOV = 95.00f;
     public static float CAM_RATIO = 0.624866f;
     public static Vector3 CAM_B_EYE_POS = new Vector3(-0.0303495f, 0.183799f, -0.113018f); //-z
     public static Vector3 CAM_B_LOOK_AT_POINT = new Vector3(-0.0439344f, 0.190594f, 0.886866f); //-z
@@ -21,9 +21,22 @@ public class ControllerStates : MonoBehaviour
     public static Vector3 PORTAL_TOP_LEFT = new Vector3(-0.9f, 1.5f, 1.8f);
     public static Vector3 PORTAL_TOP_RIGHT = new Vector3(0.7f, 1.5f, 1.8f);
 
+    //public static float CAM_B_HFOV = 60.3043f;  // horizontal field of view!!!
+    //public static float CAM_B_VFOV = 94.007f;
+    //public static float CAM_RATIO = 0.624866f;
+    //public static Vector3 CAM_B_EYE_POS = new Vector3(0.736091f, 1.57838f, -2.17946f); //-z
+    //public static Vector3 CAM_B_LOOK_AT_POINT = new Vector3(0.76831f, 1.58019f, -1.17998f); //-z
+    //public static Vector3 CAM_B_UP = new Vector3(0.0182915f, 0.99983f, -0.00240036f); //-z
+    //public static float Z_NEAR = 0.10f;
+    //public static float Z_FAR = 100f;
+    //public static Vector3 PORTAL_BOTTOM_LEFT = new Vector3(0.0f, 0.0f, 0.0f);
+    //public static Vector3 PORTAL_BOTTOM_RIGHT = new Vector3(1.6f, 0.0f, 0.0f);
+    //public static Vector3 PORTAL_TOP_LEFT = new Vector3(0.0f, 2.72f, 0.0f);
+    //public static Vector3 PORTAL_TOP_RIGHT = new Vector3(1.6f, 2.72f, 0.0f);
+
     // Camera A Projector Data
-    public static Vector3 PROJECTOR_MAIN_LEFT_CORD_POS_IN_PORTAL = new Vector3(-6.65f, 1.53f, -2.27f);  //-6.13f, 1.49f, -1.65f
-    public static Quaternion PROJECTOR_MAIN_LEFT_CORD_ROT_IN_PORTAL = new Quaternion(0.05f, 0.54f, -0.05f, 0.84f);  //0.07f, 0.56f, -0.06f, 0.83f
+    public static Vector3 PROJECTOR_MAIN_LEFT_CORD_POS_IN_PORTAL = new Vector3(-7.61f, 1.49f, -1.96f);  //-6.13f, 1.49f, -1.65f
+    public static Quaternion PROJECTOR_MAIN_LEFT_CORD_ROT_IN_PORTAL = new Quaternion(0.06f, 0.59f, -0.05f, 0.81f);  //0.07f, 0.56f, -0.06f, 0.83f
     public static Vector3 PROJECTOR_MAIN_RIGHT_CORD_POS_IN_PORTAL = new Vector3(4.17f, 1.46f, -1.72f);
     public static Quaternion PROJECTOR_MAIN_RIGHT_CORD_ROT_IN_PORTAL = new Quaternion(0.09f, -0.48f, 0.02f, 0.87f);
 
@@ -83,7 +96,13 @@ public class ControllerStates : MonoBehaviour
         3, 5, 11,  // XR
         5, 6, 8,  // MI
     };
-    
+    public static Color[] DYN_SPHERE_COLOR =
+    {
+        new Color(0.972f, 0.215f, 0.372f, 1.0f),
+        new Color(0.329f, 0.509f, 0.960f, 1.0f),
+        new Color(0.960f, 0.839f, 0, 1.0f)
+    };
+
     // Human Direction Indicator
     public static Vector3 HUMAN_DIRECT_DIGIT_NUMBER = new Vector3(-1.318f, 0f, 0f);
     public static Vector3[] USER_STUDY_DIRECT_INDI_FONT_UVs =
@@ -141,68 +160,68 @@ public class ControllerStates : MonoBehaviour
     public static Vector3[] CLOSEST_SPHERE_GROUPs =
     {
         // CA
-        new Vector3(-0.96f, 1.764f, 0.1f),
-        new Vector3(-0.96f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.886f, 0.655f),
 
-        new Vector3(-0.96f, 1.764f, 0.1f),
-        new Vector3(-0.96f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.074f, 0.655f),
 
-        new Vector3(-0.96f, 1.764f, 0.1f),
-        new Vector3(-0.96f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.495f, 0.655f),
 
         // MP
-        new Vector3(-0.96f, 1.764f, 0.1f),
-        new Vector3(-0.96f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.008f, 0.655f),
 
-        new Vector3(-0.96f, 1.764f, 0.1f),
-        new Vector3(-0.96f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.175f, 0.655f),
 
-        new Vector3(-0.96f, 1.764f, 0.1f),
-        new Vector3(-0.96f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.495f, 0.655f),
 
         // PP
-        new Vector3(-0.96f, 1.764f, 0.1f),
-        new Vector3(-0.96f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 0.98f, 0.655f),
 
-        new Vector3(-0.96f, 1.764f, 0.1f),
-        new Vector3(-0.96f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.642f, 0.655f),
 
-        new Vector3(-0.96f, 1.764f, 0.1f),
-        new Vector3(-0.96f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.524f, 0.655f),
 
         // XR
-        new Vector3(-0.96f, 1.764f, 0.1f),
-        new Vector3(-0.96f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.975f, 0.655f),
 
-        new Vector3(-0.96f, 1.764f, 0.1f),
-        new Vector3(-0.96f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.631f, 0.655f),
 
-        new Vector3(-0.96f, 1.764f, 0.1f),
-        new Vector3(-0.96f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.321f, 0.655f),
 
         // MI
-        new Vector3(-0.96f, 1.764f, 0.1f),
-        new Vector3(-0.96f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 0.992f, 0.655f),
 
-        new Vector3(-0.96f, 1.764f, 0.1f),
-        new Vector3(-0.96f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.589f, 0.655f),
 
-        new Vector3(-0.96f, 1.764f, 0.1f),
-        new Vector3(-0.96f, 1.011f, 0.1f),
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.276f, 0.655f),
 
     };
@@ -305,17 +324,17 @@ public class ControllerStates : MonoBehaviour
 
     public static string[] QUESTIONS = new string[]
     {
-        "How many balls are moving?",
+        "Count the floating spheres",
         "Between which two stickers is the person standing?",
-        "Which ball is closer to the pink one?",
-        "Which two-digit number is the target number on the left wall?"
+        "Which sticker is closest to the pink sticker?",
+        "Which number appears twice?"
     };
 
     public static string[,,] CHOICES = new string[,,] 
     {
         {{"3", "4", "5", "6", "7"}, {"3", "4", "5", "6", "7" }, {"7", "8", "9", "10", "11" } },
         {{"1-2", "2-3", "3-4", "4-5", "5-6" }, {"1-2", "2-3", "3-4", "4-5", "5-6" }, {"1-2", "2-3", "3-4", "4-5", "5-6" } },
-        {{"ph", "Blue", "ph", "Yellow", "ph" }, {"ph", "Blue", "ph", "Yellow", "ph" }, {"ph", "Blue", "ph", "Yellow", "ph" } },
+        {{"ph", "Green", "ph", "Yellow", "ph" }, {"ph", "Green", "ph", "Yellow", "ph" }, {"ph", "Green", "ph", "Yellow", "ph" } },
         {{"Yellow", "Blue", "Green", "Pink", "Black" }, {"Yellow", "Blue", "Green", "Pink", "Black"}, {"Yellow", "Blue", "Green", "Pink", "Black"} } 
     };
 
