@@ -9,7 +9,7 @@ public class UserStudyFlowController : MonoBehaviour
 {
     public GameObject m_ToggleGroup, m_DebugText, m_QuestionText, m_SetupCanvas, m_StudyCanvas;
     public Button m_NextButton, m_RedoButton, m_StartButton;
-    public Toggle[] m_Toggles;
+    public Toggle[] m_Toggles, m_SimToggles;
     public UserStudyAPIs m_api;
     
     private ToggleGroup choices;
@@ -55,15 +55,21 @@ public class UserStudyFlowController : MonoBehaviour
             for (int i = 0; i < m_Toggles.Length; i++)
             {
                 m_Toggles[i].gameObject.SetActive(true);
-                if (currentTask == 2)
+                if (currentTask == ControllerStates.FIND_CLOSEST)
                 {
                     m_Toggles[i].gameObject.SetActive(i == 1 || i == 3);
                 }
 
-                if (InDirectIndicateTask())
+                if (InDirectIndicateTask() || currentTask == ControllerStates.MATCH_NUM)
                 {
                     m_Toggles[i].gameObject.SetActive(false);
                 }
+   
+            }
+
+            for (int i = 0; i < m_SimToggles.Length; i++)
+            {
+                m_SimToggles[i].gameObject.SetActive(currentTask == ControllerStates.MATCH_NUM);
             }
         };
 
@@ -89,6 +95,11 @@ public class UserStudyFlowController : MonoBehaviour
                     m_QuestionText.GetComponent<Text>().text = "Try to estimate the position of the person in the side corridor";
                 else if (step == 2)
                     m_QuestionText.GetComponent<Text>().text = "Indicate the direction to the center of the person using the crosshairs";
+            }
+
+            for (int i = 0; i < m_SimToggles.Length; i++)
+            {
+                m_SimToggles[i].transform.GetChild(1).GetComponent<Text>().text = ControllerStates.CHOICES_SIMILARITY[currentMethod * 3 + currentTrial, i];
             }
         } 
         else
