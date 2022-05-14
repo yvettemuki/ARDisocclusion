@@ -80,7 +80,7 @@ public class UserStudyAPIs : MonoBehaviour
             || taskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_HARD
         )
         {
-            m_UserStudyController.InitDigitsNumbersForHumanDir();
+            //m_UserStudyController.InitDigitsNumbersForHumanDir();
             InitHumanByMethodAndTask();
         }
 
@@ -110,7 +110,6 @@ public class UserStudyAPIs : MonoBehaviour
         {
             case ARController.UserStudyType.TYPE_NONE:
                 m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
-                // add user study task method disable?
                 break;
 
             case ARController.UserStudyType.TYPE_CUTAWAY:
@@ -150,6 +149,24 @@ public class UserStudyAPIs : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public float GetDirectIndicateAccuracy()
+    {
+        Vector3 correct_dir = m_UserStudyController.GetCurrHumanPos() - m_UserStudyController.m_Crosshair.transform.position;
+        Vector3 user_dir = m_ARController.m_ARCamera.transform.forward;
+        float diff_angle = Mathf.Abs(Vector3.Angle(correct_dir, user_dir));
+        return diff_angle / 180f;
+    }
+
+    public void SetNoneDisocclusinWithCrosshair()
+    {
+        UserStudyController.currentTaskMode = UserStudyController.TaskMode.NONE;
+        m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+        m_ARController.CleanUpScene();
+        m_UserStudyController.Reset();
+
+        m_UserStudyController.m_Crosshair.gameObject.SetActive(true);
     }
 
 

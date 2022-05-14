@@ -18,6 +18,7 @@ public class UserStudyFlowController : MonoBehaviour
     private string[,] completionTime;
     private bool started, finished;
     private float timer;
+    private int step = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -87,6 +88,12 @@ public class UserStudyFlowController : MonoBehaviour
         started = true;
         m_api.SetUserStudyMethod((ARController.UserStudyType)currentMethod);
         m_api.SetUserStudyTask((UserStudyController.TaskMode) (currentTask * 3 + currentTrial));
+        if ((UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_EASY
+            || (UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_MEDIUM
+            || (UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_HARD)
+        {
+            step = 1;
+        }
         m_SetupCanvas.SetActive(false);
         m_StudyCanvas.SetActive(true);
         timer = Time.time;
@@ -96,6 +103,24 @@ public class UserStudyFlowController : MonoBehaviour
     {
         if (currentTask >= ControllerStates.MAX_TASK_NUM)
             return;
+
+        if ((UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_EASY
+            || (UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_MEDIUM
+            || (UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_HARD)
+        {
+            if (step == 1)
+            {
+                m_api.SetNoneDisocclusinWithCrosshair();
+                step = 2;
+                return;
+            }
+            if (step == 2)
+            {
+                string accuracy = m_api.GetDirectIndicateAccuracy().ToString();
+                Debug.Log($"----Accuracy----: {accuracy}");
+                step = 0;
+            }
+        }
         string answer = choices.ActiveToggles().FirstOrDefault().gameObject.name;
         answers[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = answer;
         completionTime[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = (Time.time - timer).ToString("0.00");
@@ -115,7 +140,8 @@ public class UserStudyFlowController : MonoBehaviour
         if (currentTask >= ControllerStates.MAX_TASK_NUM)
         {
             Conclude();
-        } else
+        } 
+        else
         {
             StartNewTrial();
             choices.SetAllTogglesOff();
