@@ -49,6 +49,7 @@ public class UserStudyFlowController : MonoBehaviour
     private void SetVisibility()
     {
         m_QuestionText.SetActive(started);
+
         if (started && !finished)
         {
             for (int i = 0; i < m_Toggles.Length; i++)
@@ -58,10 +59,15 @@ public class UserStudyFlowController : MonoBehaviour
                 {
                     m_Toggles[i].gameObject.SetActive(i == 1 || i == 3);
                 }
+
+                if (InDirectIndicateTask())
+                {
+                    m_Toggles[i].gameObject.SetActive(false);
+                }
             }
         };
-        
-        m_NextButton.gameObject.SetActive(choices.AnyTogglesOn() && started && !finished);
+
+        m_NextButton.gameObject.SetActive((choices.AnyTogglesOn()|| InDirectIndicateTask()) && started && !finished);
         m_RedoButton.gameObject.SetActive(started && !finished);
         m_StartButton.gameObject.SetActive(!started);
     }
@@ -74,8 +80,18 @@ public class UserStudyFlowController : MonoBehaviour
             {
                 m_Toggles[i].transform.GetChild(1).GetComponent<Text>().text = ControllerStates.CHOICES[currentTask, currentTrial, i];
             }
+
             m_QuestionText.GetComponent<Text>().text = ControllerStates.QUESTIONS[currentTask];
-        } else
+
+            if (InDirectIndicateTask())
+            {
+                if (step == 1)
+                    m_QuestionText.GetComponent<Text>().text = "Try to estimate the position of the person in the side corridor";
+                else if (step == 2)
+                    m_QuestionText.GetComponent<Text>().text = "Indicate the direction to the center of the person using the crosshairs";
+            }
+        } 
+        else
         {
             m_QuestionText.GetComponent<Text>().text = "You have reached the end of the study";
         }
@@ -88,9 +104,7 @@ public class UserStudyFlowController : MonoBehaviour
         started = true;
         m_api.SetUserStudyMethod((ARController.UserStudyType)currentMethod);
         m_api.SetUserStudyTask((UserStudyController.TaskMode) (currentTask * 3 + currentTrial));
-        if ((UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_EASY
-            || (UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_MEDIUM
-            || (UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_HARD)
+        if (InDirectIndicateTask())
         {
             step = 1;
         }
@@ -104,9 +118,9 @@ public class UserStudyFlowController : MonoBehaviour
         if (currentTask >= ControllerStates.MAX_TASK_NUM)
             return;
 
-        if ((UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_EASY
-            || (UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_MEDIUM
-            || (UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_HARD)
+        string answer = null;
+
+        if (InDirectIndicateTask())
         {
             if (step == 1)
             {
@@ -116,12 +130,14 @@ public class UserStudyFlowController : MonoBehaviour
             }
             if (step == 2)
             {
-                string accuracy = m_api.GetDirectIndicateAccuracy().ToString();
-                Debug.Log($"----Accuracy----: {accuracy}");
+                answer = m_api.GetDirectIndicateAccuracy().ToString();
+                Debug.Log($"----Accuracy----: {answer}");
                 step = 0;
             }
         }
-        string answer = choices.ActiveToggles().FirstOrDefault().gameObject.name;
+        else
+            answer = choices.ActiveToggles().FirstOrDefault().gameObject.name;
+        
         answers[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = answer;
         completionTime[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = (Time.time - timer).ToString("0.00");
         currentTrial++;
@@ -201,5 +217,13 @@ public class UserStudyFlowController : MonoBehaviour
         return Enumerable.Range(0, matrix.GetLength(1))
                 .Select(x => matrix[rowNumber, x])
                 .ToArray();
+    }
+
+    private bool InDirectIndicateTask()
+    {
+        return 
+            (UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_EASY
+        || (UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_MEDIUM
+        || (UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_HARD;
     }
 }

@@ -340,6 +340,13 @@ public class ControllerStates : MonoBehaviour
         {{"Yellow", "Blue", "Green", "Pink", "Black" }, {"Yellow", "Blue", "Green", "Pink", "Black"}, {"Yellow", "Blue", "Green", "Pink", "Black"} } 
     };
 
+    public static string[,] CHOICES_SIMILARITY = new string[,]
+    {
+        {"11", "12", "14", "16", "17", "18", "21", "22", "26", "31", "32", "45", "61", "88", "91", "99" },
+        {"11", "12", "14", "16", "17", "18", "21", "22", "26", "31", "32", "45", "61", "88", "91", "99" },
+        {"11", "12", "14", "16", "17", "18", "21", "22", "26", "31", "32", "45", "61", "88", "91", "99" }
+    };
+
     public static int[,,] CORRECT_ANSWERS = new int[,,]
     {
         { {2, 0, 3 }, {3, 4, 1 }, {1, 3, 2 }, {2, 1, 0 }, {0, 4, 4} },
