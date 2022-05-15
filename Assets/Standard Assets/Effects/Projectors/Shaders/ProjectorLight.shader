@@ -6,13 +6,13 @@ Shader "Projector/Light" {
 		_Color ("Main Color", Color) = (1,1,1,1)
 		_ShadowTex ("Cookie", 2D) = "" {}
 		_FalloffTex ("FallOff", 2D) = "" {}
-		_MyDstMode("DstMode", Float) = 2
+		_MyDstMode("DstMode", Float) = 5
 	}
 	
 	Subshader {
 		Tags {"Queue"="Transparent"}
 		Pass {
-			//ZWrite Off
+			ZWrite Off
 			//ColorMask RGB
 			Blend One [_MyDstMode]
 			//Offset -1, -1

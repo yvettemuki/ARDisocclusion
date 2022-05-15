@@ -10,9 +10,9 @@ Shader "Projector/ProjectorMainCorridor"
 		Subshader{
 			Tags {"Queue" = "Transparent"}
 			Pass {
-				//ZWrite Off
+				ZWrite Off
 				//ColorMask RGB
-				Blend[_MySrcMode][_MyDstMode]
+				Blend [_MySrcMode] [_MyDstMode]
 				//Offset -1, -1
 
 				CGPROGRAM

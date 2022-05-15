@@ -162,6 +162,7 @@ public class UserStudyAPIs : MonoBehaviour
     public void SetNoneDisocclusinWithCrosshair()
     {
         UserStudyController.currentTaskMode = UserStudyController.TaskMode.NONE;
+        ARController.currentUserStudyType = ARController.UserStudyType.TYPE_NONE;
         m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
         m_ARController.CleanUpScene();
         m_UserStudyController.Reset();
