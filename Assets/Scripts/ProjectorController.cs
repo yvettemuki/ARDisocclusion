@@ -57,4 +57,9 @@ public class ProjectorController : MonoBehaviour
         sideCorridorProjectorMaterial.SetInt("_MyDstMode", dstMode);
     }
 
+    public void SetSideCorridorProjectorColor(Color color)
+    {
+        sideCorridorProjectorMaterial.SetColor("_Color", color);
+    }
+
 }

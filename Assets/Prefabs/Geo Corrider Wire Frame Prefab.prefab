@@ -692,8 +692,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2583465435708145191}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.7653833, y: 0.4989241, z: 32.49974}
-  m_LocalScale: {x: 64.66718, y: 0.0035842292, z: 0.53459245}
+  m_LocalPosition: {x: 1.183, y: 0.4989241, z: 39}
+  m_LocalScale: {x: 78.40213, y: 0.0035842292, z: 1.3747771}
   m_Children: []
   m_Father: {fileID: 5189231493830620738}
   m_RootOrder: 1
@@ -1740,8 +1740,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5189231493830620862}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -194.81, y: -103.777, z: 310.45}
-  m_LocalScale: {x: 4.755807, y: 2.79, z: 0.01}
+  m_LocalPosition: {x: -194.81, y: -103.792, z: 311.3}
+  m_LocalScale: {x: 3.0798135, y: 2.79, z: 0.01}
   m_Children:
   - {fileID: 1939170254935654634}
   - {fileID: 3332099608972119830}
@@ -2209,7 +2209,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4737594309181958638
 Transform:
   m_ObjectHideFlags: 0
@@ -2599,8 +2599,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5676696688394163953}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.76349026, y: -0.50286734, z: 33.5999}
-  m_LocalScale: {x: 64.66718, y: 0.0035842292, z: 0.534582}
+  m_LocalPosition: {x: 1.184, y: -0.499, z: 40}
+  m_LocalScale: {x: 78.40213, y: 0.0035842292, z: 1.3747505}
   m_Children: []
   m_Father: {fileID: 5189231493830620738}
   m_RootOrder: 2
@@ -3359,8 +3359,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7404839738371655282}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -195.29, y: -103.779, z: 305.54}
-  m_LocalScale: {x: 2.2409642, y: 2.79, z: 0.01}
+  m_LocalPosition: {x: -195.21, y: -103.779, z: 305.54}
+  m_LocalScale: {x: 2.4132943, y: 2.79, z: 0.01}
   m_Children: []
   m_Father: {fileID: 2559544605160812006}
   m_RootOrder: 9
@@ -4111,7 +4111,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8274198264656171487
 Transform:
   m_ObjectHideFlags: 0

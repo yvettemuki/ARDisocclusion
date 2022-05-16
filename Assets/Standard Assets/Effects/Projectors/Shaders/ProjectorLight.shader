@@ -6,7 +6,7 @@ Shader "Projector/Light" {
 		_Color ("Main Color", Color) = (1,1,1,1)
 		_ShadowTex ("Cookie", 2D) = "" {}
 		_FalloffTex ("FallOff", 2D) = "" {}
-		_MyDstMode("DstMode", Float) = 5
+		_MyDstMode("DstMode", Float) = 0
 	}
 	
 	Subshader {

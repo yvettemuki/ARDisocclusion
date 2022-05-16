@@ -216,6 +216,7 @@ public class ARController : MonoBehaviour
 
         // reset the side corridor projector blend mode
         m_ProjectorController.SetSideCorridorProjectorMaterial(0);
+        m_ProjectorController.SetSideCorridorProjectorColor(new Color(1f, 1f, 1f, 1f));
     }
 
     public void CreateStencilMaskArea()
@@ -707,7 +708,8 @@ public class ARController : MonoBehaviour
             return;
         }
 
-        m_ProjectorController.SetSideCorridorProjectorMaterial(2);
+        m_ProjectorController.SetSideCorridorProjectorMaterial(5);
+        m_ProjectorController.SetSideCorridorProjectorColor(new Color(1f, 1f, 1f, 0.33f));
     }
 
     public void CutawayDisocclusion()
