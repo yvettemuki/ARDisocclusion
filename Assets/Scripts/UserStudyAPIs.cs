@@ -153,10 +153,10 @@ public class UserStudyAPIs : MonoBehaviour
 
     public float GetDirectIndicateAccuracy()
     {
-        Vector3 correct_dir = m_UserStudyController.GetCurrHumanPos() - m_UserStudyController.m_Crosshair.transform.position;
+        Vector3 correct_dir = m_UserStudyController.GetCurrHumanPos() - m_ARController.m_ARCamera.transform.position;
         Vector3 user_dir = m_ARController.m_ARCamera.transform.forward;
-        float diff_angle = Mathf.Abs(Vector3.Angle(correct_dir, user_dir));
-        return diff_angle / 180f;
+        float diff_angle = (90f - Mathf.Abs(Vector3.Angle(correct_dir, user_dir))) / 90f * 100f;
+        return diff_angle;
     }
 
     public void SetNoneDisocclusinWithCrosshair()

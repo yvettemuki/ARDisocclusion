@@ -11,6 +11,7 @@ public class UserStudyFlowController : MonoBehaviour
     public Button m_NextButton, m_RedoButton, m_StartButton;
     public Toggle[] m_Toggles, m_SimToggles;
     public UserStudyAPIs m_api;
+    public Text m_TextAccuracy;
     
     private ToggleGroup choices;
     private int currentTask, currentMethod, currentTrial;
@@ -64,14 +65,21 @@ public class UserStudyFlowController : MonoBehaviour
                 {
                     m_Toggles[i].gameObject.SetActive(false);
                 }
-   
+
             }
 
             for (int i = 0; i < m_SimToggles.Length; i++)
             {
                 m_SimToggles[i].gameObject.SetActive(currentTask == ControllerStates.MATCH_NUM);
             }
-        };
+        }
+        else if (finished)
+        {
+            for (int i = 0; i < m_SimToggles.Length; i++)
+            {
+                m_SimToggles[i].gameObject.SetActive(false);
+            }
+        }
 
         m_NextButton.gameObject.SetActive((choices.AnyTogglesOn()|| InDirectIndicateTask()) && started && !finished);
         m_RedoButton.gameObject.SetActive(started && !finished);
@@ -94,7 +102,7 @@ public class UserStudyFlowController : MonoBehaviour
                 if (step == 1)
                     m_QuestionText.GetComponent<Text>().text = "Try to estimate the position of the person in the side corridor";
                 else if (step == 2)
-                    m_QuestionText.GetComponent<Text>().text = "Indicate the direction to the center of the person using the crosshairs";
+                    m_QuestionText.GetComponent<Text>().text = "Indicate the direction to the lowest center of the person using the crosshairs";
             }
 
             for (int i = 0; i < m_SimToggles.Length; i++)
@@ -104,7 +112,7 @@ public class UserStudyFlowController : MonoBehaviour
         } 
         else
         {
-            m_QuestionText.GetComponent<Text>().text = "You have reached the end of the study";
+            m_QuestionText.GetComponent<Text>().text = "You have reached the end of the study! Thank you!";
         }
 
         //m_DebugText.GetComponent<Text>().text = string.Format("The current task is {0}, method is {1}, and trial is {2}.", currentTask, currentMethod, currentTrial);
@@ -141,13 +149,12 @@ public class UserStudyFlowController : MonoBehaviour
             }
             if (step == 2)
             {
-                answer = m_api.GetDirectIndicateAccuracy().ToString();
-                Debug.Log($"----Accuracy----: {answer}");
+                answer = m_api.GetDirectIndicateAccuracy().ToString("0.00");
                 step = 0;
             }
         }
         else
-            answer = choices.ActiveToggles().FirstOrDefault().gameObject.name;
+            answer = choices.ActiveToggles().FirstOrDefault().GetComponentInChildren<Text>().text;
         
         answers[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = answer;
         completionTime[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = (Time.time - timer).ToString("0.00");
@@ -207,7 +214,7 @@ public class UserStudyFlowController : MonoBehaviour
         if (Application.platform == RuntimePlatform.Android)
             path = Application.persistentDataPath;
 
-        m_DebugText.GetComponent<Text>().text = string.Format("The path is {0}.", path);
+        //m_DebugText.GetComponent<Text>().text = string.Format("The path is {0}.", path);
 
 
         string fname = System.DateTime.Now.ToString("HH-mm-ss") + ".csv";
