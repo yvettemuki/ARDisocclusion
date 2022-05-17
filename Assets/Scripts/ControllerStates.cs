@@ -159,57 +159,69 @@ public class ControllerStates : MonoBehaviour
 
     public static Vector3[] CLOSEST_SPHERE_GROUPs =
     {
-        // CA
+        // CA (up:green, down:yellow)
+        // Green
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.886f, 0.655f),
 
+        // Yellow
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.074f, 0.655f),
 
+        // Green
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.495f, 0.655f),
 
         // MP
+        // Yellow
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.008f, 0.655f),
 
+        // Yellow
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.175f, 0.655f),
 
+        // Green
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.495f, 0.655f),
 
         // PP
+        // Yellow
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 0.98f, 0.655f),
 
+        // Green
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.642f, 0.655f),
 
+        // Green
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.524f, 0.655f),
 
         // XR
+        // Green
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.975f, 0.655f),
 
+        // Green
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.631f, 0.655f),
 
+        // Yellow
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.321f, 0.655f),
+        new Vector3(-0.676f, 1.255f, 0.655f),
 
         // MI
         new Vector3(-0.96f, 1.764f, -0.03f),
