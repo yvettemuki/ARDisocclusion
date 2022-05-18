@@ -5,14 +5,13 @@ using UnityEngine.UI;
 using System.Linq;
 using System.IO;
 
-public class UserStudyFlowController : MonoBehaviour
+public class UserStudyTrainingFlow : MonoBehaviour
 {
-    public GameObject m_ToggleGroup, m_DebugText, m_QuestionText, m_SetupCanvas, m_StudyCanvas, m_TrainCanvas;
+    public GameObject m_ToggleGroup, m_QuestionText, m_SetupCanvas, m_StudyCanvas, m_TrainCanvas;
     public Button m_NextButton, m_RedoButton, m_StartButton;
     public Toggle[] m_Toggles, m_SimToggles;
     public UserStudyAPIs m_api;
-    public Text m_TextAccuracy;
-    
+
     private ToggleGroup choices;
     private int currentTask, currentMethod, currentTrial;
     private string[,] answers;
@@ -79,11 +78,15 @@ public class UserStudyFlowController : MonoBehaviour
             {
                 m_SimToggles[i].gameObject.SetActive(false);
             }
+
+            m_TrainCanvas.SetActive(false);
+            m_SetupCanvas.SetActive(true);
+            GetComponent<UserStudyTrainingFlow>().enabled = false;
         }
 
-        m_NextButton.gameObject.SetActive((choices.AnyTogglesOn()|| InDirectIndicateTask()) && started && !finished);
+        m_NextButton.gameObject.SetActive((choices.AnyTogglesOn() || InDirectIndicateTask()) && started && !finished);
         m_RedoButton.gameObject.SetActive(started && !finished);
-        m_StartButton.gameObject.SetActive(!started);
+        //m_StartButton.gameObject.SetActive(!started);
     }
 
     private void updateText()
@@ -109,10 +112,11 @@ public class UserStudyFlowController : MonoBehaviour
             {
                 m_SimToggles[i].transform.GetChild(1).GetComponent<Text>().text = ControllerStates.CHOICES_SIMILARITY[currentMethod * 3 + currentTrial, i];
             }
-        } 
+        }
         else
         {
             m_QuestionText.GetComponent<Text>().text = "You have reached the end of the study! Thank you!";
+            
         }
 
         //m_DebugText.GetComponent<Text>().text = string.Format("The current task is {0}, method is {1}, and trial is {2}.", currentTask, currentMethod, currentTrial);
@@ -122,14 +126,14 @@ public class UserStudyFlowController : MonoBehaviour
     {
         started = true;
         m_api.SetUserStudyMethod((ARController.UserStudyType)currentMethod);
-        m_api.SetUserStudyTask((UserStudyController.TaskMode) (currentTask * 3 + currentTrial));
+        m_api.SetUserStudyTask((UserStudyController.TaskMode)(currentTask * 3 + currentTrial));
         if (InDirectIndicateTask())
         {
             step = 1;
         }
         m_SetupCanvas.SetActive(false);
-        m_TrainCanvas.SetActive(false);
-        m_StudyCanvas.SetActive(true);
+        m_StudyCanvas.SetActive(false);
+        m_TrainCanvas.SetActive(true);
 
         timer = Time.time;
     }
@@ -157,7 +161,7 @@ public class UserStudyFlowController : MonoBehaviour
         }
         else
             answer = choices.ActiveToggles().FirstOrDefault().GetComponentInChildren<Text>().text;
-        
+
         answers[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = answer;
         completionTime[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = (Time.time - timer).ToString("0.00");
         currentTrial++;
@@ -176,7 +180,7 @@ public class UserStudyFlowController : MonoBehaviour
         if (currentTask >= ControllerStates.MAX_TASK_NUM)
         {
             Conclude();
-        } 
+        }
         else
         {
             StartNewTrial();
@@ -240,7 +244,7 @@ public class UserStudyFlowController : MonoBehaviour
 
     private bool InDirectIndicateTask()
     {
-        return 
+        return
             (UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_EASY
         || (UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_MEDIUM
         || (UserStudyController.TaskMode)(currentTask * 3 + currentTrial) == UserStudyController.TaskMode.DIRECT_INDICATOR_HARD;

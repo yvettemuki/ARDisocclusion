@@ -38,7 +38,8 @@ public class UserStudyController : MonoBehaviour
     // Human Direction Indication
     GameObject m_DirectDigitIndicator;
     public GameObject m_DirectDigitIndicatorPrefab;
-    public RawImage m_Crosshair;
+    public RawImage m_CrosshairStudy;
+    public RawImage m_CrosshairTrain;
     private Vector3 m_CurrHumanPos = Vector3.zero;
 
     // Closest Sphere
@@ -303,7 +304,8 @@ public class UserStudyController : MonoBehaviour
             m_CurrHumanPos = m_ARController.GetHumanSprite().transform.position;
             Destroy(m_ARController.GetHumanSprite());
         }
-        if (m_Crosshair.gameObject.activeSelf) m_Crosshair.gameObject.SetActive(false);  
+        if (m_CrosshairStudy.gameObject.activeSelf) m_CrosshairStudy.gameObject.SetActive(false);
+        if (m_CrosshairTrain.gameObject.activeSelf) m_CrosshairTrain.gameObject.SetActive(false);
 
         // closest sphere
         if (m_ClosestSpheres.Count > 0)

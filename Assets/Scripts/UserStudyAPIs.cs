@@ -24,7 +24,7 @@ public class UserStudyAPIs : MonoBehaviour
         
     }
 
-    public void InitDynamicSphereByMethodAndTask()
+    private void InitDynamicSphereByMethodAndTask()
     {
         int currMethod = (int)ARController.currentUserStudyType;
         int currTaskMode = (int)UserStudyController.currentTaskMode;
@@ -33,7 +33,7 @@ public class UserStudyAPIs : MonoBehaviour
         m_UserStudyController.InitDynamicSpheres(currTaskIndex);
     }
 
-    public void InitHumanByMethodAndTask()
+    private void InitHumanByMethodAndTask()
     {
         int currMethod = (int)ARController.currentUserStudyType;
         int currTaskMode = (int)UserStudyController.currentTaskMode;
@@ -42,7 +42,7 @@ public class UserStudyAPIs : MonoBehaviour
         m_ARController.InitHumanSpriteForUserStudy(currTaskIndex);
     }
 
-    public void InitClosestSphereByMethodAndTask()
+    private void InitClosestSphereByMethodAndTask()
     {
         int currMethod = (int)ARController.currentUserStudyType;
         int currTaskMode = (int)UserStudyController.currentTaskMode;
@@ -51,7 +51,7 @@ public class UserStudyAPIs : MonoBehaviour
         m_UserStudyController.InitClosestSphereGroup(currTaskIndex);
     }
 
-    public void InitSimilarDigitByMethodAndTask()
+    private void InitSimilarDigitByMethodAndTask()
     {
         int currMethod = (int)ARController.currentUserStudyType;
         int currTaskMode = (int)UserStudyController.currentTaskMode;
@@ -127,6 +127,7 @@ public class UserStudyAPIs : MonoBehaviour
                 m_ARController.SetCameraBNearClipToDefaultDepth();
                 m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
                 m_ARController.m_RawImagePicInPicInUserCanvas.gameObject.SetActive(true);
+                m_ARController.m_RawImagePicInPicInTrainCanvas.gameObject.SetActive(true);
                 m_ARController.CreateStencilMaskArea();
                 break;
 
@@ -167,7 +168,8 @@ public class UserStudyAPIs : MonoBehaviour
         m_ARController.CleanUpScene();
         m_UserStudyController.Reset();
 
-        m_UserStudyController.m_Crosshair.gameObject.SetActive(true);
+        m_UserStudyController.m_CrosshairStudy.gameObject.SetActive(true);
+        m_UserStudyController.m_CrosshairTrain.gameObject.SetActive(true);
     }
 
 

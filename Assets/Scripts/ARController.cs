@@ -18,6 +18,8 @@ public class ARController : MonoBehaviour
     public CameraImageController m_CameraImageController;
     public ProjectorController m_ProjectorController;
     public UserStudyController m_UserStudyController;
+    public UserStudyFlowController m_FormalStudy;
+    public UserStudyTrainingFlow m_TrainingStudy;
 
     public Dropdown m_DropDownAnchorType;
     public Dropdown m_DropDownUserStudyType;
@@ -38,6 +40,7 @@ public class ARController : MonoBehaviour
 
     public RawImage m_RawImagePicInPicInSetupCanvas;  // pic in pic render image
     public RawImage m_RawImagePicInPicInUserCanvas;
+    public RawImage m_RawImagePicInPicInTrainCanvas;
 
     private List<Vector3> m_4PortalCornerPositions;
     private Vector2 m_HumanLowestUV;
@@ -167,7 +170,7 @@ public class ARController : MonoBehaviour
             XRayDisocclusion();
         else if (currentUserStudyType == UserStudyType.TYPE_REFLECTION)
             ReflectionDisocclusion();
-      
+
         // methods to see around the corner (disocclusion)
         //if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
         //    PlaybackHumanSpriteInSideCorridor();
@@ -175,7 +178,6 @@ public class ARController : MonoBehaviour
         //    PlaybackCameraBVideoClipInMultiPersp();
         //else if (currentUserStudyType == UserStudyType.TYPE_PICINPIC)
         //    PlaybackCameraBVideoClipInPicture();
-
 
     }
 
@@ -208,6 +210,8 @@ public class ARController : MonoBehaviour
         if (m_Mirror) Destroy(m_Mirror);
         if (m_ProjectorMULTI.gameObject.activeSelf) m_ProjectorMULTI.gameObject.SetActive(false);
         if (m_RawImagePicInPicInUserCanvas.gameObject.activeSelf) m_RawImagePicInPicInUserCanvas.gameObject.SetActive(false);
+        if (m_RawImagePicInPicInSetupCanvas.gameObject.activeSelf) m_RawImagePicInPicInSetupCanvas.gameObject.SetActive(false);
+        if (m_RawImagePicInPicInTrainCanvas.gameObject.activeSelf) m_RawImagePicInPicInTrainCanvas.gameObject.SetActive(false);
         if (m_ProjectorLeftMAINCORD.gameObject.activeSelf) m_ProjectorLeftMAINCORD.gameObject.SetActive(false);
         if (m_StencilMaskPortalArea) Destroy(m_StencilMaskPortalArea);
         
