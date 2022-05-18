@@ -126,7 +126,7 @@ public class UserStudyTrainingFlow : MonoBehaviour
     {
         started = true;
         m_api.SetUserStudyMethod((ARController.UserStudyType)currentMethod);
-        m_api.SetUserStudyTask((UserStudyController.TaskMode)(currentTask * 3 + currentTrial));
+        m_api.SetTrainTask((UserStudyController.TaskMode)(currentTask * 3 + currentTrial));
         if (InDirectIndicateTask())
         {
             step = 1;
@@ -214,7 +214,7 @@ public class UserStudyTrainingFlow : MonoBehaviour
     {
         finished = true;
         m_api.SetUserStudyMethod(ARController.UserStudyType.TYPE_NONE);
-        m_api.SetUserStudyTask(UserStudyController.TaskMode.NONE);
+        m_api.SetTrainTask(UserStudyController.TaskMode.NONE);
 
         string path = "";
         if (Application.platform == RuntimePlatform.Android)

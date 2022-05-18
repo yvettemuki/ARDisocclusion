@@ -99,6 +99,8 @@ public class ARController : MonoBehaviour
     // human video frame for user study
     private List<CameraBFrame> m_UserStudyCamBFrames = new List<CameraBFrame>();
     public List<Texture2D> m_UserStudyFrames;
+    private List<CameraBFrame> m_TrainCamBFrames = new List<CameraBFrame>();
+    public List<Texture2D> m_TrainFrames;
 
 
     public enum ControlObjectType
@@ -569,7 +571,7 @@ public class ARController : MonoBehaviour
             Debug.Log($"filed to place the human sprite, the plane is not large enough!");
     }
 
-    public void InitHumanSpriteForUserStudy(int humanDataIndex)
+    public void InitHumanSpriteForUserStudy(int humanDataIndex, bool isStudyMode)
     {
         if (!m_IsCameraBRegisterd)
         {
@@ -577,9 +579,17 @@ public class ARController : MonoBehaviour
             return;
         }
 
-        m_HumanSpriteTex = m_UserStudyCamBFrames[humanDataIndex].tex;
-        m_HumanLowestUV = new Vector2(ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[humanDataIndex].x, ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[humanDataIndex].y);
-
+        if (isStudyMode == ControllerStates.STUDY_MODE)
+        {
+            m_HumanSpriteTex = m_UserStudyCamBFrames[humanDataIndex].tex;
+            m_HumanLowestUV = new Vector2(ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[humanDataIndex].x, ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs[humanDataIndex].y);
+        }
+        else
+        {
+            m_HumanSpriteTex = m_TrainCamBFrames[humanDataIndex].tex;
+            m_HumanLowestUV = new Vector2(ControllerStates.TRAIN_DIRECT_INDI_FONT_UVs[humanDataIndex].x, ControllerStates.TRAIN_DIRECT_INDI_FONT_UVs[humanDataIndex].y);
+        }
+        
         m_ProjectorController.SetRenderTexture(m_HumanSpriteTex);
 
         TransformFromUVToWorldPoint(in m_HumanLowestUV, out m_HumanLowestPointDirFromCamB);
@@ -607,6 +617,17 @@ public class ARController : MonoBehaviour
             {
                 CameraBFrame frame = new CameraBFrame(m_UserStudyFrames[i], uv);
                 m_UserStudyCamBFrames.Add(frame);
+            }
+        }
+
+        for (int i = 0; i < ControllerStates.TRAIN_DIRECT_INDI_FONT_UVs.Length; i++)
+        {
+            Vector2 uv = ControllerStates.TRAIN_DIRECT_INDI_FONT_UVs[i];
+
+            if (m_TrainFrames[i] != null && uv != Vector2.zero)
+            {
+                CameraBFrame frame = new CameraBFrame(m_UserStudyFrames[i], uv);
+                m_TrainCamBFrames.Add(frame);
             }
         }
     }

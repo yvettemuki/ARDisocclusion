@@ -88,6 +88,7 @@ public class ControllerStates : MonoBehaviour
         new Vector3(-0.037f, 0.57f, 0.93f), //18
         new Vector3(0.111f, 1.252f, 1.556f), //19
     };
+    
     public static int[] DYN_SPHERES_NUM =
     {
         3, 7, 8,  // CA
@@ -95,6 +96,14 @@ public class ControllerStates : MonoBehaviour
         4, 5, 10,  // PP
         3, 5, 11,  // XR
         5, 6, 8,  // MI
+    };
+    public static int[] TRAIN_DYN_SPHERES_NUM =
+    {
+        4, 3, 10,  // CA
+        3, 7, 8,  // MP
+        5, 6, 8,  // PP
+        6, 3, 11,  // XR
+        5, 3, 8,  // MI
     };
     public static Color[] DYN_SPHERE_COLOR =
     {
@@ -132,7 +141,33 @@ public class ControllerStates : MonoBehaviour
         new Vector2(285, 339),  // 2
         new Vector2(283, 298),  // 1
     };
-    
+    public static Vector3[] TRAIN_DIRECT_INDI_FONT_UVs =
+    {
+        // CA
+        new Vector2(277, 383),  // 8
+        new Vector2(285, 339),  // 2
+        new Vector2(272, 388),  // 5
+        
+        // MP
+        new Vector2(269, 257),  // 13
+        new Vector2(271, 392),  // 6
+        new Vector2(283, 298),  // 1
+
+        // PP
+        new Vector2(277, 383),  // 8
+        new Vector2(276, 356),  // 10
+        new Vector2(283, 298),  // 1
+
+        // XR
+        new Vector2(277, 369), // 9
+        new Vector2(277, 334), // 11
+        new Vector2(277, 383),  // 8
+
+        // MI
+        new Vector2(272, 388),  // 5
+        new Vector2(275, 303),  // 12
+        new Vector2(276, 356),  // 10
+    };
 
     // Closest Sphere
     public static Vector3[] CLOSEST_SPHERE_GROUP_1 =
@@ -222,6 +257,88 @@ public class ControllerStates : MonoBehaviour
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
         new Vector3(-0.676f, 1.255f, 0.655f),
+
+        // MI
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-0.676f, 0.992f, 0.655f),
+
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-0.676f, 1.589f, 0.655f),
+
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-0.676f, 1.276f, 0.655f),
+
+    };
+
+    public static Vector3[] TRAIN_CLOSEST_SPHERE_GROUPs =
+    {
+        // CA (up:green, down:yellow)
+        // Green
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-0.676f, 1.495f, 0.655f),
+
+        // Green
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-0.676f, 1.642f, 0.655f),
+
+        // Yellow
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-0.676f, 0.98f, 0.655f),
+
+        // MP
+        // Green
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-0.676f, 1.886f, 0.655f),
+
+        // Yellow
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-0.676f, 1.255f, 0.655f),
+
+        // Green
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-0.676f, 1.975f, 0.655f),
+
+        // PP
+        // Yellow
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-0.676f, 1.008f, 0.655f),
+
+        // Yellow
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-0.676f, 1.074f, 0.655f),
+
+        // Yellow
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-0.676f, 1.175f, 0.655f),
+
+        // XR
+        // Green
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-0.676f, 1.495f, 0.655f),
+
+        // Green
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-0.676f, 1.631f, 0.655f),
+
+        
+        // Green
+        new Vector3(-0.96f, 1.764f, -0.03f),
+        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-0.676f, 1.524f, 0.655f),
 
         // MI
         new Vector3(-0.96f, 1.764f, -0.03f),
@@ -343,6 +460,9 @@ public class ControllerStates : MonoBehaviour
         "Which sticker is closest to the pink sticker?",
         "Which number appears twice?"
     };
+
+    public static bool TRAIN_MODE = false;
+    public static bool STUDY_MODE = true;
 
     public static string[,,] CHOICES = new string[,,] 
     {

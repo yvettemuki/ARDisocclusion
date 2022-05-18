@@ -51,6 +51,7 @@ public class UserStudyController : MonoBehaviour
     GameObject m_SimilarGroup;
     public GameObject m_SimilarObjectPrefab;
     public List<GameObject> m_SimilarObjectPrefabs;
+    public List<GameObject> m_TrainSimilarObjectPrefabs;
 
     public enum CaptureDegree
     {
@@ -152,16 +153,23 @@ public class UserStudyController : MonoBehaviour
         }
     }
 
-    public void InitDynamicSpheres(int currTaskIndex)
+    public void InitDynamicSpheres(int currTaskIndex, bool isStudyMode)
     {
-        int sphereNum = ControllerStates.DYN_SPHERES_NUM[currTaskIndex];
+        int sphereNum = 0;
+        if (isStudyMode)
+            sphereNum = ControllerStates.DYN_SPHERES_NUM[currTaskIndex];
+        else
+            sphereNum = ControllerStates.TRAIN_DYN_SPHERES_NUM[currTaskIndex];
 
         for (int i = 0; i < sphereNum; i++)
         {
             // get portal coordinate system direction as set it as the sphere direction
             Quaternion _rotation = m_ARController.GetPortalTransform().rotation;
             Vector3 _position_start = Vector3.zero;
-            m_ARController.PortalObjectPos2World(in ControllerStates.DYM_SPHERES_POS_IN_PORTAL[i], out _position_start);
+            if (isStudyMode)
+                m_ARController.PortalObjectPos2World(in ControllerStates.DYM_SPHERES_POS_IN_PORTAL[i], out _position_start);
+            else
+                m_ARController.PortalObjectPos2World(in ControllerStates.DYM_SPHERES_POS_IN_PORTAL[i], out _position_start);
             float longest_dist = Random.Range(1.5f, 2.5f);
 
             GameObject _sphere = Instantiate(m_SpherePrefab, _position_start, _rotation);
@@ -233,11 +241,20 @@ public class UserStudyController : MonoBehaviour
         }
     }
 
-    public void InitClosestSphereGroup(int currTaskIndex)
+    public void InitClosestSphereGroup(int currTaskIndex, bool isStudyMode)
     {
-        CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUPs[currTaskIndex], m_ClosestSphereMat[0], true);
-        CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUPs[currTaskIndex + 1], m_ClosestSphereMat[1], true);
-        CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUPs[currTaskIndex + 2], m_ClosestSphereMat[2], false);
+        if (isStudyMode)
+        {
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUPs[currTaskIndex], m_ClosestSphereMat[0], true);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUPs[currTaskIndex + 1], m_ClosestSphereMat[1], true);
+            CreateClosestSphere(ControllerStates.CLOSEST_SPHERE_GROUPs[currTaskIndex + 2], m_ClosestSphereMat[2], false);
+        }
+        else
+        {
+            CreateClosestSphere(ControllerStates.TRAIN_CLOSEST_SPHERE_GROUPs[currTaskIndex], m_ClosestSphereMat[0], true);
+            CreateClosestSphere(ControllerStates.TRAIN_CLOSEST_SPHERE_GROUPs[currTaskIndex + 1], m_ClosestSphereMat[1], true);
+            CreateClosestSphere(ControllerStates.TRAIN_CLOSEST_SPHERE_GROUPs[currTaskIndex + 2], m_ClosestSphereMat[2], false);
+        }
     }
 
     public void CreateSimilarGroup(Vector3 pos_in_portal)
@@ -270,17 +287,18 @@ public class UserStudyController : MonoBehaviour
         }
     }
 
-    public void InitSimilarGroup(int currTaskIndex)
+    public void InitSimilarGroup(int currTaskIndex, bool isStudyMode)
     {
         Quaternion _rotation = m_ARController.GetPortalTransform().rotation;
 
         Vector3 _position = Vector3.zero;
         m_ARController.PortalObjectPos2World(in ControllerStates.SIMILAR_DIGIT_GROUP_POS, out _position);
 
-        m_SimilarGroup = Instantiate(m_SimilarObjectPrefabs[currTaskIndex], _position, _rotation);
+        if (isStudyMode)
+            m_SimilarGroup = Instantiate(m_SimilarObjectPrefabs[currTaskIndex], _position, _rotation);
+        else 
+            m_SimilarGroup = Instantiate(m_TrainSimilarObjectPrefabs[currTaskIndex], _position, _rotation);
     }
-
-    
 
     public void DestroyCurrentObjects()
     {
