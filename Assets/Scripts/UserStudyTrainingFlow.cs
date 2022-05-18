@@ -105,7 +105,7 @@ public class UserStudyTrainingFlow : MonoBehaviour
                 if (step == 1)
                     m_QuestionText.GetComponent<Text>().text = "Try to estimate the position of the person in the side corridor";
                 else if (step == 2)
-                    m_QuestionText.GetComponent<Text>().text = "Indicate the direction to the lowest center of the person using the crosshairs";
+                    m_QuestionText.GetComponent<Text>().text = "Indicate the direction to the lowest center of the person using the circle";
             }
 
             for (int i = 0; i < m_SimToggles.Length; i++)
@@ -155,7 +155,7 @@ public class UserStudyTrainingFlow : MonoBehaviour
             }
             if (step == 2)
             {
-                answer = m_api.GetDirectIndicateAccuracy().ToString("0.00");
+                answer = m_api.GetDirectIndicateAccuracy();
                 step = 0;
             }
         }

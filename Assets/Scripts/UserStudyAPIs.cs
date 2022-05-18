@@ -193,12 +193,17 @@ public class UserStudyAPIs : MonoBehaviour
         }
     }
 
-    public float GetDirectIndicateAccuracy()
+    public string GetDirectIndicateAccuracy()
     {
-        Vector3 correct_dir = m_UserStudyController.GetCurrHumanPos() - m_ARController.m_ARCamera.transform.position;
+        string dataset = null;
+        Vector3 correct_dir = (m_UserStudyController.GetCurrHumanPos() - m_ARController.m_ARCamera.transform.position).normalized;
         Vector3 user_dir = m_ARController.m_ARCamera.transform.forward;
-        float diff_angle = (90f - Mathf.Abs(Vector3.Angle(correct_dir, user_dir))) / 90f * 100f;
-        return diff_angle;
+        float diviation_angle = Mathf.Abs(Vector3.Angle(correct_dir, user_dir));
+        //float diff_angle = (90f - Mathf.Abs(Vector3.Angle(correct_dir, user_dir))) / 90f * 100f;
+        dataset = $"{correct_dir.ToString("0.00")}, {user_dir.ToString("0.00")}, {diviation_angle.ToString("0.00")}";
+        //Debug.Log(dataset);
+        
+        return dataset;
     }
 
     public void SetNoneDisocclusinWithCrosshair()
