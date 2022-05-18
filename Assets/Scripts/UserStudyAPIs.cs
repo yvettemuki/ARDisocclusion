@@ -200,8 +200,10 @@ public class UserStudyAPIs : MonoBehaviour
         Vector3 user_dir = m_ARController.m_ARCamera.transform.forward;
         float diviation_angle = Mathf.Abs(Vector3.Angle(correct_dir, user_dir));
         //float diff_angle = (90f - Mathf.Abs(Vector3.Angle(correct_dir, user_dir))) / 90f * 100f;
-        dataset = $"{correct_dir.ToString("0.00")}, {user_dir.ToString("0.00")}, {diviation_angle.ToString("0.00")}";
-        //Debug.Log(dataset);
+        dataset = $"{correct_dir.x.ToString("0.00")}#{correct_dir.y.ToString("0.00")}#{correct_dir.z.ToString("0.00")}," +
+            $"{user_dir.x.ToString("0.00")}#{user_dir.y.ToString("0.00")}#{user_dir.z.ToString("0.00")}," +
+            $"{diviation_angle.ToString("0.00")}";
+        Debug.Log(dataset);
         
         return dataset;
     }

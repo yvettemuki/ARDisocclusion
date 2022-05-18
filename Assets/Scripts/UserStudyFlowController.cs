@@ -218,7 +218,7 @@ public class UserStudyFlowController : MonoBehaviour
 
         //m_DebugText.GetComponent<Text>().text = string.Format("The path is {0}.", path);
 
-        string fname = System.DateTime.Now.ToString("HH-mm-ss") + ".csv";
+        string fname = System.DateTime.Now.ToString("MMddHHmm") + ".csv"; 
 
         using (StreamWriter writer = new StreamWriter(Path.Combine(path, fname)))
         {
