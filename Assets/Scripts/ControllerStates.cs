@@ -192,7 +192,7 @@ public class ControllerStates : MonoBehaviour
         new Vector3(-0.676f, 1.4f, 0.1f)
     };
 
-    public static Vector3[] CLOSEST_SPHERE_GROUPs =
+    public static Vector3[] CLOSEST_PATCH_GROUPs =
     {
         // CA (up:green, down:yellow)
         // Green
@@ -273,7 +273,7 @@ public class ControllerStates : MonoBehaviour
 
     };
 
-    public static Vector3[] TRAIN_CLOSEST_SPHERE_GROUPs =
+    public static Vector3[] TRAIN_CLOSEST_PATCH_GROUPs =
     {
         // CA (up:green, down:yellow)
         // Green

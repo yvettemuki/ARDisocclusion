@@ -133,23 +133,16 @@ public class ARController : MonoBehaviour
             return;
         }
 
-        // Start the detected
-        //TextLogger.Log("Start the AR session!");
-
-        // Start set up the camera
-        //m_ARCamera.enabled = true;
-        //m_CameraB.enabled = false;
-
-       //InitializeCameraBVideoFrames();
-
         m_CameraACullingMask = m_ARCamera.cullingMask;
 
-        InitializeCameraBVideoFrames();
+        InitializeHumanVideoFrames();
     }
 
     // Update is called once per frame/
     void Update()
     {
+        // TODO: return if the tracking is not update
+
         UpdateCameraPosition();
 
         //if (m_IsPlaybackSegment)
@@ -607,7 +600,7 @@ public class ARController : MonoBehaviour
             Debug.Log($"filed to place the human sprite, the plane is not large enough!");
     }
 
-    public void InitializeCameraBVideoFrames()
+    public void InitializeHumanVideoFrames()
     {
         for (int i = 0; i < ControllerStates.USER_STUDY_DIRECT_INDI_FONT_UVs.Length; i++)
         {
@@ -934,7 +927,6 @@ public class ARController : MonoBehaviour
             else
             {
                 m_HumanSprite.transform.position = hit.pose.position;
-                // to do: also change the orientation of human
             }
 
         }

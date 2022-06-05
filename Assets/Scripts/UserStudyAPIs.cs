@@ -42,13 +42,13 @@ public class UserStudyAPIs : MonoBehaviour
         m_ARController.InitHumanSpriteForUserStudy(currTaskIndex, isStudyMode);
     }
 
-    private void InitClosestSphereByMethodAndTask(bool isStudyMode)
+    private void InitClosestPatchByMethodAndTask(bool isStudyMode)
     {
         int currMethod = (int)ARController.currentUserStudyType;
         int currTaskMode = (int)UserStudyController.currentTaskMode;
         int currTaskIndex = 3 * (currMethod * 3 + (currTaskMode % 3));
 
-        m_UserStudyController.InitClosestSphereGroup(currTaskIndex, isStudyMode);
+        m_UserStudyController.InitClosestPatchGroup(currTaskIndex, isStudyMode);
     }
 
     private void InitSimilarDigitByMethodAndTask(bool isStudyMode)
@@ -89,7 +89,7 @@ public class UserStudyAPIs : MonoBehaviour
             || taskMode == UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_HARD
         )
         {
-            InitClosestSphereByMethodAndTask(ControllerStates.STUDY_MODE);
+            InitClosestPatchByMethodAndTask(ControllerStates.STUDY_MODE);
         }
 
         if (taskMode == UserStudyController.TaskMode.SIMILAR_GROUP_EASY
@@ -181,7 +181,7 @@ public class UserStudyAPIs : MonoBehaviour
             || taskMode == UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_HARD
         )
         {
-            InitClosestSphereByMethodAndTask(ControllerStates.TRAIN_MODE);
+            InitClosestPatchByMethodAndTask(ControllerStates.TRAIN_MODE);
         }
 
         if (taskMode == UserStudyController.TaskMode.SIMILAR_GROUP_EASY
@@ -198,11 +198,11 @@ public class UserStudyAPIs : MonoBehaviour
         string dataset = null;
         Vector3 correct_dir = (m_UserStudyController.GetCurrHumanPos() - m_ARController.m_ARCamera.transform.position).normalized;
         Vector3 user_dir = m_ARController.m_ARCamera.transform.forward;
-        float diviation_angle = Mathf.Abs(Vector3.Angle(correct_dir, user_dir));
+        float deviation_angle = Mathf.Abs(Vector3.Angle(correct_dir, user_dir));
         //float diff_angle = (90f - Mathf.Abs(Vector3.Angle(correct_dir, user_dir))) / 90f * 100f;
         dataset = $"{correct_dir.x.ToString("0.00")}#{correct_dir.y.ToString("0.00")}#{correct_dir.z.ToString("0.00")}," +
             $"{user_dir.x.ToString("0.00")}#{user_dir.y.ToString("0.00")}#{user_dir.z.ToString("0.00")}," +
-            $"{diviation_angle.ToString("0.00")}";
+            $"{deviation_angle.ToString("0.00")}";
         Debug.Log(dataset);
         
         return dataset;
