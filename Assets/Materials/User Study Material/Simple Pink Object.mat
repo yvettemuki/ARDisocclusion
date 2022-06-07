@@ -76,5 +76,7 @@ Material:
     m_Colors:
     - _Color: {r: 0.33134568, g: 0.51016533, b: 0.9622642, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EstimateLightColor: {r: 0.5566038, g: 0.5566038, b: 0.5566038, a: 1}
+    - _EstimateLightDir: {r: -2, g: 4, b: -2, a: 0}
     - _LightPoint: {r: -2, g: 4, b: -2, a: 0}
   m_BuildTextureStacks: []

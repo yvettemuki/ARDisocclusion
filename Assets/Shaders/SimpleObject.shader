@@ -3,9 +3,11 @@ Shader "Unlit/SimpleObject"
     Properties
     {
         _Color("Color", Color) = (0.909, 0.478, 0.564, 1.0)
+        _EstimateLightColor("Main Light Color", Color) = (1.0, 1.0, 1.0, 1.0)
         _MainTex("Texture", 2D) = "white" {}
         _CompFunc("StencilCompFunc", int) = 0  // 0:Always, 3:Equal
         _LightPoint("Light Point Position", Vector) = (-2, 4, -2, 0)
+        _EstimateLightDir("Main Light Direction", Vector) = (0, 0, 0, 0)
     }
         SubShader
     {
@@ -44,7 +46,9 @@ Shader "Unlit/SimpleObject"
             sampler2D _MainTex;
             float4 _MainTex_ST;
             fixed4 _Color;
+            fixed4 _EstimateLightColor;
             float4 _LightPoint;
+            float4 _EstimateLightDir;
 
             v2f vert(appdata v)
             {
@@ -63,8 +67,9 @@ Shader "Unlit/SimpleObject"
                 // calcuate ambient lighting
                 fixed4 ambient = _Color.rgba * tex * fixed4(0.6, 0.6, 0.6, 1.0);
                 // calculate diffuse lighting
-                fixed3 lightDirection = normalize(_LightPoint.xyz - i.worldPosition);
-                fixed diffuse = max(dot(lightDirection, normalize(i.worldNormal)), 0.0) * fixed4(0.5, 0.5, 0.5, 1.0) * _Color.rgba * tex;
+                //fixed3 lightDirection = normalize(_LightPoint.xyz - i.worldPosition);
+                fixed3 lightDirection = normalize(_EstimateLightDir.xyz);
+                fixed diffuse = max(dot(lightDirection, normalize(i.worldNormal)), 0.0) * _EstimateLightColor * _Color.rgba * tex; //fixed4(0.5, 0.5, 0.5, 1.0)
                 fixed4 col = ambient + diffuse;
                 return col;
             }

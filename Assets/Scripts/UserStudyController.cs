@@ -444,6 +444,15 @@ public class UserStudyController : MonoBehaviour
             {
                 obj.sphere.GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
                 obj.sphere.GetComponent<MeshRenderer>().material.SetColor("_Color", ControllerStates.DYN_SPHERE_COLOR[(int)currentTaskMode]);
+                obj.sphere.GetComponent<MeshRenderer>().material.SetVector(
+                    "_EstimateLightDir",
+                    new Vector4(
+                        HDRLightEstimation.mainLightDirection.Value.x,
+                        HDRLightEstimation.mainLightDirection.Value.y,
+                        HDRLightEstimation.mainLightDirection.Value.z, 
+                        0
+                        )
+                );
             }
 
             currentMatType = MAT_STANDARD;
@@ -455,10 +464,20 @@ public class UserStudyController : MonoBehaviour
             {
                 obj.sphere.GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
                 obj.sphere.GetComponent<MeshRenderer>().material.SetColor("_Color", ControllerStates.DYN_SPHERE_COLOR[(int)currentTaskMode]);
+                obj.sphere.GetComponent<MeshRenderer>().material.SetVector(
+                    "_EstimateLightDir",
+                    new Vector4(
+                        HDRLightEstimation.mainLightDirection.Value.x,
+                        HDRLightEstimation.mainLightDirection.Value.y,
+                        HDRLightEstimation.mainLightDirection.Value.z,
+                        0
+                        )
+                );
             }
 
             currentMatType = MAT_STENCIL;
         }
+
     }
 
     public void ChangeClosestSphereMaterial(int type)

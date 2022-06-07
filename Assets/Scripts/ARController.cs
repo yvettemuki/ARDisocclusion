@@ -619,7 +619,7 @@ public class ARController : MonoBehaviour
 
             if (m_TrainFrames[i] != null && uv != Vector2.zero)
             {
-                CameraBFrame frame = new CameraBFrame(m_UserStudyFrames[i], uv);
+                CameraBFrame frame = new CameraBFrame(m_TrainFrames[i], uv);
                 m_TrainCamBFrames.Add(frame);
             }
         }
