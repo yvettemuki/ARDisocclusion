@@ -458,7 +458,7 @@ public class ControllerStates : MonoBehaviour
         "Count the floating spheres",
         "Between which two stickers is the person standing?",
         "Which sticker is closest to the pink sticker?",
-        "Which number appears twice?"
+        "Which number appears in two different squares?"
     };
 
     public static bool TRAIN_MODE = false;

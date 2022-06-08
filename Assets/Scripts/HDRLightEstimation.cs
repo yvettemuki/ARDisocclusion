@@ -36,20 +36,15 @@ public class HDRLightEstimation : MonoBehaviour
         }
     }
 
-    public static Vector3? mainLightDirection { get; private set; }
+    public static Vector3? mainLightDirection = Vector3.zero;
 
-    public static Color? mainLightColor { get; private set; }
+    public static Color? mainLightColor = Color.white;
 
     void OnEnable()
     {
         if (m_CameraManager != null)
             m_CameraManager.frameReceived += FrameChanged;
 
-        //// Disable the arrow to start; enable it later if we get directional light info
-        //if (arrow)
-        //{
-        //    arrow.gameObject.SetActive(false);
-        //}
         Application.onBeforeRender += OnBeforeRender;
     }
 
@@ -75,28 +70,23 @@ public class HDRLightEstimation : MonoBehaviour
         if (args.lightEstimation.mainLightDirection.HasValue)
         {
             mainLightDirection = args.lightEstimation.mainLightDirection;
-            //m_DymSphereMat.SetVector("_EstimateLightDir", new Vector4(mainLightDirection.Value.x, mainLightDirection.Value.y, mainLightDirection.Value.z, 0));
-            //if (arrow)
-            //{
-            //    arrow.gameObject.SetActive(true);
-            //    arrow.rotation = Quaternion.LookRotation(mainLightDirection.Value);
-            //}
+            m_DymSphereMat.SetVector("_EstimateLightDir", new Vector4(mainLightDirection.Value.x, mainLightDirection.Value.y, mainLightDirection.Value.z, 0));
         }
-        //else if (arrow)
-        //{
-        //    arrow.gameObject.SetActive(false);
-        //    mainLightDirection = null;
-        //}
+        else
+        {
+            mainLightDirection = null;
+            m_DymSphereMat.SetVector("_EstimateLightDir", new Vector4(0, 0, 0, 0));
+        }
 
         if (args.lightEstimation.mainLightColor.HasValue)
         {
             mainLightColor = args.lightEstimation.mainLightColor;
             m_DymSphereMat.SetColor("_EstimateLightColor", mainLightColor.Value);
-            //Debug.Log($"-------------: {mainLightColor.Value.ToString()}");
         }
         else
         {
             mainLightColor = null;
+            m_DymSphereMat.SetColor("_EstimateLightColor", new Color(0.1f, 0.1f, 0.1f, 1));
         }
     }
 }

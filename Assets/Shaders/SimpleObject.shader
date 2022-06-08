@@ -65,11 +65,11 @@ Shader "Unlit/SimpleObject"
                 // sample the texture
                 fixed4 tex = tex2D(_MainTex, i.uv);
                 // calcuate ambient lighting
-                fixed4 ambient = _Color.rgba * tex * fixed4(0.6, 0.6, 0.6, 1.0);
+                fixed4 ambient = _Color.rgba * tex * _EstimateLightColor * fixed4(0.5, 0.5, 0.5, 1.0);  
                 // calculate diffuse lighting
                 //fixed3 lightDirection = normalize(_LightPoint.xyz - i.worldPosition);
-                fixed3 lightDirection = normalize(_EstimateLightDir.xyz);
-                fixed diffuse = max(dot(lightDirection, normalize(i.worldNormal)), 0.0) * _EstimateLightColor * _Color.rgba * tex; //fixed4(0.5, 0.5, 0.5, 1.0)
+                fixed3 lightDirection = normalize(-_EstimateLightDir.xyz);
+                fixed4 diffuse = max(dot(lightDirection, normalize(i.worldNormal)), 0.0) * _EstimateLightColor * fixed4(0.5, 0.5, 0.5, 1.0) *  _Color.rgba * tex; 
                 fixed4 col = ambient + diffuse;
                 return col;
             }
