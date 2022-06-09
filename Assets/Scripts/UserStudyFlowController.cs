@@ -58,7 +58,7 @@ public class UserStudyFlowController : MonoBehaviour
                 m_Toggles[i].gameObject.SetActive(true);
                 if (currentTask == ControllerStates.FIND_CLOSEST)
                 {
-                    m_Toggles[i].gameObject.SetActive(i == 1 || i == 3);
+                    m_Toggles[i].gameObject.SetActive(i == 0 || i == 2 || i == 4);
                 }
 
                 if (InDirectIndicateTask() || currentTask == ControllerStates.MATCH_NUM)

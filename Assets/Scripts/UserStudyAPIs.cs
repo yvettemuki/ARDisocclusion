@@ -84,9 +84,9 @@ public class UserStudyAPIs : MonoBehaviour
             InitHumanByMethodAndTask(ControllerStates.STUDY_MODE);
         }
 
-        if (taskMode == UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_EASY
-            || taskMode == UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_MEDIUM
-            || taskMode == UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_HARD
+        if (taskMode == UserStudyController.TaskMode.ClOSEST_PATCH_GROUP_EASY
+            || taskMode == UserStudyController.TaskMode.ClOSEST_PATCH_GROUP_MEDIUM
+            || taskMode == UserStudyController.TaskMode.ClOSEST_PATCH_GROUP_HARD
         )
         {
             InitClosestPatchByMethodAndTask(ControllerStates.STUDY_MODE);
@@ -176,9 +176,9 @@ public class UserStudyAPIs : MonoBehaviour
             InitHumanByMethodAndTask(ControllerStates.TRAIN_MODE);
         }
 
-        if (taskMode == UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_EASY
-            || taskMode == UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_MEDIUM
-            || taskMode == UserStudyController.TaskMode.ClOSEST_SPHERE_GROUP_HARD
+        if (taskMode == UserStudyController.TaskMode.ClOSEST_PATCH_GROUP_EASY
+            || taskMode == UserStudyController.TaskMode.ClOSEST_PATCH_GROUP_MEDIUM
+            || taskMode == UserStudyController.TaskMode.ClOSEST_PATCH_GROUP_HARD
         )
         {
             InitClosestPatchByMethodAndTask(ControllerStates.TRAIN_MODE);
@@ -224,7 +224,7 @@ public class UserStudyAPIs : MonoBehaviour
         dataset = $"{user_position_in_portal.x.ToString("0.000")}#{user_position_in_portal.y.ToString("0.000")}#{user_position_in_portal.z.ToString("0.000")}," +
             $"{user_direction_in_portal.x.ToString("0.000")}#{user_direction_in_portal.y.ToString("0.000")}#{user_direction_in_portal.z.ToString("0.000")}," +
             $"{human_sprite_depth_in_portal.ToString("0.000")}";
-        Debug.Log(dataset);
+        //Debug.Log(dataset);
         
         return dataset;
     }

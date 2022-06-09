@@ -208,7 +208,7 @@ public class ControllerStates : MonoBehaviour
         // Green
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.495f, 0.655f),
+        new Vector3(0.676f, 1.495f, 0.655f),
 
         // MP
         // Yellow
@@ -224,7 +224,7 @@ public class ControllerStates : MonoBehaviour
         // Green
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.495f, 0.655f),
+        new Vector3(0.676f, 1.495f, 0.655f),
 
         // PP
         // Yellow
@@ -240,7 +240,7 @@ public class ControllerStates : MonoBehaviour
         // Green
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.524f, 0.655f),
+        new Vector3(0.676f, 1.324f, 0.655f),
 
         // XR
         // Green
@@ -251,7 +251,7 @@ public class ControllerStates : MonoBehaviour
         // Green
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.631f, 0.655f),
+        new Vector3(0.676f, 1.431f, 0.655f),
 
         // Yellow
         new Vector3(-0.96f, 1.764f, -0.03f),
@@ -284,7 +284,7 @@ public class ControllerStates : MonoBehaviour
         // Green
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.642f, 0.655f),
+        new Vector3(0.676f, 1.642f, 0.655f),
 
         // Yellow
         new Vector3(-0.96f, 1.764f, -0.03f),
@@ -295,7 +295,7 @@ public class ControllerStates : MonoBehaviour
         // Green
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.886f, 0.655f),
+        new Vector3(0.676f, 1.886f, 0.655f),
 
         // Yellow
         new Vector3(-0.96f, 1.764f, -0.03f),
@@ -316,7 +316,7 @@ public class ControllerStates : MonoBehaviour
         // Yellow
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.074f, 0.655f),
+        new Vector3(0.676f, 1.074f, 0.655f),
 
         // Yellow
         new Vector3(-0.96f, 1.764f, -0.03f),
@@ -327,7 +327,7 @@ public class ControllerStates : MonoBehaviour
         // Green
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.495f, 0.655f),
+        new Vector3(0.676f, 1.495f, 0.655f),
 
         // Green
         new Vector3(-0.96f, 1.764f, -0.03f),
@@ -347,7 +347,7 @@ public class ControllerStates : MonoBehaviour
 
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.589f, 0.655f),
+        new Vector3(0.676f, 1.589f, 0.655f),
 
         new Vector3(-0.96f, 1.764f, -0.03f),
         new Vector3(-0.96f, 1.011f, -0.03f),
@@ -468,7 +468,7 @@ public class ControllerStates : MonoBehaviour
     {
         {{"3", "4", "5", "6", "7"}, {"3", "4", "5", "6", "7" }, {"7", "8", "9", "10", "11" } },
         {{"1-2", "2-3", "3-4", "4-5", "5-6" }, {"1-2", "2-3", "3-4", "4-5", "5-6" }, {"1-2", "2-3", "3-4", "4-5", "5-6" } },
-        {{"ph", "Green", "ph", "Yellow", "ph" }, {"ph", "Green", "ph", "Yellow", "ph" }, {"ph", "Green", "ph", "Yellow", "ph" } },
+        {{"Green", "ph", "Yellow", "ph", "None" }, {"Green", "ph", "Yellow", "ph", "None" }, {"Green", "ph", "Yellow", "ph", "None" } },
         {{"Yellow", "Blue", "Green", "Pink", "Black" }, {"Yellow", "Blue", "Green", "Pink", "Black"}, {"Yellow", "Blue", "Green", "Pink", "Black"} } 
     };
 

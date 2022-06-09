@@ -69,9 +69,9 @@ public class UserStudyController : MonoBehaviour
         DIRECT_INDICATOR_EASY, 
         DIRECT_INDICATOR_MEDIUM,
         DIRECT_INDICATOR_HARD,
-        ClOSEST_SPHERE_GROUP_EASY,
-        ClOSEST_SPHERE_GROUP_MEDIUM,
-        ClOSEST_SPHERE_GROUP_HARD,
+        ClOSEST_PATCH_GROUP_EASY,
+        ClOSEST_PATCH_GROUP_MEDIUM,
+        ClOSEST_PATCH_GROUP_HARD,
         SIMILAR_GROUP_EASY,
         SIMILAR_GROUP_MEDIUM,
         SIMILAR_GROUP_HARD,
@@ -107,11 +107,11 @@ public class UserStudyController : MonoBehaviour
         //    UpdateDirectIndicator();
         //}
 
-        if (currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_EASY
-            || currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_MEDIUM
-            || currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_HARD)
+        if (currentTaskMode == TaskMode.ClOSEST_PATCH_GROUP_EASY
+            || currentTaskMode == TaskMode.ClOSEST_PATCH_GROUP_MEDIUM
+            || currentTaskMode == TaskMode.ClOSEST_PATCH_GROUP_HARD)
         {
-            UpdateClosestSphere();
+            UpdateClosestPatch();
         }
 
         if (currentTaskMode == TaskMode.SIMILAR_GROUP_EASY
@@ -208,26 +208,30 @@ public class UserStudyController : MonoBehaviour
         {
             // set x axis in portal system to 0.01
             patch.transform.localScale = new Vector3(0.02f, 0.2f, 0.2f);
+            if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_CUTAWAY && pos_in_portal.x < 0f)
+            {
+                patch.SetActive(false);
+            }
         }
 
         m_ClosestPatches.Add(patch);
     }
 
-    public void InitClosestSphereGroup(TaskMode taskMode)
+    public void InitClosestPatchGroup(TaskMode taskMode)
     {
-        if (taskMode == TaskMode.ClOSEST_SPHERE_GROUP_EASY)
+        if (taskMode == TaskMode.ClOSEST_PATCH_GROUP_EASY)
         {
             CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_1[0], m_ClosestSphereMat[0], true);
             CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_1[1], m_ClosestSphereMat[1], true);
             CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_1[2], m_ClosestSphereMat[2], false);
         }
-        else if (taskMode == TaskMode.ClOSEST_SPHERE_GROUP_MEDIUM)
+        else if (taskMode == TaskMode.ClOSEST_PATCH_GROUP_MEDIUM)
         {
             CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_2[0], m_ClosestSphereMat[0], true);
             CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_2[1], m_ClosestSphereMat[1], true);
             CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_2[2], m_ClosestSphereMat[2], false);
         }
-        else if (taskMode == TaskMode.ClOSEST_SPHERE_GROUP_HARD)
+        else if (taskMode == TaskMode.ClOSEST_PATCH_GROUP_HARD)
         {
             CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_3[0], m_ClosestSphereMat[0], true);
             CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_3[1], m_ClosestSphereMat[1], true);
@@ -377,16 +381,16 @@ public class UserStudyController : MonoBehaviour
         }
     }
 
-    public void UpdateClosestSphere()
+    public void UpdateClosestPatch()
     {
         if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_PICINPIC
             || ARController.currentUserStudyType == ARController.UserStudyType.TYPE_REFLECTION)
         {
-            ChangeClosestSphereMaterial(MAT_STENCIL);
+            ChangeClosestPatchMaterial(MAT_STENCIL);
         }
         else
         {
-            ChangeClosestSphereMaterial(MAT_STANDARD);
+            ChangeClosestPatchMaterial(MAT_STANDARD);
         }
     }
 
@@ -480,7 +484,7 @@ public class UserStudyController : MonoBehaviour
 
     }
 
-    public void ChangeClosestSphereMaterial(int type)
+    public void ChangeClosestPatchMaterial(int type)
     {
         if (type == MAT_STANDARD)
         {
@@ -576,16 +580,24 @@ public class UserStudyController : MonoBehaviour
             //    m_DirectDigitIndicator.SetActive(isActive);
         }
 
-        if (currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_EASY
-            || currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_MEDIUM
-            || currentTaskMode == TaskMode.ClOSEST_SPHERE_GROUP_HARD)
+        if (currentTaskMode == TaskMode.ClOSEST_PATCH_GROUP_EASY
+            || currentTaskMode == TaskMode.ClOSEST_PATCH_GROUP_MEDIUM
+            || currentTaskMode == TaskMode.ClOSEST_PATCH_GROUP_HARD)
         {
             // closest sphere
             if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_MULTIPERSPECTIVE)
                 m_ClosestPatches[2].SetActive(isActive);
+            else if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_CUTAWAY)
+            {
+                m_ClosestPatches[0].SetActive(isActive);
+                m_ClosestPatches[1].SetActive(isActive);
+                if (!m_ClosestPatches[2].activeSelf)
+                    m_ClosestPatches[2].SetActive(false);
+                else
+                    m_ClosestPatches[2].SetActive(isActive);
+            }
             else
             {
-                // if the spheres have many, can replace to foreach
                 m_ClosestPatches[0].SetActive(isActive);
                 m_ClosestPatches[1].SetActive(isActive);
                 m_ClosestPatches[2].SetActive(isActive);
@@ -683,18 +695,18 @@ public class UserStudyController : MonoBehaviour
                 break;
 
             case "Closest 1":
-                InitClosestSphereGroup(TaskMode.ClOSEST_SPHERE_GROUP_EASY);
-                currentTaskMode = TaskMode.ClOSEST_SPHERE_GROUP_EASY;
+                InitClosestPatchGroup(TaskMode.ClOSEST_PATCH_GROUP_EASY);
+                currentTaskMode = TaskMode.ClOSEST_PATCH_GROUP_EASY;
                 break;
 
             case "Closest 2":
-                InitClosestSphereGroup(TaskMode.ClOSEST_SPHERE_GROUP_MEDIUM);
-                currentTaskMode = TaskMode.ClOSEST_SPHERE_GROUP_MEDIUM;
+                InitClosestPatchGroup(TaskMode.ClOSEST_PATCH_GROUP_MEDIUM);
+                currentTaskMode = TaskMode.ClOSEST_PATCH_GROUP_MEDIUM;
                 break;
 
             case "Closest 3":
-                InitClosestSphereGroup(TaskMode.ClOSEST_SPHERE_GROUP_HARD);
-                currentTaskMode = TaskMode.ClOSEST_SPHERE_GROUP_HARD;
+                InitClosestPatchGroup(TaskMode.ClOSEST_PATCH_GROUP_HARD);
+                currentTaskMode = TaskMode.ClOSEST_PATCH_GROUP_HARD;
                 break;
 
             case "Similar 1":
