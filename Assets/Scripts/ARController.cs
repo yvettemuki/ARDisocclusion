@@ -853,7 +853,7 @@ public class ARController : MonoBehaviour
             m_ProjectorMULTI = Instantiate(m_ProjectorPrefabMULTI, camera_b_pos, Quaternion.LookRotation(forward, up));
             m_ProjectorMULTI.gameObject.SetActive(false);
 
-            // create projector for left main corridor (set the projector as the child of ARCamera (cam A))
+            // create projector for left main corridor
             m_ProjectorLeftMAINCORD = Instantiate(m_ProjectorPrefabLeftMAINCORD);
             m_ProjectorLeftMAINCORD.transform.parent = m_AnchorController.m_PortalAnchor.transform;
             m_ProjectorLeftMAINCORD.transform.localPosition = ControllerStates.PROJECTOR_MAIN_LEFT_CORD_POS_IN_PORTAL;

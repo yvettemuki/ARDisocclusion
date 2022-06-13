@@ -18,7 +18,9 @@ public class AnchorController : MonoBehaviour
     const TrackableType trackableTypes = TrackableType.PlaneWithinPolygon; //TrackableType.FeaturePoint | 
     static List<ARRaycastHit> portalRayCastHits = new List<ARRaycastHit>(); // pivots for portal
     static List<ARRaycastHit> corridorRayCastHits = new List<ARRaycastHit>(); // pivots for corridor
-    
+
+    public Text m_TextPlaneInfo;
+
     [SerializeField]
     GameObject m_PrefabCorrider;
     public GameObject prefabCorrider
@@ -113,6 +115,13 @@ public class AnchorController : MonoBehaviour
         else if (ARController.currentObjectType == ARController.ControlObjectType.OBJ_NONE)
             return;
 
+        //if (m_IsPortalExist)
+        //    Debug.Log($"Portal Pose {m_PortalAnchor.gameObject.transform.position.ToString()}");
+        //if (m_IsCorridorExist)
+        //    Debug.Log($"Corridor Pose {m_CorridorAnchor.gameObject.transform.position.ToString()}");
+
+        //if (m_IsPortalExist)
+        //    m_TextPlaneInfo.text = $"Plane Info: {portalRayCastHits[0].trackableId == portalRayCastHits[1].trackableId}";
     }
 
     public Pose CalculatePlacementPose(List<ARRaycastHit> pivotHits)
@@ -133,7 +142,6 @@ public class AnchorController : MonoBehaviour
             up = pivotHits[0].pose.up;
             forward = Vector3.Cross(right, up);  // !!make sure the correct direction
             // calculate the rotation
-            Vector3 portalRightDir = pivotHits[1].pose.position - pivotHits[0].pose.position;
             rotation = Quaternion.LookRotation(forward, up); // make sure the right later
 
             pose.position = position;
@@ -316,7 +324,7 @@ public class AnchorController : MonoBehaviour
 
 
     // Create and attach the geometry prefab (corridor) to the portal anchor
-    private void AttachGeoToPortal(GameObject geoPrefab, Pose pose)
+    private void AttachGeoToPortal(GameObject geoPrefab, in Pose pose)
     {
         if (!m_IsPortalExist)
             return;
@@ -324,20 +332,18 @@ public class AnchorController : MonoBehaviour
         if (geoPrefab == null || pose == null)
             return;
 
-        ARTrackable plane = m_PlaneController.GetTargetPlane();
-        if (plane != null)
+        //ARTrackable plane = m_PlaneController.GetTargetPlane();
+        
+        var anchor = CreateAnchor(pose, portalRayCastHits[0].trackable, geoPrefab);
+
+        if (anchor)
         {
-            var anchor = CreateAnchor(pose, plane, geoPrefab);
+            // TODO: current we only have one geometry model (corridor)
+            m_CorridorAnchor = anchor;
+            m_Anchors.Add(anchor);
+            m_IsCorridorExist = true;
 
-            if (anchor)
-            {
-                // TODO: current we only have one geometry model (corridor)
-                m_CorridorAnchor = anchor;
-                m_Anchors.Add(anchor);
-                m_IsCorridorExist = true;
-
-                m_CorridorAnchor.gameObject.SetActive(false);
-            }
+            m_CorridorAnchor.gameObject.SetActive(false);
         }
 
     }
