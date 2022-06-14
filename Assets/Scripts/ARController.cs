@@ -257,20 +257,20 @@ public class ARController : MonoBehaviour
             case "None":
                 currentUserStudyType = UserStudyType.TYPE_NONE;
                 CleanUpScene();
-                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                m_AnchorController.m_Corridor.SetActive(false);
                 break;
 
             case "Cut-Away":
                 currentUserStudyType = UserStudyType.TYPE_CUTAWAY;
                 CleanUpScene();
                 m_UserStudyController.SetUserStudyObjectsActive(true);
-                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
+                m_AnchorController.m_Corridor.SetActive(true);
                 break;
 
             case "Multipersp":
                 currentUserStudyType = UserStudyType.TYPE_MULTIPERSPECTIVE;
                 CleanUpScene();
-                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                m_AnchorController.m_Corridor.SetActive(false);
                 m_CameraB.GetComponent<Camera>().nearClipPlane = portal_depth;
                 m_ProjectorMULTI.gameObject.SetActive(true);
                 break;
@@ -278,7 +278,7 @@ public class ARController : MonoBehaviour
             case "PicInPic":
                 currentUserStudyType = UserStudyType.TYPE_PICINPIC;
                 CleanUpScene();
-                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                m_AnchorController.m_Corridor.SetActive(false);
                 m_UserStudyController.SetUserStudyObjectsActive(true);
                 m_RawImagePicInPicInUserCanvas.gameObject.SetActive(true);
                 CreateStencilMaskArea();
@@ -287,7 +287,7 @@ public class ARController : MonoBehaviour
             case "X-Ray":
                 currentUserStudyType = UserStudyType.TYPE_XRAY;
                 CleanUpScene();
-                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
+                m_AnchorController.m_Corridor.SetActive(true);
                 // dynamic sphere view
                 m_UserStudyController.SetUserStudyObjectsActive(true);
                 m_ProjectorLeftMAINCORD.gameObject.SetActive(true);
@@ -298,7 +298,7 @@ public class ARController : MonoBehaviour
             case "Reflection":
                 currentUserStudyType = UserStudyType.TYPE_REFLECTION;
                 CleanUpScene();
-                m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                m_AnchorController.m_Corridor.SetActive(false);
                 m_UserStudyController.SetUserStudyObjectsActive(true);
                 //m_ProjectorLeftMAINCORD.gameObject.SetActive(true);
                 //m_ProjectorController.SetMainCorridorProjectorMaterial(1, 0);
@@ -330,50 +330,50 @@ public class ARController : MonoBehaviour
                 if (camera_a_pos_in_portal.x < portal_x_lower_bound)
                 {
                     m_TextCameraPos.text += $"left side {portal_x_lower_bound}:\n{camera_a_pos_in_portal.ToString()}\n";
-                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(true);
-                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(true);
-                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(false);
+                    m_AnchorController.m_Corridor.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(true);
+                    m_AnchorController.m_Corridor.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(true);
+                    m_AnchorController.m_Corridor.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(false);
                     if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
                     {
-                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(false);
-                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(true);
-                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
+                        m_AnchorController.m_Corridor.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(false);
+                        m_AnchorController.m_Corridor.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(true);
+                        m_AnchorController.m_Corridor.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
                     }
                     else 
                     {
-                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(true);
-                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
-                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
+                        m_AnchorController.m_Corridor.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(true);
+                        m_AnchorController.m_Corridor.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
+                        m_AnchorController.m_Corridor.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
                     }
 
-                    m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
+                    m_AnchorController.m_Corridor.SetActive(true);
 
                 }
                 else if (camera_a_pos_in_portal.x > portal_x_upper_bound)
                 {
                     m_TextCameraPos.text += $"right side {portal_x_upper_bound}:\n{camera_a_pos_in_portal.ToString()}\n ";
-                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(true);
-                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(true);
-                    m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(false);
+                    m_AnchorController.m_Corridor.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(true);
+                    m_AnchorController.m_Corridor.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(true);
+                    m_AnchorController.m_Corridor.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(false);
                     if (currentUserStudyType == UserStudyType.TYPE_CUTAWAY)
                     {
-                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(false);
-                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(true);
-                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
+                        m_AnchorController.m_Corridor.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(false);
+                        m_AnchorController.m_Corridor.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(true);
+                        m_AnchorController.m_Corridor.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
                     }
                     else 
                     {
-                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(true);
-                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
-                        m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
+                        m_AnchorController.m_Corridor.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(true);
+                        m_AnchorController.m_Corridor.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
+                        m_AnchorController.m_Corridor.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
                     }
-                    m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
+                    m_AnchorController.m_Corridor.SetActive(true);
 
                 }
                 else
                 {
                     m_TextCameraPos.text += $"center:\n{camera_a_pos_in_portal.ToString()}\n ";
-                    m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                    m_AnchorController.m_Corridor.SetActive(false);
                 }
             }
             
@@ -385,13 +385,13 @@ public class ARController : MonoBehaviour
     public void SetSideCorridorViewActive(in bool isActive)
     {
         // side corridor self view
-        if (m_AnchorController.m_CorridorAnchor)
+        if (m_AnchorController.m_Corridor)
         {
-            m_AnchorController.m_CorridorAnchor.gameObject.SetActive(isActive);
-            m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(isActive);
-            m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(isActive);
-            m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
-            m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
+            m_AnchorController.m_Corridor.SetActive(isActive);
+            m_AnchorController.m_Corridor.transform.GetChild(0).Find("Geo Wall Right Side").gameObject.SetActive(isActive);
+            m_AnchorController.m_Corridor.transform.GetChild(0).Find("Geo Wall Left Side").gameObject.SetActive(isActive);
+            m_AnchorController.m_Corridor.transform.GetChild(0).Find("Auxiliary Plane Right").gameObject.SetActive(false);
+            m_AnchorController.m_Corridor.transform.GetChild(0).Find("Auxiliary Plane Left").gameObject.SetActive(false);
 
             // mirror effect
             if (currentUserStudyType == UserStudyType.TYPE_REFLECTION)
@@ -403,8 +403,8 @@ public class ARController : MonoBehaviour
             }
             else
             {
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(false);
-                m_AnchorController.m_CorridorAnchor.gameObject.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(false);
+                m_AnchorController.m_Corridor.transform.GetChild(0).Find("Geo Wall Left Front").gameObject.SetActive(false);
+                m_AnchorController.m_Corridor.transform.GetChild(0).Find("Geo Wall Right Front").gameObject.SetActive(false);
             }
         }
 

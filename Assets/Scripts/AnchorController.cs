@@ -51,6 +51,7 @@ public class AnchorController : MonoBehaviour
 
     public ARAnchor m_PortalAnchor;
     public ARAnchor m_CorridorAnchor;
+    public GameObject m_Corridor;
 
     void Awake()
     {
@@ -115,13 +116,8 @@ public class AnchorController : MonoBehaviour
         else if (ARController.currentObjectType == ARController.ControlObjectType.OBJ_NONE)
             return;
 
-        //if (m_IsPortalExist)
-        //    Debug.Log($"Portal Pose {m_PortalAnchor.gameObject.transform.position.ToString()}");
-        //if (m_IsCorridorExist)
-        //    Debug.Log($"Corridor Pose {m_CorridorAnchor.gameObject.transform.position.ToString()}");
-
-        //if (m_IsPortalExist)
-        //    m_TextPlaneInfo.text = $"Plane Info: {portalRayCastHits[0].trackableId == portalRayCastHits[1].trackableId}";
+        if (m_IsPortalExist && m_IsCorridorExist)
+            m_TextPlaneInfo.text = $"Plane Info: {m_PortalAnchor.trackableId}";
     }
 
     public Pose CalculatePlacementPose(List<ARRaycastHit> pivotHits)
@@ -205,6 +201,12 @@ public class AnchorController : MonoBehaviour
 
         m_PortalAnchor = null;
         m_CorridorAnchor = null;
+
+        if (!m_Corridor)
+        {
+            Destroy(m_Corridor);
+            m_Corridor = null;
+        }
 
         m_Anchors.Clear();
         portalRayCastHits.Clear();
@@ -301,7 +303,10 @@ public class AnchorController : MonoBehaviour
                     Debug.Log($"the portal posi: {m_PortalAnchor.gameObject.transform.position.ToString()} ");
 
                     // attach the corridor geometry to the portal
-                    AttachGeoToPortal(prefabCorrider, pose);
+                    //AttachGeoToPortal(prefabCorrider, pose);
+
+                    // add the corridor geometry to the portal anchor
+                    AddObjectToAnchor(prefabCorrider, in anchor);
                 }
                 else if (ARController.currentObjectType == ARController.ControlObjectType.OBJ_CORRIDOR)
                 {
@@ -344,6 +349,38 @@ public class AnchorController : MonoBehaviour
             m_IsCorridorExist = true;
 
             m_CorridorAnchor.gameObject.SetActive(false);
+        }
+
+    }
+
+    // Add gameObject to the exsisting anchor
+    private void AddObjectToAnchor(GameObject prefab, in ARAnchor anchor)
+    {
+        if (!m_IsPortalExist)
+            return;
+
+        if (anchor == null || prefab == null)
+            return;
+
+        Vector3 _position = anchor.transform.position;
+        Quaternion _rotation = anchor.transform.rotation;
+        m_Corridor =  Instantiate(prefab, _position, _rotation, m_PortalAnchor.gameObject.transform);
+
+        //if (m_Corridor.GetComponent<ARAnchor>() == null)
+        //{
+        //    ARAnchor new_anchor = m_Corridor.AddComponent<ARAnchor>();
+        //    new_anchor = anchor;
+        //}
+        //else
+        //{
+        //    ARAnchor other_anchor = m_Corridor.GetComponent<ARAnchor>();
+        //    other_anchor = anchor;
+        //}
+
+        if (m_Corridor)
+        {
+            m_IsCorridorExist = true;
+            m_Corridor.gameObject.SetActive(false);
         }
 
     }

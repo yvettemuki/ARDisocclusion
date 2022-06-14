@@ -109,30 +109,30 @@ public class UserStudyAPIs : MonoBehaviour
         switch (methodMode)
         {
             case ARController.UserStudyType.TYPE_NONE:
-                m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                m_ARController.m_AnchorController.m_Corridor.SetActive(false);
                 break;
 
             case ARController.UserStudyType.TYPE_CUTAWAY:
-                m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
+                m_ARController.m_AnchorController.m_Corridor.SetActive(true);
                 m_UserStudyController.SetUserStudyObjectsActive(true);
                 break;
 
             case ARController.UserStudyType.TYPE_MULTIPERSPECTIVE:
-                m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                m_ARController.m_AnchorController.m_Corridor.SetActive(false);
                 m_ARController.SetCameraBNearClipToPortalDepth();
                 m_ARController.SetProjectorMULTIActive(true);
                 break;
 
             case ARController.UserStudyType.TYPE_PICINPIC:
                 m_ARController.SetCameraBNearClipToDefaultDepth();
-                m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                m_ARController.m_AnchorController.m_Corridor.SetActive(false);
                 m_ARController.m_RawImagePicInPicInUserCanvas.gameObject.SetActive(true);
                 m_ARController.m_RawImagePicInPicInTrainCanvas.gameObject.SetActive(true);
                 m_ARController.CreateStencilMaskArea();
                 break;
 
             case ARController.UserStudyType.TYPE_XRAY:
-                m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(true);
+                m_ARController.m_AnchorController.m_Corridor.SetActive(true);
                 // dynamic sphere view
                 m_UserStudyController.SetUserStudyObjectsActive(true);
                 m_ARController.SetProjectorMAINCORDActive(true);
@@ -141,7 +141,7 @@ public class UserStudyAPIs : MonoBehaviour
                 break;
 
             case ARController.UserStudyType.TYPE_REFLECTION:
-                m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+                m_ARController.m_AnchorController.m_Corridor.SetActive(false);
                 m_ARController.SetProjectorMAINCORDActive(true);
                 m_ARController.m_ProjectorController.SetMainCorridorProjectorMaterial(1, 0);
                 m_ARController.CreateStencilMaskArea();
@@ -233,7 +233,7 @@ public class UserStudyAPIs : MonoBehaviour
     {
         UserStudyController.currentTaskMode = UserStudyController.TaskMode.NONE;
         ARController.currentUserStudyType = ARController.UserStudyType.TYPE_NONE;
-        m_ARController.m_AnchorController.m_CorridorAnchor.gameObject.SetActive(false);
+        m_ARController.m_AnchorController.m_Corridor.SetActive(false);
         m_ARController.CleanUpScene();
         m_UserStudyController.Reset();
 

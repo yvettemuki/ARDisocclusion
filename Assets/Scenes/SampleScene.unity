@@ -12310,7 +12310,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1072110374
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22661,6 +22661,7 @@ MonoBehaviour:
   m_PrefabPoint: {fileID: 1362899771367802, guid: 8237eed71993e984a9cbd9507dbac182, type: 3}
   m_PortalAnchor: {fileID: 0}
   m_CorridorAnchor: {fileID: 0}
+  m_Corridor: {fileID: 0}
 --- !u!114 &2079571522
 MonoBehaviour:
   m_ObjectHideFlags: 0
