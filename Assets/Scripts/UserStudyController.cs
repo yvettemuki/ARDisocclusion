@@ -319,10 +319,11 @@ public class UserStudyController : MonoBehaviour
 
         // human direction indicator
         //if (m_DirectDigitIndicator) Destroy(m_DirectDigitIndicator);
-        if (m_ARController.GetHumanSprite())
+        if (m_ARController.GetHumanSprite() && m_ARController.GetHumanSprite().activeSelf)
         {
             m_CurrHumanPos = m_ARController.GetHumanSprite().transform.position;
-            Destroy(m_ARController.GetHumanSprite());
+            m_ARController.GetHumanSprite().SetActive(false);
+            //Destroy(m_ARController.GetHumanSprite());
         }
         if (m_CrosshairStudy.gameObject.activeSelf) m_CrosshairStudy.gameObject.SetActive(false);
         if (m_CrosshairTrain.gameObject.activeSelf) m_CrosshairTrain.gameObject.SetActive(false);

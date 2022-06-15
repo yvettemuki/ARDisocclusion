@@ -25,6 +25,7 @@ public class ARController : MonoBehaviour
     public Dropdown m_DropDownUserStudyType;
     public Text m_TextCameraPos;
     public Text m_TextPortalPos;
+    public Text m_TextAttentionInfo;
     public GameObject m_HumanSpritePrefab;
     public GameObject m_CameraBPrefab;
     public GameObject m_PortalPlanePrefab;
@@ -189,7 +190,7 @@ public class ARController : MonoBehaviour
         if (m_ProjectorHM) Destroy(m_ProjectorHM);
         if (m_ProjectorMULTI) Destroy(m_ProjectorMULTI);
         if (m_PortalPlane) Destroy(m_PortalPlane);
-        if (m_Mirror) Destroy(m_Mirror);
+        //if (m_Mirror) Destroy(m_Mirror);
 
         m_IsPlaybackSegment = false;
         m_IsPlaybackHumanSprite = false;
@@ -201,8 +202,10 @@ public class ARController : MonoBehaviour
     {
         // let user study controlle to control it
         //if (m_HumanSprite) Destroy(m_HumanSprite);
-        if (m_PortalPlane) Destroy(m_PortalPlane);
-        if (m_Mirror) Destroy(m_Mirror);
+        //if (m_PortalPlane) Destroy(m_PortalPlane);
+        //if (m_Mirror) Destroy(m_Mirror);
+
+        if (m_PortalPlane && m_PortalPlane.activeSelf) m_PortalPlane.SetActive(false);
         if (m_ProjectorMULTI.gameObject.activeSelf) m_ProjectorMULTI.gameObject.SetActive(false);
         if (m_RawImagePicInPicInUserCanvas.gameObject.activeSelf) m_RawImagePicInPicInUserCanvas.gameObject.SetActive(false);
         if (m_RawImagePicInPicInSetupCanvas.gameObject.activeSelf) m_RawImagePicInPicInSetupCanvas.gameObject.SetActive(false);
@@ -408,14 +411,18 @@ public class ARController : MonoBehaviour
             }
         }
 
-        // human sprite view
-        if (m_HumanSprite)
-            m_HumanSprite.SetActive(isActive);
-
         // set user study objects view
         if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_PICINPIC ||
             ARController.currentUserStudyType == ARController.UserStudyType.TYPE_REFLECTION)
         {
+            if (UserStudyController.currentTaskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_EASY
+            || UserStudyController.currentTaskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_MEDIUM
+            || UserStudyController.currentTaskMode == UserStudyController.TaskMode.DIRECT_INDICATOR_HARD)
+            {
+                // human sprite view
+                if (m_HumanSprite)
+                    m_HumanSprite.SetActive(isActive);
+            }
             return;
         }
 
@@ -475,6 +482,9 @@ public class ARController : MonoBehaviour
          * renew coordinate system.
          * */
         ProcessCameraBProjectorsPos();
+
+        if (m_IsCameraBRegisterd)
+            m_TextAttentionInfo.gameObject.SetActive(true);
 
     }
 
@@ -642,9 +652,13 @@ public class ARController : MonoBehaviour
 
         if (!m_PortalPlane)
         {
-            Vector3 position = m_AnchorController.m_PortalAnchor.gameObject.transform.position;
-            Quaternion rotation = m_AnchorController.m_PortalAnchor.gameObject.transform.rotation;
+            Vector3 position = m_AnchorController.m_PortalAnchor.transform.position;
+            Quaternion rotation = m_AnchorController.m_PortalAnchor.transform.rotation;
             m_PortalPlane = Instantiate(m_PortalPlanePrefab, position, rotation);
+        }
+        else
+        {
+            m_PortalPlane.SetActive(true);
         }
 
         SetSideCorridorViewActive(true);

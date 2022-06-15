@@ -5291,6 +5291,7 @@ MonoBehaviour:
   m_DropDownUserStudyType: {fileID: 1744432626}
   m_TextCameraPos: {fileID: 1270414722}
   m_TextPortalPos: {fileID: 1251947677}
+  m_TextAttentionInfo: {fileID: 1072110375}
   m_HumanSpritePrefab: {fileID: 551767727156965736, guid: 900b0e43c5006a344b849d88f4d465f8, type: 3}
   m_CameraBPrefab: {fileID: 4691372859710652527, guid: eb3dd7cb733ac1f43959607eae4d7eb7, type: 3}
   m_PortalPlanePrefab: {fileID: 6137503052789258821, guid: 4a187dcc54ad6ad4ab871ae9e048678e, type: 3}
@@ -12305,12 +12306,12 @@ GameObject:
   - component: {fileID: 1072110376}
   - component: {fileID: 1072110375}
   m_Layer: 5
-  m_Name: Text trackable Plane
+  m_Name: Text Attention Info
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1072110374
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12327,8 +12328,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -293, y: -155}
-  m_SizeDelta: {x: 160, y: 70}
+  m_AnchoredPosition: {x: 1, y: 48}
+  m_SizeDelta: {x: 613.3747, y: 266.0946}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1072110375
 MonoBehaviour:
@@ -12343,7 +12344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.33134568, g: 0.7081133, b: 0.9622642, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12352,7 +12353,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 28
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 2
@@ -12363,7 +12364,16 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Hit: True'
+  m_Text: '1. Try to stay in the current position, expcet in the last task. (finding
+    similarity)
+
+
+    2. Try to keep the movement of the tablet steady and try to
+    avoid excessive rotating the tablet.
+
+
+    3. Try to keep the red portal in the
+    sight of view.'
 --- !u!222 &1072110376
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -22655,7 +22665,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66facfb55081ab84b86394b54231a6e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TextPlaneInfo: {fileID: 1072110375}
   m_PrefabCorrider: {fileID: 4407280373777591399, guid: db0b760e910fe24408652e169e1fa8cc, type: 3}
   m_PrefabPortal: {fileID: 5141530898398381382, guid: 576b556ff4935f64382ca460ec24f878, type: 3}
   m_PrefabPoint: {fileID: 1362899771367802, guid: 8237eed71993e984a9cbd9507dbac182, type: 3}

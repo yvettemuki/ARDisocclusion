@@ -19,8 +19,6 @@ public class AnchorController : MonoBehaviour
     static List<ARRaycastHit> portalRayCastHits = new List<ARRaycastHit>(); // pivots for portal
     static List<ARRaycastHit> corridorRayCastHits = new List<ARRaycastHit>(); // pivots for corridor
 
-    public Text m_TextPlaneInfo;
-
     [SerializeField]
     GameObject m_PrefabCorrider;
     public GameObject prefabCorrider
@@ -115,9 +113,6 @@ public class AnchorController : MonoBehaviour
         }
         else if (ARController.currentObjectType == ARController.ControlObjectType.OBJ_NONE)
             return;
-
-        if (m_IsPortalExist && m_IsCorridorExist)
-            m_TextPlaneInfo.text = $"Plane Info: {m_PortalAnchor.trackableId}";
     }
 
     public Pose CalculatePlacementPose(List<ARRaycastHit> pivotHits)
