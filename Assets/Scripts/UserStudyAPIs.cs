@@ -46,7 +46,7 @@ public class UserStudyAPIs : MonoBehaviour
     {
         int currMethod = (int)ARController.currentUserStudyType;
         int currTaskMode = (int)UserStudyController.currentTaskMode;
-        int currTaskIndex = 3 * (currMethod * 3 + (currTaskMode % 3));
+        int currTaskIndex = 8 * (currMethod * 3 + (currTaskMode % 3));
 
         m_UserStudyController.InitClosestPatchGroup(currTaskIndex, isStudyMode);
     }

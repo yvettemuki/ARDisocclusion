@@ -9,7 +9,7 @@ public class UserStudyFlowController : MonoBehaviour
 {
     public GameObject m_ToggleGroup, m_DebugText, m_QuestionText, m_SetupCanvas, m_StudyCanvas, m_TrainCanvas;
     public Button m_NextButton, m_RedoButton, m_StartButton;
-    public Toggle[] m_Toggles, m_SimToggles;
+    public Toggle[] m_Toggles, m_SimToggles, m_ClosestToggles;
     public UserStudyAPIs m_api;
     public Text m_TextAccuracy;
     
@@ -44,11 +44,14 @@ public class UserStudyFlowController : MonoBehaviour
     void Update()
     {
         SetVisibility();
+        // Change
         updateText();
     }
 
     private void SetVisibility()
     {
+
+        // Change
         m_QuestionText.SetActive(started);
 
         if (started && !finished)
@@ -56,12 +59,10 @@ public class UserStudyFlowController : MonoBehaviour
             for (int i = 0; i < m_Toggles.Length; i++)
             {
                 m_Toggles[i].gameObject.SetActive(true);
-                if (currentTask == ControllerStates.FIND_CLOSEST)
-                {
-                    m_Toggles[i].gameObject.SetActive(i == 0 || i == 2 || i == 4);
-                }
 
-                if (InDirectIndicateTask() || currentTask == ControllerStates.MATCH_NUM)
+                if (InDirectIndicateTask() || 
+                    currentTask == ControllerStates.MATCH_NUM || 
+                    currentTask == ControllerStates.FIND_CLOSEST)
                 {
                     m_Toggles[i].gameObject.SetActive(false);
                 }
@@ -69,19 +70,20 @@ public class UserStudyFlowController : MonoBehaviour
             }
 
             for (int i = 0; i < m_SimToggles.Length; i++)
-            {
                 m_SimToggles[i].gameObject.SetActive(currentTask == ControllerStates.MATCH_NUM);
-            }
+
+            for (int i = 0; i < m_ClosestToggles.Length; i++)
+                m_ClosestToggles[i].gameObject.SetActive(currentTask == ControllerStates.FIND_CLOSEST);
         }
         else if (finished)
         {
             for (int i = 0; i < m_SimToggles.Length; i++)
-            {
                 m_SimToggles[i].gameObject.SetActive(false);
-            }
         }
 
+        // Change
         m_NextButton.gameObject.SetActive((choices.AnyTogglesOn()|| InDirectIndicateTask()) && started && !finished);
+        //m_NextButton.gameObject.SetActive(started && !finished);
         m_RedoButton.gameObject.SetActive(started && !finished);
         m_StartButton.gameObject.SetActive(!started);
     }
@@ -106,9 +108,10 @@ public class UserStudyFlowController : MonoBehaviour
             }
 
             for (int i = 0; i < m_SimToggles.Length; i++)
-            {
                 m_SimToggles[i].transform.GetChild(1).GetComponent<Text>().text = ControllerStates.CHOICES_SIMILARITY[currentMethod * 3 + currentTrial, i];
-            }
+
+            for (int i = 0; i < m_ClosestToggles.Length; i++)
+                m_ClosestToggles[i].transform.GetChild(1).GetComponent<Text>().text = ControllerStates.CHOICES_CLOSEST[i];
         } 
         else
         {
@@ -156,7 +159,11 @@ public class UserStudyFlowController : MonoBehaviour
             }
         }
         else
+        {
+            // Change
             answer = choices.ActiveToggles().FirstOrDefault().GetComponentInChildren<Text>().text;
+            //answer = "teaser data";
+        }
         
         answers[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = answer;
         completionTime[currentTask, currentMethod * ControllerStates.MAX_TRIAL_NUM + currentTrial] = (Time.time - timer).ToString("0.00");
@@ -175,6 +182,7 @@ public class UserStudyFlowController : MonoBehaviour
 
         if (currentTask >= ControllerStates.MAX_TASK_NUM)
         {
+            //Change
             Conclude();
         } 
         else

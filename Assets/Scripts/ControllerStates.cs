@@ -35,8 +35,8 @@ public class ControllerStates : MonoBehaviour
     //public static Vector3 PORTAL_TOP_RIGHT = new Vector3(1.6f, 2.72f, 0.0f);
 
     // Camera A Projector Data
-    public static Vector3 PROJECTOR_MAIN_LEFT_CORD_POS_IN_PORTAL = new Vector3(-7.61f, 1.49f, -1.96f);  //-6.13f, 1.49f, -1.65f
-    public static Quaternion PROJECTOR_MAIN_LEFT_CORD_ROT_IN_PORTAL = new Quaternion(0.06f, 0.59f, -0.05f, 0.81f);  //0.07f, 0.56f, -0.06f, 0.83f
+    public static Vector3 PROJECTOR_MAIN_LEFT_CORD_POS_IN_PORTAL = new Vector3(-6.576f, 1.602f, -1.981f);  //-7.61f, 1.49f, -1.96f
+    public static Quaternion PROJECTOR_MAIN_LEFT_CORD_ROT_IN_PORTAL = new Quaternion(0.07f, 0.58f, -0.06f, 0.81f);  //0.06f, 0.59f, -0.05f, 0.81f
     public static Vector3 PROJECTOR_MAIN_RIGHT_CORD_POS_IN_PORTAL = new Vector3(4.17f, 1.46f, -1.72f);
     public static Quaternion PROJECTOR_MAIN_RIGHT_CORD_ROT_IN_PORTAL = new Quaternion(0.09f, -0.48f, 0.02f, 0.87f);
 
@@ -88,7 +88,13 @@ public class ControllerStates : MonoBehaviour
         new Vector3(-0.037f, 0.57f, 0.93f), //18
         new Vector3(0.111f, 1.252f, 1.556f), //19
     };
-    
+
+    // Change
+    //3, 7, 8,  // CA
+    //    4, 6, 9,  // MP
+    //    4, 5, 10,  // PP
+    //    3, 5, 11,  // XR
+    //    5, 6, 8,  // MI
     public static int[] DYN_SPHERES_NUM =
     {
         3, 7, 8,  // CA
@@ -121,18 +127,21 @@ public class ControllerStates : MonoBehaviour
         new Vector2(277, 369), // 9
         new Vector2(269, 257), // 13
         
-        // MP
+        // MP // Change
         new Vector2(278, 359),  // 3
+        //new Vector2(277, 334), // 11
         new Vector2(283, 298),  // 1
         new Vector2(277, 383),  // 8
 
-        // PP
+        // PP // Change
         new Vector2(276, 356),  // 10
+        //new Vector2(277, 334), // 11
         new Vector2(275, 303),  // 12
         new Vector2(272, 388),  // 5
 
-        // XR
+        // XR // Change
         new Vector2(285, 339),  // 2
+        //new Vector2(277, 334), // 11
         new Vector2(271, 392),  // 6
         new Vector2(269, 257),  // 13
 
@@ -192,83 +201,239 @@ public class ControllerStates : MonoBehaviour
         new Vector3(-0.676f, 1.4f, 0.1f)
     };
 
+    //public static Vector3[] CLOSEST_PATCH_GROUPs =
+    //{
+    //    // CA (up:green, down:yellow)
+    //    // Green
+    //    new Vector3(-0.96f, 1.764f, -0.03f),
+    //    new Vector3(-0.96f, 1.011f, -0.03f),
+    //    new Vector3(-0.676f, 1.886f, 0.655f),
+
+    //    // Yellow
+    //    new Vector3(-0.96f, 1.764f, -0.03f),
+    //    new Vector3(-0.96f, 1.011f, -0.03f),
+    //    new Vector3(-0.676f, 1.074f, 0.655f),
+
+    //    // Green
+    //    new Vector3(-0.96f, 1.764f, -0.03f),
+    //    new Vector3(-0.96f, 1.011f, -0.03f),
+    //    new Vector3(0.676f, 1.495f, 0.655f),
+
+    //    // MP
+    //    // Yellow
+    //    new Vector3(-0.96f, 1.764f, -0.03f),
+    //    new Vector3(-0.96f, 1.011f, -0.03f),
+    //    new Vector3(-0.676f, 1.008f, 0.655f),
+
+    //    // Yellow
+    //    new Vector3(-0.96f, 1.764f, -0.03f),
+    //    new Vector3(-0.96f, 1.011f, -0.03f),
+    //    new Vector3(-0.676f, 1.175f, 0.655f),
+
+    //    // Green
+    //    new Vector3(-0.96f, 1.764f, -0.03f),
+    //    new Vector3(-0.96f, 1.011f, -0.03f),
+    //    new Vector3(0.676f, 1.495f, 0.655f),
+
+    //    // PP
+    //    // Yellow
+    //    new Vector3(-0.96f, 1.764f, -0.03f),
+    //    new Vector3(-0.96f, 1.011f, -0.03f),
+    //    new Vector3(-0.676f, 0.98f, 0.655f),
+
+    //    // Green
+    //    new Vector3(-0.96f, 1.764f, -0.03f),
+    //    new Vector3(-0.96f, 1.011f, -0.03f),
+    //    new Vector3(-0.676f, 1.642f, 0.655f),
+
+    //    // Green
+    //    new Vector3(-0.96f, 1.764f, -0.03f),
+    //    new Vector3(-0.96f, 1.011f, -0.03f),
+    //    new Vector3(0.676f, 1.324f, 0.655f),
+
+    //    // XR
+    //    // Green
+    //    new Vector3(-0.96f, 1.764f, -0.03f),
+    //    new Vector3(-0.96f, 1.011f, -0.03f),
+    //    new Vector3(-0.676f, 1.975f, 0.655f),
+
+    //    // Green
+    //    new Vector3(-0.96f, 1.764f, -0.03f),
+    //    new Vector3(-0.96f, 1.011f, -0.03f),
+    //    new Vector3(0.676f, 1.431f, 0.655f),
+
+    //    // Yellow
+    //    new Vector3(-0.96f, 1.764f, -0.03f),
+    //    new Vector3(-0.96f, 1.011f, -0.03f),
+    //    new Vector3(-0.676f, 1.255f, 0.655f),
+
+    //    // MI
+    //    new Vector3(-0.96f, 1.764f, -0.03f),
+    //    new Vector3(-0.96f, 1.011f, -0.03f),
+    //    new Vector3(-0.676f, 0.992f, 0.655f),
+
+    //    new Vector3(-0.96f, 1.764f, -0.03f),
+    //    new Vector3(-0.96f, 1.011f, -0.03f),
+    //    new Vector3(-0.676f, 1.589f, 0.655f),
+
+    //    new Vector3(-0.96f, 1.764f, -0.03f),
+    //    new Vector3(-0.96f, 1.011f, -0.03f),
+    //    new Vector3(-0.676f, 1.276f, 0.655f),
+
+    //};
+
     public static Vector3[] CLOSEST_PATCH_GROUPs =
     {
         // CA (up:green, down:yellow)
         // Green
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.886f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // Yellow
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.074f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // Green
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(0.676f, 1.495f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // MP
         // Yellow
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.008f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // Yellow
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.175f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // Green
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(0.676f, 1.495f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // PP
         // Yellow
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 0.98f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // Green
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.642f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // Green
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(0.676f, 1.324f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // XR
         // Green
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.975f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // Green
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(0.676f, 1.431f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // Yellow
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.255f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // MI
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
         new Vector3(-0.676f, 0.992f, 0.655f),
 
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
         new Vector3(-0.676f, 1.589f, 0.655f),
 
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
         new Vector3(-0.676f, 1.276f, 0.655f),
 
     };
@@ -277,80 +442,154 @@ public class ControllerStates : MonoBehaviour
     {
         // CA (up:green, down:yellow)
         // Green
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.495f, 0.655f),
-
-        // Green
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(0.676f, 1.642f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // Yellow
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 0.98f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
+
+        // Green
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // MP
-        // Green
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(0.676f, 1.886f, 0.655f),
+        // Yellow
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // Yellow
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.255f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // Green
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.975f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // PP
         // Yellow
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.008f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
-        // Yellow
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(0.676f, 1.074f, 0.655f),
+        // Green
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
-        // Yellow
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.175f, 0.655f),
+        // Green
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // XR
         // Green
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(0.676f, 1.495f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // Green
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.631f, 0.655f),
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
-        
-        // Green
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(-0.676f, 1.524f, 0.655f),
+        // Yellow
+        new Vector3(-1.173f, 1.602f, -0.03f),
+        new Vector3(-1.173f, 0.985f, -0.03f),
+        new Vector3(-0.75f, 1.852f, 0.583f),
+        new Vector3(-0.75f, 0.555f, 1.50f),
+        new Vector3(-0.75f, 0.567f, 0.389f),
+        new Vector3(0.676f, 1.734f, 2.063f),
+        new Vector3(0.676f, 1.02f, 3.467f),
+        new Vector3(0.676f, 0.903f, 1.135f),
 
         // MI
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-1.013f, 1.545f, -0.03f),
+        new Vector3(-1.013f, 0.985f, -0.03f),
+        new Vector3(-0.676f, 1.698f, 0.521f),
+        new Vector3(-0.676f, 1.207f, 1.645f),
+        new Vector3(-0.676f, 0.682f, 0.968f),
+        new Vector3(0.676f, 1.574f, 1.477f),
+        new Vector3(0.676f, 1.207f, 2.966f),
         new Vector3(-0.676f, 0.992f, 0.655f),
 
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
-        new Vector3(0.676f, 1.589f, 0.655f),
+        new Vector3(-1.013f, 1.545f, -0.03f),
+        new Vector3(-1.013f, 0.985f, -0.03f),
+        new Vector3(-0.676f, 1.698f, 0.521f),
+        new Vector3(-0.676f, 1.207f, 1.645f),
+        new Vector3(-0.676f, 0.682f, 0.968f),
+        new Vector3(0.676f, 1.574f, 1.477f),
+        new Vector3(0.676f, 1.207f, 2.966f),
+        new Vector3(-0.676f, 1.589f, 0.655f),
 
-        new Vector3(-0.96f, 1.764f, -0.03f),
-        new Vector3(-0.96f, 1.011f, -0.03f),
+        new Vector3(-1.013f, 1.545f, -0.03f),
+        new Vector3(-1.013f, 0.985f, -0.03f),
+        new Vector3(-0.676f, 1.698f, 0.521f),
+        new Vector3(-0.676f, 1.207f, 1.645f),
+        new Vector3(-0.676f, 0.682f, 0.968f),
+        new Vector3(0.676f, 1.574f, 1.477f),
+        new Vector3(0.676f, 1.207f, 2.966f),
         new Vector3(-0.676f, 1.276f, 0.655f),
 
     };
@@ -470,6 +709,11 @@ public class ControllerStates : MonoBehaviour
         {{"1-2", "2-3", "3-4", "4-5", "5-6" }, {"1-2", "2-3", "3-4", "4-5", "5-6" }, {"1-2", "2-3", "3-4", "4-5", "5-6" } },
         {{"Green", "ph", "Yellow", "ph", "None" }, {"Green", "ph", "Yellow", "ph", "None" }, {"Green", "ph", "Yellow", "ph", "None" } },
         {{"Yellow", "Blue", "Green", "Pink", "Black" }, {"Yellow", "Blue", "Green", "Pink", "Black"}, {"Yellow", "Blue", "Green", "Pink", "Black"} } 
+    };
+
+    public static string[] CHOICES_CLOSEST = new string[]
+    {
+        "Black", "Yellow", "White", "Green", "Purple", "Red", "Blue"
     };
 
     public static string[,] CHOICES_SIMILARITY = new string[,]

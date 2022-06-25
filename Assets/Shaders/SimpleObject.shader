@@ -8,10 +8,13 @@ Shader "Unlit/SimpleObject"
         _CompFunc("StencilCompFunc", int) = 0  // 0:Always, 3:Equal
         _LightPoint("Light Point Position", Vector) = (-2, 4, -2, 0)
         _EstimateLightDir("Main Light Direction", Vector) = (0, 0, 0, 0)
+        _SrcMode("SrcMode", Float) = 1
+        _DstMode("DstMode", Float) = 0
+        _Alpha("alpha", Float) = 1
     }
-        SubShader
+    SubShader
     {
-        Tags { "RenderType" = "Opaque" }
+        Tags { "Queue" = "Geometry"}
         LOD 100
 
         Stencil
@@ -23,6 +26,8 @@ Shader "Unlit/SimpleObject"
 
         Pass
         {
+            Blend [_SrcMode] [_DstMode]
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -49,6 +54,7 @@ Shader "Unlit/SimpleObject"
             fixed4 _EstimateLightColor;
             float4 _LightPoint;
             float4 _EstimateLightDir;
+            float _Alpha;
 
             v2f vert(appdata v)
             {
@@ -71,6 +77,7 @@ Shader "Unlit/SimpleObject"
                 fixed3 lightDirection = normalize(-_EstimateLightDir.xyz);
                 fixed4 diffuse = max(dot(lightDirection, normalize(i.worldNormal)), 0.0) * _EstimateLightColor * fixed4(0.5, 0.5, 0.5, 1.0) *  _Color.rgba * tex; 
                 fixed4 col = ambient + diffuse;
+                col.a = _Alpha;
                 return col;
             }
             ENDCG

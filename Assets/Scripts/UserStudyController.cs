@@ -42,10 +42,10 @@ public class UserStudyController : MonoBehaviour
     public RawImage m_CrosshairTrain;
     private Vector3 m_CurrHumanPos = Vector3.zero;
 
-    // Closest Sphere
+    // Closest Patch
     List<GameObject> m_ClosestPatches = new List<GameObject>();
-    public GameObject m_ClosestSpherePrefab;
-    public List<Material> m_ClosestSphereMat;
+    public GameObject m_ClosestPatchPrefab;
+    public List<Material> m_ClosestPatchMats;
 
     // Similar Object
     GameObject m_SimilarGroup;
@@ -168,14 +168,17 @@ public class UserStudyController : MonoBehaviour
             Vector3 _position_start = Vector3.zero;
             m_ARController.PortalObjectPos2World(in ControllerStates.DYM_SPHERES_POS_IN_PORTAL[i], out _position_start);
 
+            // Change
             float longest_dist = Random.Range(1.5f, 2.5f);
+            //float longest_dist = 2.0f;
 
             GameObject _sphere = Instantiate(m_SpherePrefab, _position_start, _rotation);
 
             float _range_scale = 0.25f;
             _sphere.transform.localScale = new Vector3(_range_scale, _range_scale, _range_scale);
 
-            DynamicSphere _dy_sphere = new DynamicSphere(_sphere, _position_start, longest_dist, Random.Range(1f, 2.5f));
+            // Change
+            DynamicSphere _dy_sphere = new DynamicSphere(_sphere, _position_start, longest_dist, Random.Range(1f, 2.5f)); 
             m_DynamicSpheres.Add(_dy_sphere);
         }
     }
@@ -197,21 +200,22 @@ public class UserStudyController : MonoBehaviour
         Vector3 _position = Vector3.zero;
         m_ARController.PortalObjectPos2World(in pos_in_portal, out _position);
 
-        GameObject patch = Instantiate(m_ClosestSpherePrefab, _position, _rotation);
+        GameObject patch = Instantiate(m_ClosestPatchPrefab, _position, _rotation);
         patch.GetComponent<MeshRenderer>().material = mat;
         if (scale_axis_mode)
         {
-            // set z axis in portal system to 0.01
-            patch.transform.localScale = new Vector3(0.2f, 0.2f, 0.02f);
+            // set z axis in portal system to 0.02
+            patch.transform.localScale = new Vector3(0.4f, 0.4f, 0.02f);
         }
         else
         {
-            // set x axis in portal system to 0.01
-            patch.transform.localScale = new Vector3(0.02f, 0.2f, 0.2f);
-            if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_CUTAWAY && pos_in_portal.x < 0f)
-            {
-                patch.SetActive(false);
-            }
+            // set x axis in portal system to 0.02
+            patch.transform.localScale = new Vector3(0.02f, 0.4f, 0.4f);
+        }
+
+        if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_CUTAWAY && pos_in_portal.x < 0f)
+        {
+            patch.SetActive(false);
         }
 
         m_ClosestPatches.Add(patch);
@@ -221,21 +225,21 @@ public class UserStudyController : MonoBehaviour
     {
         if (taskMode == TaskMode.ClOSEST_PATCH_GROUP_EASY)
         {
-            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_1[0], m_ClosestSphereMat[0], true);
-            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_1[1], m_ClosestSphereMat[1], true);
-            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_1[2], m_ClosestSphereMat[2], false);
+            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_1[0], m_ClosestPatchMats[0], true);
+            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_1[1], m_ClosestPatchMats[1], true);
+            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_1[2], m_ClosestPatchMats[2], false);
         }
         else if (taskMode == TaskMode.ClOSEST_PATCH_GROUP_MEDIUM)
         {
-            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_2[0], m_ClosestSphereMat[0], true);
-            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_2[1], m_ClosestSphereMat[1], true);
-            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_2[2], m_ClosestSphereMat[2], false);
+            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_2[0], m_ClosestPatchMats[0], true);
+            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_2[1], m_ClosestPatchMats[1], true);
+            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_2[2], m_ClosestPatchMats[2], false);
         }
         else if (taskMode == TaskMode.ClOSEST_PATCH_GROUP_HARD)
         {
-            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_3[0], m_ClosestSphereMat[0], true);
-            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_3[1], m_ClosestSphereMat[1], true);
-            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_3[2], m_ClosestSphereMat[2], false);
+            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_3[0], m_ClosestPatchMats[0], true);
+            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_3[1], m_ClosestPatchMats[1], true);
+            CreateClosestPatches(ControllerStates.CLOSEST_SPHERE_GROUP_3[2], m_ClosestPatchMats[2], false);
         }
         else
         {
@@ -247,15 +251,25 @@ public class UserStudyController : MonoBehaviour
     {
         if (isStudyMode)
         {
-            CreateClosestPatches(ControllerStates.CLOSEST_PATCH_GROUPs[currTaskIndex], m_ClosestSphereMat[0], true);
-            CreateClosestPatches(ControllerStates.CLOSEST_PATCH_GROUPs[currTaskIndex + 1], m_ClosestSphereMat[1], true);
-            CreateClosestPatches(ControllerStates.CLOSEST_PATCH_GROUPs[currTaskIndex + 2], m_ClosestSphereMat[2], false);
+            CreateClosestPatches(ControllerStates.CLOSEST_PATCH_GROUPs[currTaskIndex], m_ClosestPatchMats[0], true);
+            CreateClosestPatches(ControllerStates.CLOSEST_PATCH_GROUPs[currTaskIndex + 1], m_ClosestPatchMats[1], true);
+            CreateClosestPatches(ControllerStates.CLOSEST_PATCH_GROUPs[currTaskIndex + 2], m_ClosestPatchMats[2], false);
+            CreateClosestPatches(ControllerStates.CLOSEST_PATCH_GROUPs[currTaskIndex + 3], m_ClosestPatchMats[3], false);
+            CreateClosestPatches(ControllerStates.CLOSEST_PATCH_GROUPs[currTaskIndex + 4], m_ClosestPatchMats[4], false);
+            CreateClosestPatches(ControllerStates.CLOSEST_PATCH_GROUPs[currTaskIndex + 5], m_ClosestPatchMats[5], false);
+            CreateClosestPatches(ControllerStates.CLOSEST_PATCH_GROUPs[currTaskIndex + 6], m_ClosestPatchMats[6], false);
+            CreateClosestPatches(ControllerStates.CLOSEST_PATCH_GROUPs[currTaskIndex + 7], m_ClosestPatchMats[7], false);
         }
         else
         {
-            CreateClosestPatches(ControllerStates.TRAIN_CLOSEST_PATCH_GROUPs[currTaskIndex], m_ClosestSphereMat[0], true);
-            CreateClosestPatches(ControllerStates.TRAIN_CLOSEST_PATCH_GROUPs[currTaskIndex + 1], m_ClosestSphereMat[1], true);
-            CreateClosestPatches(ControllerStates.TRAIN_CLOSEST_PATCH_GROUPs[currTaskIndex + 2], m_ClosestSphereMat[2], false);
+            CreateClosestPatches(ControllerStates.TRAIN_CLOSEST_PATCH_GROUPs[currTaskIndex], m_ClosestPatchMats[0], true);
+            CreateClosestPatches(ControllerStates.TRAIN_CLOSEST_PATCH_GROUPs[currTaskIndex + 1], m_ClosestPatchMats[1], true);
+            CreateClosestPatches(ControllerStates.TRAIN_CLOSEST_PATCH_GROUPs[currTaskIndex + 2], m_ClosestPatchMats[2], false);
+            CreateClosestPatches(ControllerStates.TRAIN_CLOSEST_PATCH_GROUPs[currTaskIndex + 3], m_ClosestPatchMats[3], false);
+            CreateClosestPatches(ControllerStates.TRAIN_CLOSEST_PATCH_GROUPs[currTaskIndex + 4], m_ClosestPatchMats[4], false);
+            CreateClosestPatches(ControllerStates.TRAIN_CLOSEST_PATCH_GROUPs[currTaskIndex + 5], m_ClosestPatchMats[5], false);
+            CreateClosestPatches(ControllerStates.TRAIN_CLOSEST_PATCH_GROUPs[currTaskIndex + 6], m_ClosestPatchMats[6], false);
+            CreateClosestPatches(ControllerStates.TRAIN_CLOSEST_PATCH_GROUPs[currTaskIndex + 7], m_ClosestPatchMats[7], false);
         }
     }
 
@@ -485,19 +499,86 @@ public class UserStudyController : MonoBehaviour
 
     }
 
+    private void SetClosestMatAlpha(bool isTransparent, int index)
+    {
+        if (isTransparent)
+        {
+            m_ClosestPatches[index].GetComponent<MeshRenderer>().material.SetInt("_SrcMode", 3);
+            m_ClosestPatches[index].GetComponent<MeshRenderer>().material.SetInt("_DstMode", 5);
+            m_ClosestPatches[index].GetComponent<MeshRenderer>().material.renderQueue = 3000;
+            m_ClosestPatches[index].GetComponent<MeshRenderer>().material.SetFloat("_Alpha", 0.5f);
+        }
+        else
+        {
+            m_ClosestPatches[index].GetComponent<MeshRenderer>().material.SetInt("_SrcMode", 1);
+            m_ClosestPatches[index].GetComponent<MeshRenderer>().material.SetInt("_DstMode", 0);
+            m_ClosestPatches[index].GetComponent<MeshRenderer>().material.renderQueue = 2000;
+            m_ClosestPatches[index].GetComponent<MeshRenderer>().material.SetFloat("_Alpha", 1f);
+        }
+    }
+
     public void ChangeClosestPatchMaterial(int type)
     {
         if (type == MAT_STANDARD)
         {
             // type == 0, standard color material
             m_ClosestPatches[2].GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            m_ClosestPatches[3].GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            m_ClosestPatches[4].GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            m_ClosestPatches[5].GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            m_ClosestPatches[6].GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
+            m_ClosestPatches[7].GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 0);
             currentMatType = MAT_STANDARD;
         }
         else if (type == MAT_STENCIL)
         {
             // type == 1, stencil shader material
             m_ClosestPatches[2].GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            m_ClosestPatches[3].GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            m_ClosestPatches[4].GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            m_ClosestPatches[5].GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            m_ClosestPatches[6].GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
+            m_ClosestPatches[7].GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
             currentMatType = MAT_STENCIL;
+        }
+
+        if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_XRAY)
+        {
+            for (int i = 0; i < m_ClosestPatches.Count; i++)
+            {
+                Vector3 _pos_in_world = m_ClosestPatches[i].transform.position;
+                Vector3 _pos_in_portal = Vector3.zero;
+                m_ARController.WorldObjectPos2Portal(in _pos_in_world, out _pos_in_portal);
+                if (_pos_in_portal.x < 0f)
+                    SetClosestMatAlpha(true, i);
+                else
+                    SetClosestMatAlpha(false, i);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < m_ClosestPatches.Count; i++)
+            {
+                SetClosestMatAlpha(false, i);
+            }
+        }
+    }
+
+    private void SetSimilarMatAlpha(bool isTransparent, int index)
+    {
+        if (isTransparent)
+        {
+            m_SimilarGroup.transform.GetChild(index).GetComponent<MeshRenderer>().material.SetInt("_SrcMode", 3);
+            m_SimilarGroup.transform.GetChild(index).GetComponent<MeshRenderer>().material.SetInt("_DstMode", 5);
+            m_SimilarGroup.transform.GetChild(index).GetComponent<MeshRenderer>().material.renderQueue = 3000;
+            m_SimilarGroup.transform.GetChild(index).GetComponent<MeshRenderer>().material.SetFloat("_Alpha", 0.5f);
+        }
+        else
+        {
+            m_SimilarGroup.transform.GetChild(index).GetComponent<MeshRenderer>().material.SetInt("_SrcMode", 1);
+            m_SimilarGroup.transform.GetChild(index).GetComponent<MeshRenderer>().material.SetInt("_DstMode", 0);
+            m_SimilarGroup.transform.GetChild(index).GetComponent<MeshRenderer>().material.renderQueue = 2000;
+            m_SimilarGroup.transform.GetChild(index).GetComponent<MeshRenderer>().material.SetFloat("_Alpha", 1f);
         }
     }
 
@@ -524,6 +605,27 @@ public class UserStudyController : MonoBehaviour
                 m_SimilarGroup.transform.GetChild(i).GetComponent<MeshRenderer>().material.SetInt("_CompFunc", 3);
             }
             currentMatType = MAT_STENCIL;
+        }
+
+        if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_XRAY)
+        {
+            for (int i = 0; i < ControllerStates.SIMILAR_DIGIT_NUM_PER_GROUP; i++)
+            {
+                Vector3 _pos_in_world = m_SimilarGroup.transform.GetChild(i).position;
+                Vector3 _pos_in_portal = Vector3.zero;
+                m_ARController.WorldObjectPos2Portal(in _pos_in_world, out _pos_in_portal);
+                if (_pos_in_portal.x < 0f)
+                    SetSimilarMatAlpha(true, i);
+                else
+                    SetSimilarMatAlpha(false, i);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < ControllerStates.SIMILAR_DIGIT_NUM_PER_GROUP; i++)
+            {
+                SetSimilarMatAlpha(false, i);
+            }
         }
     }
 
@@ -585,23 +687,52 @@ public class UserStudyController : MonoBehaviour
             || currentTaskMode == TaskMode.ClOSEST_PATCH_GROUP_MEDIUM
             || currentTaskMode == TaskMode.ClOSEST_PATCH_GROUP_HARD)
         {
-            // closest sphere
+            // closest patch
             if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_MULTIPERSPECTIVE)
+            {
                 m_ClosestPatches[2].SetActive(isActive);
+                m_ClosestPatches[3].SetActive(isActive);
+                m_ClosestPatches[4].SetActive(isActive);
+                m_ClosestPatches[5].SetActive(isActive);
+                m_ClosestPatches[6].SetActive(isActive);
+                m_ClosestPatches[7].SetActive(isActive);
+            }
             else if (ARController.currentUserStudyType == ARController.UserStudyType.TYPE_CUTAWAY)
             {
-                m_ClosestPatches[0].SetActive(isActive);
-                m_ClosestPatches[1].SetActive(isActive);
-                if (!m_ClosestPatches[2].activeSelf)
+                
+                m_ClosestPatches[5].SetActive(isActive);
+                m_ClosestPatches[6].SetActive(isActive);
+                m_ClosestPatches[7].SetActive(isActive);
+
+                if (!m_ClosestPatches[0].activeSelf)  // 2-7 are in the same situation
+                {
+                    m_ClosestPatches[0].SetActive(false);
+                    m_ClosestPatches[1].SetActive(false);
                     m_ClosestPatches[2].SetActive(false);
+                    m_ClosestPatches[3].SetActive(false);
+                    m_ClosestPatches[4].SetActive(false);
+                    
+                }
                 else
+                {
+                    m_ClosestPatches[0].SetActive(isActive);
+                    m_ClosestPatches[1].SetActive(isActive);
                     m_ClosestPatches[2].SetActive(isActive);
+                    m_ClosestPatches[3].SetActive(isActive);
+                    m_ClosestPatches[4].SetActive(isActive);
+
+                }
             }
             else
             {
                 m_ClosestPatches[0].SetActive(isActive);
                 m_ClosestPatches[1].SetActive(isActive);
                 m_ClosestPatches[2].SetActive(isActive);
+                m_ClosestPatches[3].SetActive(isActive);
+                m_ClosestPatches[4].SetActive(isActive);
+                m_ClosestPatches[5].SetActive(isActive);
+                m_ClosestPatches[6].SetActive(isActive);
+                m_ClosestPatches[7].SetActive(isActive);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARFoundation;
 
@@ -8,6 +9,7 @@ public class HDRLightEstimation : MonoBehaviour
     ARCameraManager m_CameraManager;
 
     public Material m_DymSphereMat;
+    public List<Material> m_ClosestPatchMat;
 
     //[SerializeField]
     //Transform m_Arrow;
@@ -71,11 +73,19 @@ public class HDRLightEstimation : MonoBehaviour
         {
             mainLightDirection = args.lightEstimation.mainLightDirection;
             m_DymSphereMat.SetVector("_EstimateLightDir", new Vector4(mainLightDirection.Value.x, mainLightDirection.Value.y, mainLightDirection.Value.z, 0));
+            for (int i = 0; i < m_ClosestPatchMat.Count; i++)
+            {
+                m_ClosestPatchMat[i].SetVector("_EstimateLightDir", new Vector4(mainLightDirection.Value.x, mainLightDirection.Value.y, mainLightDirection.Value.z, 0));
+            }
         }
         else
         {
             mainLightDirection = null;
-            m_DymSphereMat.SetVector("_EstimateLightDir", new Vector4(0, 0, 0, 0));
+            m_DymSphereMat.SetVector("_EstimateLightDir", new Vector4(1f, -1f, 0f, 0f));
+            for (int i = 0; i < m_ClosestPatchMat.Count; i++)
+            {
+                m_ClosestPatchMat[i].SetVector("_EstimateLightDir", new Vector4(1f, -1f, 0f, 0f));
+            }
         }
 
         if (args.lightEstimation.mainLightColor.HasValue)
@@ -89,4 +99,5 @@ public class HDRLightEstimation : MonoBehaviour
             m_DymSphereMat.SetColor("_EstimateLightColor", new Color(0.1f, 0.1f, 0.1f, 1));
         }
     }
+
 }

@@ -9,7 +9,7 @@ public class UserStudyTrainingFlow : MonoBehaviour
 {
     public GameObject m_ToggleGroup, m_QuestionText, m_SetupCanvas, m_StudyCanvas, m_TrainCanvas;
     public Button m_NextButton, m_RedoButton, m_StartButton;
-    public Toggle[] m_Toggles, m_SimToggles;
+    public Toggle[] m_Toggles, m_SimToggles, m_ClosestToggles;
     public UserStudyAPIs m_api;
 
     private ToggleGroup choices;
@@ -55,12 +55,10 @@ public class UserStudyTrainingFlow : MonoBehaviour
             for (int i = 0; i < m_Toggles.Length; i++)
             {
                 m_Toggles[i].gameObject.SetActive(true);
-                if (currentTask == ControllerStates.FIND_CLOSEST)
-                {
-                    m_Toggles[i].gameObject.SetActive(i == 0 || i == 2 || i == 4);
-                }
 
-                if (InDirectIndicateTask() || currentTask == ControllerStates.MATCH_NUM)
+                if (InDirectIndicateTask() 
+                    || currentTask == ControllerStates.MATCH_NUM
+                    || currentTask == ControllerStates.FIND_CLOSEST)
                 {
                     m_Toggles[i].gameObject.SetActive(false);
                 }
@@ -68,9 +66,10 @@ public class UserStudyTrainingFlow : MonoBehaviour
             }
 
             for (int i = 0; i < m_SimToggles.Length; i++)
-            {
                 m_SimToggles[i].gameObject.SetActive(currentTask == ControllerStates.MATCH_NUM);
-            }
+
+            for (int i = 0; i < m_ClosestToggles.Length; i++)
+                m_ClosestToggles[i].gameObject.SetActive(currentTask == ControllerStates.FIND_CLOSEST);
         }
         else if (finished)
         {
@@ -109,9 +108,10 @@ public class UserStudyTrainingFlow : MonoBehaviour
             }
 
             for (int i = 0; i < m_SimToggles.Length; i++)
-            {
-                m_SimToggles[i].transform.GetChild(1).GetComponent<Text>().text = ControllerStates.CHOICES_SIMILARITY_TRAIN[currentMethod * 3 + currentTrial, i];
-            }
+                m_SimToggles[i].transform.GetChild(1).GetComponent<Text>().text = ControllerStates.CHOICES_SIMILARITY[currentMethod * 3 + currentTrial, i];
+
+            for (int i = 0; i < m_ClosestToggles.Length; i++)
+                m_ClosestToggles[i].transform.GetChild(1).GetComponent<Text>().text = ControllerStates.CHOICES_CLOSEST[i];
         }
         else
         {
