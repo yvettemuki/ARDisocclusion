@@ -223,7 +223,7 @@ public class UserStudyAPIs : MonoBehaviour
 
         dataset = $"{user_position_in_portal.x.ToString("0.000")}#{user_position_in_portal.y.ToString("0.000")}#{user_position_in_portal.z.ToString("0.000")}," +
             $"{user_direction_in_portal.x.ToString("0.000")}#{user_direction_in_portal.y.ToString("0.000")}#{user_direction_in_portal.z.ToString("0.000")}," +
-            $"{human_sprite_depth_in_portal.ToString("0.000")}";
+            $"{human_sprite_position_in_portal.x.ToString("0.000")}#{human_sprite_position_in_portal.y.ToString("0.000")}#{human_sprite_position_in_portal.z.ToString("0.000")}";
         //Debug.Log(dataset);
         
         return dataset;

@@ -108,7 +108,7 @@ public class UserStudyTrainingFlow : MonoBehaviour
             }
 
             for (int i = 0; i < m_SimToggles.Length; i++)
-                m_SimToggles[i].transform.GetChild(1).GetComponent<Text>().text = ControllerStates.CHOICES_SIMILARITY[currentMethod * 3 + currentTrial, i];
+                m_SimToggles[i].transform.GetChild(1).GetComponent<Text>().text = ControllerStates.CHOICES_SIMILARITY_TRAIN[currentMethod * 3 + currentTrial, i];
 
             for (int i = 0; i < m_ClosestToggles.Length; i++)
                 m_ClosestToggles[i].transform.GetChild(1).GetComponent<Text>().text = ControllerStates.CHOICES_CLOSEST[i];

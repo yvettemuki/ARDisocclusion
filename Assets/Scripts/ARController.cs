@@ -26,6 +26,7 @@ public class ARController : MonoBehaviour
     public Text m_TextCameraPos;
     public Text m_TextPortalPos;
     public Text m_TextAttentionInfo;
+    public Text m_HumanPosInfo;
     public GameObject m_HumanSpritePrefab;
     public GameObject m_CameraBPrefab;
     public GameObject m_PortalPlanePrefab;
@@ -142,8 +143,6 @@ public class ARController : MonoBehaviour
     // Update is called once per frame/
     void Update()
     {
-        // TODO: return if the tracking is not update
-
         UpdateCameraPosition();
 
         //if (m_IsPlaybackSegment)
@@ -201,11 +200,11 @@ public class ARController : MonoBehaviour
     public void CleanUpScene()
     {
         // let user study controlle to control it
-        //if (m_HumanSprite) Destroy(m_HumanSprite);
-        //if (m_PortalPlane) Destroy(m_PortalPlane);
+        if (m_HumanSprite) Destroy(m_HumanSprite);
+        if (m_PortalPlane) Destroy(m_PortalPlane);
         //if (m_Mirror) Destroy(m_Mirror);
 
-        if (m_PortalPlane && m_PortalPlane.activeSelf) m_PortalPlane.SetActive(false);
+        //if (m_PortalPlane && m_PortalPlane.activeSelf) m_PortalPlane.SetActive(false);
         if (m_ProjectorMULTI.gameObject.activeSelf) m_ProjectorMULTI.gameObject.SetActive(false);
         if (m_RawImagePicInPicInUserCanvas.gameObject.activeSelf) m_RawImagePicInPicInUserCanvas.gameObject.SetActive(false);
         if (m_RawImagePicInPicInSetupCanvas.gameObject.activeSelf) m_RawImagePicInPicInSetupCanvas.gameObject.SetActive(false);
@@ -597,14 +596,14 @@ public class ARController : MonoBehaviour
 
         TransformFromUVToWorldPoint(in m_HumanLowestUV, out m_HumanLowestPointDirFromCamB);
 
-        Ray ray = new Ray(camera_b_pos, m_HumanLowestPointDirFromCamB);
+        Ray ray = new Ray(m_CameraB.transform.position, m_HumanLowestPointDirFromCamB);
 
         List<ARRaycastHit> hits = new List<ARRaycastHit>();
         if (m_ARRaycastManager.Raycast(ray, hits, TrackableType.PlaneWithinPolygon))
         {
             ARRaycastHit hit = hits[0];
 
-            m_HumanSprite = Instantiate(m_HumanSpritePrefab, hit.pose.position, Quaternion.LookRotation(forward, up));
+            m_HumanSprite = Instantiate(m_HumanSpritePrefab, hit.pose.position, Quaternion.LookRotation(m_CameraB.transform.forward, m_CameraB.transform.up));
         }
         else
             Debug.Log($"filed to place the human sprite, the plane is not large enough!");
@@ -652,8 +651,8 @@ public class ARController : MonoBehaviour
 
         if (!m_PortalPlane)
         {
-            Vector3 position = m_AnchorController.m_PortalAnchor.transform.position;
-            Quaternion rotation = m_AnchorController.m_PortalAnchor.transform.rotation;
+            Vector3 position = GetPortalTransform().position;
+            Quaternion rotation = GetPortalTransform().rotation;
             m_PortalPlane = Instantiate(m_PortalPlanePrefab, position, rotation);
         }
         else
@@ -851,25 +850,28 @@ public class ARController : MonoBehaviour
 
             // create projector for side corridor
             m_ProjectorBG = Instantiate(m_ProjectorPrefabBG);
-            m_ProjectorBG.transform.parent = m_AnchorController.m_PortalAnchor.transform;
+            m_ProjectorBG.transform.parent = m_AnchorController.m_PortalAnchor.gameObject.transform;
             m_ProjectorBG.transform.localPosition = cam_pos_in_portal_coord;
             m_ProjectorBG.transform.localRotation = rotation_in_portal_coord;
             m_ProjectorBG.gameObject.SetActive(true);
 
             // create projector for human sprite
             m_ProjectorHM = Instantiate(m_ProjectorPrefabHM);
-            m_ProjectorHM.transform.parent = m_AnchorController.m_PortalAnchor.transform;
+            m_ProjectorHM.transform.parent = m_AnchorController.m_PortalAnchor.gameObject.transform;
             m_ProjectorHM.transform.localPosition = cam_pos_in_portal_coord;
             m_ProjectorHM.transform.localRotation = rotation_in_portal_coord;
             m_ProjectorHM.gameObject.SetActive(true);
 
             // create projector for multiperspective portal plane
-            m_ProjectorMULTI = Instantiate(m_ProjectorPrefabMULTI, camera_b_pos, Quaternion.LookRotation(forward, up));
+            m_ProjectorMULTI = Instantiate(m_ProjectorPrefabMULTI);
+            m_ProjectorMULTI.transform.parent = m_AnchorController.m_PortalAnchor.gameObject.transform;
+            m_ProjectorMULTI.transform.localPosition = cam_pos_in_portal_coord;
+            m_ProjectorMULTI.transform.localRotation = rotation_in_portal_coord;
             m_ProjectorMULTI.gameObject.SetActive(false);
 
             // create projector for left main corridor
             m_ProjectorLeftMAINCORD = Instantiate(m_ProjectorPrefabLeftMAINCORD);
-            m_ProjectorLeftMAINCORD.transform.parent = m_AnchorController.m_PortalAnchor.transform;
+            m_ProjectorLeftMAINCORD.transform.parent = m_AnchorController.m_PortalAnchor.gameObject.transform;
             m_ProjectorLeftMAINCORD.transform.localPosition = ControllerStates.PROJECTOR_MAIN_LEFT_CORD_POS_IN_PORTAL;
             m_ProjectorLeftMAINCORD.transform.localRotation = ControllerStates.PROJECTOR_MAIN_LEFT_CORD_ROT_IN_PORTAL;
             m_ProjectorLeftMAINCORD.gameObject.SetActive(false);
@@ -910,18 +912,18 @@ public class ARController : MonoBehaviour
         float clip_half_height = clip_half_width * aspect;
 
         // get the start(bottom left) point of the clip plane
-        Vector3 clip_center_point = camera_b_pos + forward * ControllerStates.Z_NEAR;
+        Vector3 clip_center_point = m_CameraB.transform.position + m_CameraB.transform.forward * ControllerStates.Z_NEAR;
         Debug.Log($"&&& clip center point is : {clip_center_point.ToString()}"); // shoulbe be z = z_near 0.1
-        Vector3 clip_start_point = clip_center_point - right * clip_half_width - up * clip_half_height;  // start from bottom left
+        Vector3 clip_start_point = clip_center_point - m_CameraB.transform.right * clip_half_width - m_CameraB.transform.up * clip_half_height;  // start from bottom left
 
-        Vector3 cam_pos_to_clip_start_dir = clip_start_point - camera_b_pos;  // attenction: here we don't need to normalize the vector
+        Vector3 cam_pos_to_clip_start_dir = clip_start_point - m_CameraB.transform.position;  // attenction: here we don't need to normalize the vector
 
         // calcualte the uv 3D point
         float uu = uv.x * (clip_half_width * 2 / tex_width);
         float vv = uv.y * (clip_half_height * 2 / tex_height);
 
 
-        pointDir = cam_pos_to_clip_start_dir + uu * right + vv * up;
+        pointDir = cam_pos_to_clip_start_dir + uu * m_CameraB.transform.right + vv * m_CameraB.transform.up;
 
     }
 
@@ -1169,11 +1171,11 @@ public class ARController : MonoBehaviour
         }
 
         // calcualte the cameraA position with respect to the portal
-        Vector3 pos_in_portal_0 = pos_in_world - portal_origin;
+        Vector3 pos_in_portal_0 = pos_in_world - GetPortalTransform().position;
         pos_in_portal = new Vector3(
-            Vector3.Dot(portal_x_axis, pos_in_portal_0),
-            Vector3.Dot(portal_y_axis, pos_in_portal_0),
-            Vector3.Dot(portal_z_axis, pos_in_portal_0)
+            Vector3.Dot(GetPortalTransform().right, pos_in_portal_0),
+            Vector3.Dot(GetPortalTransform().up, pos_in_portal_0),
+            Vector3.Dot(GetPortalTransform().forward, pos_in_portal_0)
         );
 
     }
