@@ -345,7 +345,7 @@ public class UserStudyController : MonoBehaviour
 
         // human direction indicator
         //if (m_DirectDigitIndicator) Destroy(m_DirectDigitIndicator);
-        if (m_ARController.GetHumanSprite() && m_ARController.GetHumanSprite().activeSelf)
+        if (m_ARController.GetHumanSprite())
         {
             m_CurrHumanPos = m_ARController.GetHumanSprite().transform.position;
             //m_ARController.GetHumanSprite().SetActive(false);

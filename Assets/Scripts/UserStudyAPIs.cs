@@ -221,7 +221,18 @@ public class UserStudyAPIs : MonoBehaviour
         m_ARController.WorldObjectPos2Portal(in human_sprite_position_in_world, out human_sprite_position_in_portal);
         float human_sprite_depth_in_portal = human_sprite_position_in_portal.z;
 
-        dataset = $"{user_position_in_portal.x.ToString("0.000")}#{user_position_in_portal.y.ToString("0.000")}#{user_position_in_portal.z.ToString("0.000")}," +
+        // Calculate error angle
+        Vector3 sprite_b_pos = human_sprite_position_in_portal;
+        Vector3 sprite_a_pos = sprite_b_pos + new Vector3(0, 1.6f, 0);
+        Vector3 dir_ba = sprite_a_pos - sprite_b_pos;
+        Vector3 dir_bu = user_position_in_portal - sprite_b_pos;
+        Vector3 n_abu = -Vector3.Cross(dir_ba, dir_bu).normalized;
+        Vector3 user_dir = user_direction_in_portal.normalized;
+        float cos_of_complem_angle = Vector3.Dot(n_abu, user_dir);
+        float err_angle = 90f - Mathf.Acos(cos_of_complem_angle) * Mathf.Rad2Deg;
+
+        dataset = $"{err_angle.ToString("0.000")}," +
+            $"{user_position_in_portal.x.ToString("0.000")}#{user_position_in_portal.y.ToString("0.000")}#{user_position_in_portal.z.ToString("0.000")}," +
             $"{user_direction_in_portal.x.ToString("0.000")}#{user_direction_in_portal.y.ToString("0.000")}#{user_direction_in_portal.z.ToString("0.000")}," +
             $"{human_sprite_position_in_portal.x.ToString("0.000")}#{human_sprite_position_in_portal.y.ToString("0.000")}#{human_sprite_position_in_portal.z.ToString("0.000")}";
         //Debug.Log(dataset);
